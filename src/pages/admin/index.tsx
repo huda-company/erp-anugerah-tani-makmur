@@ -1,9 +1,10 @@
+import { Button } from "antd";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { AUTH_PAGE_URL } from "@/constants/pageURL";
 
-const Home = () => {
+const Admin = () => {
   const router = useRouter();
 
   useSession({
@@ -13,7 +14,11 @@ const Home = () => {
     },
   });
 
-  return <>aaa</>;
+  return (
+    <Button onClick={() => signOut()} type="primary">
+      logout
+    </Button>
+  );
 };
 
-export default Home;
+export default Admin;

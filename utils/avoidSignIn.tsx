@@ -1,0 +1,21 @@
+import { getSession } from "next-auth/react";
+
+export const avoidSignIn = async (context: any) => {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/admin", // Redirect to the admin dashboard if authenticated
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    // Continue rendering the login page
+    props: {
+      messages: (await import(`^/dictionaries/${context.locale}.json`)).default,
+    },
+  };
+};
