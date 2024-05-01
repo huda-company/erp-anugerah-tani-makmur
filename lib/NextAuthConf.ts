@@ -36,7 +36,6 @@ export const authOptions: NextAuthOptions = {
           const res = await signInAPI(credentials);
 
           const data: { user: User; token: string } = await res.data;
-          console.log("data", data);
 
           if (!data?.token) {
             throw res.response.data;
