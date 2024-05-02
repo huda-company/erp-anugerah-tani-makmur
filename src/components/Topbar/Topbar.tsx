@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import LocaleSwitcher from "../LocalSwitcher";
 
 const Topbar = () => {
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

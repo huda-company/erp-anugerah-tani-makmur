@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
       authorize: async (credentials) => {
         try {
           const res = await signInAPI(credentials);
-          console.log("resss", res)
+          console.log("resss", res);
 
           const data: { user: User; token: string } = await res.data;
 

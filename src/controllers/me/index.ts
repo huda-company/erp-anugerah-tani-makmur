@@ -18,7 +18,7 @@ export const me = async (req: NextApiRequest, res: NextApiResponse) => {
     if (session) {
       const userCheck = await User.findById(session.userId, {
         plainPassword: 0,
-        password: 0
+        password: 0,
       });
 
       return res.status(200).json({ data: userCheck });
