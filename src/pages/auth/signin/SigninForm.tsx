@@ -121,11 +121,20 @@ const SignInForm = () => {
             )}
           />
           <div className="flex flex-row justify-center gap-3">
-            <Button className="bg-primary text-white hover:bg-primary-foreground" type="submit" disabled={loading}>
+            <Button
+              className="bg-primary text-white hover:bg-primary-foreground"
+              type="submit"
+              disabled={loading}
+            >
               {loading && <FaSpinner className="mr-2 h-4 w-4 animate-spin" />}
               {capitalizeStr(t("Signin.signin"))}
             </Button>
-            <Button className="bg-gray-700 text-white hover:bg-gray-500" onClick={handleReset} type="reset" disabled={loading}>
+            <Button
+              className="bg-gray-700 text-white hover:bg-gray-500"
+              onClick={handleReset}
+              type="reset"
+              disabled={loading}
+            >
               Reset
             </Button>
           </div>

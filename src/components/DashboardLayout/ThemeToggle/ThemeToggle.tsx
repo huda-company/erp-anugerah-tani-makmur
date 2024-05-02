@@ -1,5 +1,4 @@
 /* eslint-disable no-empty-pattern */
-/* eslint-disable @typescript-eslint/ban-types */
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 

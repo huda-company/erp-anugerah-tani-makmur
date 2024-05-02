@@ -35,7 +35,7 @@ export const doSignin = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({
         ...respBody.SUCCESS.SIGN_IN_SUCCESS,
         data: userCheck,
-        token: generatedtoken
+        token: generatedtoken,
       });
     }
 
@@ -53,7 +53,7 @@ export const doSignin = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).json({
       ...respBody.SUCCESS.SIGN_IN_SUCCESS,
       data: userCheck,
-      token: userToken
+      token: userToken,
     });
   } catch (error: any) {
     if (error.code == "ERR_JWT_EXPIRED") {
