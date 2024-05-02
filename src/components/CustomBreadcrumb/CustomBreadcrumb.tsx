@@ -27,7 +27,9 @@ const CustomBreadcrumb: FC<CustomBreadcrumbProps> = ({ items, separator }) => {
                   <BreadcrumbPage>{capitalizeStr(item.name)}</BreadcrumbPage>
                 )}
 
-                {!item.isActive && <BreadcrumbSeparator />}
+                {!item.isActive && (
+                  <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
+                )}
               </BreadcrumbItem>
             );
           })}
