@@ -24,12 +24,16 @@ import {
   Plus,
   Settings,
   SunMedium,
+  Store,
   Trash,
   Twitter,
   User,
   User2Icon,
   UserX2Icon,
   X,
+  Layers2,
+  ShoppingCart,
+  Package2,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -38,6 +42,7 @@ export const Icons = {
   dashboard: LayoutDashboardIcon,
   logo: Command,
   login: LogIn,
+  category: Layers2,
   close: X,
   profile: User2Icon,
   spinner: Loader2,
@@ -62,6 +67,9 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   parkingSquare: ParkingSquare,
+  store: Store,
+  shoppingCart: ShoppingCart,
+  item: Package2,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

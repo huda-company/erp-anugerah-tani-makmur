@@ -1,3 +1,11 @@
+import {
+  BRANCHES_PAGE,
+  ITEM_CAT_PAGE,
+  ITEM_PAGE,
+  PO_PAGE,
+  SUPPLIER_PAGE,
+  USER_PAGE,
+} from "@/constants/pageURL";
 import { NavItem } from "../types";
 
 export const navItems: NavItem[] = [
@@ -8,21 +16,39 @@ export const navItems: NavItem[] = [
     label: "Dashboard",
   },
   {
-    title: "user",
-    href: "/dashboard/user",
+    title: "supplier",
+    href: SUPPLIER_PAGE.ROOT,
     icon: "user",
     label: "user",
   },
   {
-    title: "employee",
-    href: "/dashboard/employee",
-    icon: "employee",
-    label: "employee",
+    title: "purchaseOrder",
+    href: PO_PAGE.ROOT,
+    icon: "shoppingCart",
+    label: "shoppingCart",
   },
   {
-    title: "parkingField",
-    href: "/parking-field",
-    icon: "parkingSquare",
-    label: "employee",
+    title: "itemCategory",
+    href: ITEM_CAT_PAGE.ROOT,
+    icon: "category",
+    label: "category",
+  },
+  {
+    title: "item",
+    href: ITEM_PAGE.ROOT,
+    icon: "item",
+    label: "item",
+  },
+  {
+    title: "branch",
+    href: BRANCHES_PAGE.ROOT,
+    icon: "store",
+    label: "store",
+  },
+  {
+    title: "user",
+    href: USER_PAGE.ROOT,
+    icon: "user",
+    label: "user",
   },
 ];

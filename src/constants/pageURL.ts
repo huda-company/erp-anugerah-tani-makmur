@@ -14,13 +14,44 @@ export const AUTH_PAGE_URL = {
   FIRST_TIME_SIGN_IN_SUCCESS: "/auth/first-time-sign-in/success",
 };
 
-export const USER_PAGE = {
-  DASHBOARD: "/dashboard",
-};
-
 export const SUPPLIER_PAGE = {
   ROOT: "/supplier",
   ADD: "/supplier/add",
   EDIT: "/supplier/edit",
   VIEW: "/supplier/view",
+};
+
+export const PO_PAGE = {
+  ROOT: "/purchase",
+  ADD: "/purchase/add",
+  EDIT: "/purchase/edit",
+  VIEW: "/purchase/view",
+};
+
+export const ITEM_CAT_PAGE = {
+  ROOT: "/itemcategory",
+  ADD: "/itemcategory/add",
+  EDIT: "/itemcategory/edit",
+  VIEW: "/itemcategory/view",
+};
+
+export const ITEM_PAGE = {
+  ROOT: "/item",
+  ADD: "/item/add",
+  EDIT: "/item/edit",
+  VIEW: "/item/view",
+};
+
+export const BRANCHES_PAGE = {
+  ROOT: "/branches",
+  ADD: "/branches/add",
+  EDIT: "/branches/edit",
+  VIEW: "/branches/view",
+};
+
+export const USER_PAGE = {
+  ROOT: "/user",
+  ADD: "/user/add",
+  EDIT: "/user/edit",
+  VIEW: "/user/view",
 };
