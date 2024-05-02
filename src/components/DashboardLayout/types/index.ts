@@ -1,3 +1,4 @@
+import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { Icons } from "../icons";
 
 export interface NavItem {
@@ -30,3 +31,8 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+export type HeaderModuleProps = {
+  title: string;
+  bcumbs?: BreadcrumbItem[];
+};
