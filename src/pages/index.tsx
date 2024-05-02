@@ -1,19 +1,10 @@
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { Button } from "antd";
+import React from "react";
 
-import { AUTH_PAGE_URL } from "@/constants/pageURL";
-
-const Home = () => {
-  const router = useRouter();
-
-  useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push(AUTH_PAGE_URL.SIGNIN);
-    },
-  });
-
-  return <>aaa</>;
-};
+const Home = () => (
+  <div className="App">
+    <Button type="primary">Button</Button>
+  </div>
+);
 
 export default Home;
