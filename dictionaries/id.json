@@ -1,0 +1,99 @@
+{
+  "Index": {
+    "home": "Halaman utama",
+    "emailVerification": "Verifikasi Email",
+    "title": "judul",
+    "motto": "Kepuasan anda adalah keberhasilan kami",
+    "mottoDesc": "Kami selalu berupaya untuk membuat penyedia parkir dan pemilik mobil merasa puas terhadap layanan kami. Segala bentuk saran, kritik, dan masukan adalah hal yang sangat berharga bagi kami, agar kita terus berinovasi, memperbaiki dan meningkatkan layanan kami.",
+    "description": "deskripsi",
+    "secure": "aman",
+    "clean": "bersih",
+    "easyPay": "pembayaran mudah",
+    "organized": "tertata",
+    "easy": "mudah",
+    "integrated": "terintegrasi",
+    "secureDesc": "Tempat yang aman untuk parkir mobil. aman dari pencurian, aman dari hal yang tidak diinginkan",
+    "cleanDesc": "Tempat yang parkir mobil yang bersih. membuat mobil dan penyewa nyaman",
+    "integratedDesc": "Sistem yang terintegrasi. melakukan semua hal dengan mudah",
+    "easyPayDesc": "Pembayaran yang mudah. bagi penyewa dan pemilik parkir mobil",
+    "organizedDesc": "Parkir mobil yang tertata. membuat enak dipandang mata",
+    "easyDesc": "Mudah dalam pengoperasian, mudah dalam segala hal",
+    "connectingOwnerAndTenant": "mempertemukan penyedia dan penyewa parkir",
+    "connectingOwnerAndTenantDesc": "Penyedia dan penyewa parkir bertemu disini untuk saling bekerja sama, saling membantu, satu sama lain."
+  },
+  "Common": {
+    "signOut": "keluar",
+    "back": "kembali",
+    "add": "tambah",
+    "edit": "edit",
+    "view": "lihat",
+    "delete": "hapus",
+    "action": "aksi",
+    "select": "pilih",
+    "success": "berhasil",
+    "error": "terjadi kesalahan",
+    "cancel": "batal",
+    "confirm": "Konfirmasi"
+  },
+  "AboutUs": {
+    "aboutUs": "tentang kami"
+  },
+  "ContactUs": {
+    "contactUs": "kontak kami"
+  },
+  "Signin": {
+    "signin": "masuk",
+    "dontHaveAcc": "belum punya akun ?",
+    "createNow": "Daftar Sekarang"
+  },
+  "Signup": {
+    "name": "Nama",
+    "phone": "Telepon",
+    "birthDate": "Tanggal Lahir",
+    "gender": "Jenis kelamin",
+    "register": "Daftar",
+    "alreadyHaveAcc": "Sudah punya akun"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "ganti ke {locale, select, id {ID} en {English} other {Unknown}}"
+  },
+  "Sidebar": {
+    "dashboard": "dashboard",
+    "employee": "pegawai",
+    "supplier": "supplier",
+    "purchaseOrder": "Purchase Order",
+    "item": "item",
+    "itemCategory": "kateogri item",
+    "branch": "cabang",
+    "user": "pengguna"
+  },
+  "PageLayout": {
+    "pageTitle": "Judul Halaman"
+  },
+  "ParkingField": {
+    "subdistrict": "Kelurahan",
+    "district": "Kecamatan",
+    "city": "Kota",
+    "province": "Provinsi",
+    "address": "Alamat"
+  },
+  "NotFound": {
+    "page404": "halaman tidak ditemukan",
+    "page404desc": "Maaf, halaman yang anda kunjungi tidak ditemukan atau sudah dipindahkan",
+    "backToDashboard": "kembali ke dashboard"
+  },
+  "Msg": {
+    "areUSure": "Anda Yakin ?"
+  },
+  "API_MSG": {
+    "SUCCESS": {
+      "NEW_PARKING_FIELD_CREATE": "berhasil menambah tempat parkir",
+      "PARKING_FIELD_UPDATE": "berhasil mengubah data lahan parkir"
+    },
+    "ERROR": {
+      "NEW_PARKING_FIELD_CREATE": "gagal menambah data tempat parkir",
+      "PARKING_FIELD_UPDATE": "gagal mengubah data tempat parkir",
+      "PARKING_FIELD_DELETE": "gagal menghapus data tempat parkir"
+    }
+  }
+}
