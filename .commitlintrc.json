@@ -16,7 +16,8 @@
         "perf",
         "revert",
         "wip",
-        "utils"
+        "utils",
+        "config"
       ]
     ]
   }
