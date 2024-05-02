@@ -60,7 +60,11 @@
   "Sidebar": {
     "dashboard": "dashboard",
     "employee": "employee",
-    "parkingField": "parking field",
+    "supplier": "supplier",
+    "purchaseOrder": "Purchase Order",
+    "item": "item",
+    "itemCategory": "item category",
+    "branch": "branch",
     "user": "user"
   },
   "PageLayout": {

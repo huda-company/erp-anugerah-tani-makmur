@@ -60,7 +60,11 @@
   "Sidebar": {
     "dashboard": "dashboard",
     "employee": "pegawai",
-    "parkingField": "lahan / tempat parkir",
+    "supplier": "supplier",
+    "purchaseOrder": "Purchase Order",
+    "item": "item",
+    "itemCategory": "kateogri item",
+    "branch": "cabang",
     "user": "pengguna"
   },
   "PageLayout": {
