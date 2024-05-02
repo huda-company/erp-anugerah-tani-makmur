@@ -15,7 +15,8 @@
         "test",
         "perf",
         "revert",
-        "wip"
+        "wip",
+        "utils"
       ]
     ]
   }
