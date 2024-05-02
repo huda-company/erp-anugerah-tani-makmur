@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import React from "react";
@@ -7,7 +8,6 @@ import PageLayout from "@/components/PageLayout";
 import SignInForm from "./SigninForm";
 
 import { avoidSignIn } from "^/utils/avoidSignIn";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 
 export const getServerSideProps = avoidSignIn;
 
@@ -17,7 +17,7 @@ const Signin = () => {
   return (
     <PageLayout title={t("Signin.signin")}>
       <div className="my-[1rem] flex flex-col items-center justify-center ">
-        <div className="border-4 border-double border-blue-900 p-[2rem]">
+        <div className="rounded-[1rem] border-4 border-double border-blue-900 p-[2rem]">
           <Link href="/">
             <div className="flex flex-col items-center">
               <img src="/logo.png" height={100} width={100} alt="logo" />

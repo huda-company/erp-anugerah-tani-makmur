@@ -15,13 +15,7 @@ export function MobileSidebar() {
           <MenuIcon />
         </SheetTrigger>
         <SheetContent side="left" className="bg-white !px-0">
-          <div className="space-y-4 py-2">
-            <div className="px-3 py-2">
-              <div className="space-y-1">
-                <DashboardNav items={navItems} setOpen={setOpen} />
-              </div>
-            </div>
-          </div>
+          <DashboardNav items={navItems} setOpen={setOpen} />
         </SheetContent>
       </Sheet>
     </>
