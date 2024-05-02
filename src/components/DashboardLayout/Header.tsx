@@ -29,10 +29,9 @@ export default function Header() {
               >
                 <img
                   src="/logo.png"
-                  className="h-8 px-1 py-1"
                   alt="FlowBite Logo"
-                  height={40}
-                  width={40}
+                  height={50}
+                  width={50}
                 />
               </div>
             </Link>
