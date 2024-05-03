@@ -2,7 +2,6 @@ import { getSession } from "next-auth/react";
 
 export const avoidSignIn = async (context: any) => {
   const session = await getSession(context);
-  console.log("avoidSignIn", context.locale);
 
   if (session) {
     return {
