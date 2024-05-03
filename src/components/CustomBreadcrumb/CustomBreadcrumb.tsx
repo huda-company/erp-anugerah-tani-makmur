@@ -18,16 +18,16 @@ const CustomBreadcrumb: FC<CustomBreadcrumbProps> = ({ items, separator }) => {
           items.map((item) => {
             return (
               <BreadcrumbItem key={item.key}>
-                {!item.isActive && (
+                {item.isActive == false && (
                   <BreadcrumbLink href={item.url}>
                     {capitalizeStr(item.name)}
                   </BreadcrumbLink>
                 )}
-                {item.isActive && (
+                {item.isActive == true && (
                   <BreadcrumbPage>{capitalizeStr(item.name)}</BreadcrumbPage>
                 )}
 
-                {!item.isActive && (
+                {item.isActive == false && (
                   <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
                 )}
               </BreadcrumbItem>

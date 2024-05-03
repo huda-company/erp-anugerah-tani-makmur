@@ -4,8 +4,12 @@ import { BsArrowLeftSquare } from "react-icons/bs";
 
 import { HeaderModuleProps } from "./types";
 import Typography from "../Typography";
-import CustomBreadcrumb from "../CustomBreadcrumb/CustomBreadcrumb";
-import { BreadcrumbItem } from "../CustomBreadcrumb/types";
+import dynamic from "next/dynamic";
+
+const CustomBcumbNoSSR = dynamic(
+  () => import("../CustomBreadcrumb/CustomBreadcrumb"),
+  { ssr: false }
+);
 
 const HeaderModule: FC<HeaderModuleProps> = ({ title, bcumbs }) => {
   const router = useRouter();
@@ -22,9 +26,12 @@ const HeaderModule: FC<HeaderModuleProps> = ({ title, bcumbs }) => {
           </Typography>
         </div>
       </div>
-      <div>
-        <CustomBreadcrumb separator="#" items={bcumbs} />
-      </div>
+
+      {bcumbs && (
+        <div>
+          <CustomBcumbNoSSR separator="/" items={bcumbs} />
+        </div>
+      )}
     </div>
   );
 };
