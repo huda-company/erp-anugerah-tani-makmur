@@ -35,4 +35,5 @@ export type SidebarNavItem = NavItemWithChildren;
 export type HeaderModuleProps = {
   title: string;
   bcumbs?: BreadcrumbItem[];
+  addPageURL?: string;
 };

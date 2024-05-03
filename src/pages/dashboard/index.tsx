@@ -19,7 +19,7 @@ const Dashboard = () => {
     <>
       <DashboardLayout>
         <ScrollArea className="h-full">
-          <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+          <div className="flex-1 space-y-4 md:p-8">
             <Tabs defaultValue="overview" className="space-y-4">
               <TabsList>
                 <TabsTrigger value="overview">Overview</TabsTrigger>
