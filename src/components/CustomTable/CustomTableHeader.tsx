@@ -1,0 +1,21 @@
+import { FC } from "react";
+import { TableHead, TableHeader, TableRow } from "../ui/table";
+import { CustomTblProps } from "./types";
+
+const CustomTableHeader: FC<CustomTblProps> = ({ data }) => {
+  return (
+    <>
+      <TableHeader>
+        <TableRow>
+          {data &&
+            data.header &&
+            data.header.map((hdr, idx: number) => {
+              return <TableHead key={`header-${idx}`}>{hdr.value}</TableHead>;
+            })}
+        </TableRow>
+      </TableHeader>
+    </>
+  );
+};
+
+export default CustomTableHeader;
