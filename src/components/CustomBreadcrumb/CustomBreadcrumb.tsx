@@ -9,7 +9,6 @@ import {
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 import { capitalizeStr } from "^/utils/capitalizeStr";
-import { Slash } from "lucide-react";
 
 const CustomBreadcrumb: FC<CustomBreadcrumbProps> = ({ items, separator }) => {
   return (
