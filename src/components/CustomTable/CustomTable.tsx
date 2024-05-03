@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Table, TableCaption } from "../ui/table";
+import { Table } from "../ui/table";
 import { CustomTblProps } from "./types";
 import Image from "next/image";
 import CustomTableHeader from "./CustomTableHeader";

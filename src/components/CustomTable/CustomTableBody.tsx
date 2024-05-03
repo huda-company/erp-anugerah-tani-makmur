@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { TableBody, TableCell, TableRow } from "../ui/table";
 import { CustomTablItem, CustomTblBody, CustomTblProps } from "./types";
-import Image from "next/image";
 
 const CustomTableBody: FC<CustomTblProps> = ({ data }) => {
   return (

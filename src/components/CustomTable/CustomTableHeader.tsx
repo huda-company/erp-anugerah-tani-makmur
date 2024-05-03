@@ -1,13 +1,6 @@
 import { FC } from "react";
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import { CustomTablItem, CustomTblBody, CustomTblProps } from "./types";
-import Image from "next/image";
+import { TableHead, TableHeader, TableRow } from "../ui/table";
+import { CustomTblProps } from "./types";
 
 const CustomTableHeader: FC<CustomTblProps> = ({ data }) => {
   return (
