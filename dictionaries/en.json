@@ -33,7 +33,9 @@
     "success": "success",
     "error": "error",
     "cancel": "cancel",
-    "confirm": "confirm"
+    "confirm": "confirm",
+    "code": "code",
+    "detail": "detail"
   },
   "AboutUs": {
     "aboutUs": "about us"
@@ -67,6 +69,9 @@
     "branch": "branch",
     "user": "user"
   },
+  "SupplierPage": {
+    "revenue": "revenue"
+  },
   "PageLayout": {
     "pageTitle": "Page title"
   },
@@ -87,13 +92,14 @@
   },
   "API_MSG": {
     "SUCCESS": {
-      "NEW_PARKING_FIELD_CREATE": "new parking field created successfully",
-      "PARKING_FIELD_UPDATE": "parking field updated successfully"
+      "NEW_SUPPLIER_CREATE": "new supplier created successfully",
+      "SUPPLIER_UPDATE": "supplier updated successfully",
+      "SUPPLIER_DELETE": "supplier deleted successfully"
     },
     "ERROR": {
-      "NEW_PARKING_FIELD_CREATE": "failed to create new parking field",
-      "PARKING_FIELD_UPDATE": "failed to update parking field",
-      "PARKING_FIELD_DELETE": "failed to delete parking field"
+      "NEW_SUPPLIER_CREATE": "failed to create new supplier",
+      "SUPPLIER_UPDATE": "failed to update supplier",
+      "SUPPLIER_DELETE": "failed to delete supplier"
     }
   }
 }

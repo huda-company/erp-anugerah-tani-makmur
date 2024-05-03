@@ -5,7 +5,7 @@ export type CustomTblCols = {
   style?: string;
 };
 
-export type CustomTablItem = {
+export type CustomTblItem = {
   value: string | ReactNode;
   className?: string;
   sort?: boolean;
@@ -13,11 +13,11 @@ export type CustomTablItem = {
 };
 
 export type CustomTblBody = {
-  items: CustomTablItem[];
+  items: CustomTblItem[];
   style?: string;
 };
 
-export type CustomTblHeader = CustomTablItem[];
+export type CustomTblHeader = CustomTblItem[];
 
 export type CustomTblData = {
   header: CustomTblHeader;

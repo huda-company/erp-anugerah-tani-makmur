@@ -5,7 +5,7 @@ import { CustomTblProps } from "./types";
 const CustomTableHeader: FC<CustomTblProps> = ({ data }) => {
   return (
     <>
-      <TableHeader>
+      <TableHeader className="rounded-lg border-2 border-primary bg-[#98DC65]">
         <TableRow>
           {data &&
             data.header &&

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { TableBody, TableCell, TableRow } from "../ui/table";
-import { CustomTablItem, CustomTblBody, CustomTblProps } from "./types";
+import { CustomTblItem, CustomTblBody, CustomTblProps } from "./types";
 
 const CustomTableBody: FC<CustomTblProps> = ({ data }) => {
   return (
@@ -11,7 +11,7 @@ const CustomTableBody: FC<CustomTblProps> = ({ data }) => {
             data.body.map((row: CustomTblBody, rowIdx: number) => {
               return (
                 <TableRow key={`rowIdx-${rowIdx}`}>
-                  {row.items.map((itm: CustomTablItem, itmIdx: number) => {
+                  {row.items.map((itm: CustomTblItem, itmIdx: number) => {
                     return (
                       <TableCell
                         key={`rowIdx-${rowIdx}--itmId-${itmIdx}`}
