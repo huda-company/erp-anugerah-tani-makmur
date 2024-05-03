@@ -33,7 +33,9 @@
     "success": "berhasil",
     "error": "terjadi kesalahan",
     "cancel": "batal",
-    "confirm": "Konfirmasi"
+    "confirm": "Konfirmasi",
+    "code": "Kode",
+    "detail": "detail"
   },
   "AboutUs": {
     "aboutUs": "tentang kami"
@@ -67,6 +69,9 @@
     "branch": "cabang",
     "user": "pengguna"
   },
+  "SupplierPage": {
+    "revenue": "pendapatan"
+  },
   "PageLayout": {
     "pageTitle": "Judul Halaman"
   },
@@ -87,13 +92,14 @@
   },
   "API_MSG": {
     "SUCCESS": {
-      "NEW_PARKING_FIELD_CREATE": "berhasil menambah tempat parkir",
-      "PARKING_FIELD_UPDATE": "berhasil mengubah data lahan parkir"
+      "NEW_SUPPLIER_CREATE": "berhasil menambah supplier",
+      "SUPPLIER_UPDATE": "berhasil mengubah data supplier",
+      "SUPPLIER_DELETE": "berhasil menghapus data supplier"
     },
     "ERROR": {
-      "NEW_PARKING_FIELD_CREATE": "gagal menambah data tempat parkir",
-      "PARKING_FIELD_UPDATE": "gagal mengubah data tempat parkir",
-      "PARKING_FIELD_DELETE": "gagal menghapus data tempat parkir"
+      "NEW_SUPPLIER_CREATE": "gagal menambah data tempat parkir",
+      "SUPPLIER_UPDATE": "gagal mengubah data tempat parkir",
+      "SUPPLIER_DELETE": "gagal menghapus data tempat parkir"
     }
   }
 }

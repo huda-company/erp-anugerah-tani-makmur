@@ -83,20 +83,20 @@ export const respBody = {
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.NEW_ROLE_CREATE),
     },
-    NEW_PARKING_FIELD_CREATE: {
+    NEW_SUPPLIER_CREATE: {
       ...resBody,
       success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_PARKING_FIELD_CREATE),
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_SUPPLIER_CREATE),
     },
-    PARKING_FIELD_UPDATE: {
+    SUPPLIER_UPDATE: {
       ...resBody,
       success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.PARKING_FIELD_UPDATE),
+      message: capitalizeStr(API_MSG.SUCCESS.SUPPLIER_UPDATE),
     },
-    PARKING_FIELD_DELETE: {
+    SUPPLIER_DELETE: {
       ...resBody,
       success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.PARKING_FIELD_DELETE),
+      message: capitalizeStr(API_MSG.SUCCESS.SUPPLIER_DELETE),
     },
 
     SIGN_IN_SUCCESS: {
