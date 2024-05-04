@@ -10,11 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormMode,
-  ISupplierForm,
-  SupplierFormProps,
-} from "^/@types/models/supplier";
+import { ISupplierForm, SupplierFormProps } from "^/@types/models/supplier";
 import {
   SupplierFormSchema,
   initialSupplierForm,
@@ -30,6 +26,7 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { getStaticProps } from "^/utils/getStaticProps";
+import { FormMode } from "^/@types/global";
 
 const SupplierForm: FC<SupplierFormProps> = ({
   mode,

@@ -7,7 +7,7 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import { useTranslations } from "next-intl";
 import SupplierForm from "../../../components/Supplier/SupplierForm";
 import { noop } from "^/utils/helpers";
-import { FormMode } from "^/@types/models/supplier";
+import { FormMode } from "^/@types/global";
 
 const AddSupplierPage: FC = () => {
   const t = useTranslations("");
