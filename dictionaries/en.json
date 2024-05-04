@@ -8,7 +8,7 @@
     "description": "description",
     "secure": "secure",
     "clean": "clean",
-    "easyPay": "easy payment",
+    "price": "price",
     "organized": "organized",
     "easy": "easy",
     "integrated": "integrated",
@@ -94,12 +94,18 @@
     "SUCCESS": {
       "NEW_SUPPLIER_CREATE": "new supplier created successfully",
       "SUPPLIER_UPDATE": "supplier updated successfully",
-      "SUPPLIER_DELETE": "supplier deleted successfully"
+      "SUPPLIER_DELETE": "supplier deleted successfully",
+      "NEW_ITEM_CAT_CREATE": "berhasil menambah kategori item",
+      "ITEM_CAT_UPDATE": "berhasil mengubah data kategori item",
+      "ITEM_CAT_DELETE": "berhasil menghapus data kategori item"
     },
     "ERROR": {
       "NEW_SUPPLIER_CREATE": "failed to create new supplier",
       "SUPPLIER_UPDATE": "failed to update supplier",
-      "SUPPLIER_DELETE": "failed to delete supplier"
+      "SUPPLIER_DELETE": "failed to delete supplier",
+      "NEW_ITEM_CAT_CREATE": "gagal menambah data kategori item",
+      "ITEM_CAT_UPDATE": "gagal mengubah data kategori item",
+      "ITEM_CAT_DELETE": "gagal menghapus data kategori item"
     }
   }
 }

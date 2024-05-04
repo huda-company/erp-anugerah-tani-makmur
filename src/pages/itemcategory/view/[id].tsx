@@ -1,22 +1,25 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { bcData } from "^/config/supplier/config";
 import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
-import SupplierForm from "../../../components/Supplier/SupplierForm";
-import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
-import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
+import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
+import { bcData } from "^/config/itemcategory/config";
+import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
 
-const EditSupplierPage: FC = () => {
+const ViewItemCatPage: FC = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Common.edit")} ${t("Sidebar.supplier")}`;
+  const titlePage = `${t("Common.detail")} ${t("Sidebar.itemCategory")}`;
 
-  const { formVal } = useGetSupplierById();
+  const { formVal, fetch } = useGetItemCatById();
+
+  const doRefreshData = () => {
+    fetch();
+  };
 
   return (
     <DashboardLayout>
@@ -29,10 +32,10 @@ const EditSupplierPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <SupplierForm
-              doRefresh={noop}
+            <ItemCategoryForm
+              doRefresh={doRefreshData}
               initialFormVals={formVal}
-              mode={FormMode.EDIT}
+              mode={FormMode.VIEW}
             />
           </div>
         </div>
@@ -43,4 +46,4 @@ const EditSupplierPage: FC = () => {
 
 export { getStaticPaths, getStaticProps };
 
-export default EditSupplierPage;
+export default ViewItemCatPage;

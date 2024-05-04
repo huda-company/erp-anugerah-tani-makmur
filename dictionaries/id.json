@@ -8,7 +8,7 @@
     "description": "deskripsi",
     "secure": "aman",
     "clean": "bersih",
-    "easyPay": "pembayaran mudah",
+    "price": "harga",
     "organized": "tertata",
     "easy": "mudah",
     "integrated": "terintegrasi",
@@ -65,7 +65,7 @@
     "supplier": "supplier",
     "purchaseOrder": "Purchase Order",
     "item": "item",
-    "itemCategory": "kateogri item",
+    "itemCategory": "kategori item",
     "branch": "cabang",
     "user": "pengguna"
   },
@@ -94,12 +94,24 @@
     "SUCCESS": {
       "NEW_SUPPLIER_CREATE": "berhasil menambah supplier",
       "SUPPLIER_UPDATE": "berhasil mengubah data supplier",
-      "SUPPLIER_DELETE": "berhasil menghapus data supplier"
+      "SUPPLIER_DELETE": "berhasil menghapus data supplier",
+      "NEW_ITEM_CAT_CREATE": "berhasil menambah kategori item",
+      "ITEM_CAT_UPDATE": "berhasil mengubah data kategori item",
+      "ITEM_CAT_DELETE": "berhasil menghapus data kategori item",
+      "NEW_ITEM_CREATE": "berhasil menambah item",
+      "ITEM_UPDATE": "berhasil mengubah data item",
+      "ITEM_DELETE": "berhasil menghapus data item"
     },
     "ERROR": {
-      "NEW_SUPPLIER_CREATE": "gagal menambah data tempat parkir",
-      "SUPPLIER_UPDATE": "gagal mengubah data tempat parkir",
-      "SUPPLIER_DELETE": "gagal menghapus data tempat parkir"
+      "NEW_SUPPLIER_CREATE": "gagal menambah data supplier",
+      "SUPPLIER_UPDATE": "gagal mengubah data supplier",
+      "SUPPLIER_DELETE": "gagal menghapus data tempat parkir",
+      "NEW_ITEM_CAT_CREATE": "gagal menambah data kategori item",
+      "ITEM_CAT_UPDATE": "gagal mengubah data kategori item",
+      "ITEM_CAT_DELETE": "gagal menghapus data kategori item",
+      "NEW_ITEM_CREATE": "gagal menambah data item",
+      "ITEM_UPDATE": "gagal mengubah data item",
+      "ITEM_DELETE": "gagal menghapus data item"
     }
   }
 }

@@ -7,16 +7,16 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
-import SupplierForm from "../../../components/Supplier/SupplierForm";
-import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
+import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
+import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
 
-const EditSupplierPage: FC = () => {
+const EditItemPage: FC = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Common.edit")} ${t("Sidebar.supplier")}`;
+  const titlePage = `${t("Common.edit")} ${t("Sidebar.itemCategory")}`;
 
-  const { formVal } = useGetSupplierById();
+  const { formVal } = useGetItemCatById();
 
   return (
     <DashboardLayout>
@@ -29,7 +29,7 @@ const EditSupplierPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <SupplierForm
+            <ItemCategoryForm
               doRefresh={noop}
               initialFormVals={formVal}
               mode={FormMode.EDIT}
@@ -43,4 +43,4 @@ const EditSupplierPage: FC = () => {
 
 export { getStaticPaths, getStaticProps };
 
-export default EditSupplierPage;
+export default EditItemPage;

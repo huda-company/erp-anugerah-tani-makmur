@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import SupplierForm from "../../../components/Supplier/SupplierForm";
 import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
-import { FormMode } from "^/@types/models/supplier";
+import { FormMode } from "^/@types/global";
 
 const ViewSupplierPage: FC = () => {
   const t = useTranslations("");

@@ -1,15 +1,14 @@
 import { useRouter } from "next/navigation";
 import { FC } from "react";
-import { BsArrowLeftSquare } from "react-icons/bs";
 
 import { HeaderModuleProps } from "./types";
 import Typography from "../Typography";
 import dynamic from "next/dynamic";
-import { MdAddToPhotos } from "react-icons/md";
+import { BsArrowLeftSquare } from "react-icons/bs";
 
-import { Button } from "../ui/button";
 import { noop } from "^/utils/helpers";
 import { capitalizeStr } from "^/utils/capitalizeStr";
+import { AiFillPlusCircle } from "react-icons/ai";
 
 const CustomBcumbNoSSR = dynamic(
   () => import("../CustomBreadcrumb/CustomBreadcrumb"),
@@ -26,27 +25,26 @@ const HeaderModule: FC<HeaderModuleProps> = ({ title, bcumbs, addPageURL }) => {
           <div onClick={router.back} className="cursor-pointer">
             <BsArrowLeftSquare color="black" size={20} />
           </div>
-          <Typography className="text-xl font-bold text-black underline">
-            {capitalizeStr(title)}
-          </Typography>
         </div>
       </div>
 
       {bcumbs && (
-        <div className="flex items-center">
-          <CustomBcumbNoSSR separator=">" items={bcumbs} />
+        <div className="flex items-center gap-x-2">
+          {/* <CustomBcumbNoSSR separator=">" items={bcumbs} /> */}
+          <AiFillPlusCircle
+            onClick={() => {
+              addPageURL ? router.push(addPageURL) : noop;
+            }}
+            className="h-6 w-6 cursor-pointer"
+          />
+          <Typography className="text-xl font-bold text-black underline">
+            {capitalizeStr(title)}
+          </Typography>
         </div>
       )}
 
       <div className="flex">
-        <Button
-          className="bg-gray-500 text-white hover:bg-primary-foreground"
-          onClick={() => {
-            addPageURL ? router.push(addPageURL) : noop;
-          }}
-        >
-          <MdAddToPhotos className="h-5 w-5" />
-        </Button>
+        <CustomBcumbNoSSR separator=">" items={bcumbs} />
       </div>
     </div>
   );
