@@ -19,9 +19,20 @@ export const API_MSG = {
   SUCCESS: {
     NEW_USER_CREATE: "new user created successfully",
     NEW_ROLE_CREATE: "new role created successfully",
+
     SUPPLIER_UPDATE: "parking field updated successfully",
     SUPPLIER_DELETE: "parking field deleted successfully",
+
     NEW_SUPPLIER_CREATE: "new supplier field created successfully",
+
+    NEW_ITEM_CAT_CREATE: "new item category created successfully",
+    ITEM_CAT_UPDATE: "item category updated successfully",
+    ITEM_CAT_DELETE: "item category deleted successfully",
+
+    NEW_ITEM_CREATE: "new item created successfully",
+    ITEM_UPDATE: "item updated successfully",
+    ITEM_DELETE: "item deleted successfully",
+
     SIGN_IN_SUCCESS: "signin successfully",
     RETRIEVED_DATA_SUCCESS: "data retrieved successfully",
     EMAIL_VERIF_SUCCESS: "your email verified successfully",

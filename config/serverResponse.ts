@@ -78,11 +78,13 @@ export const respBody = {
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.NEW_USER_CREATE),
     },
+
     NEW_ROLE_CREATE: {
       ...resBody,
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.NEW_ROLE_CREATE),
     },
+
     NEW_SUPPLIER_CREATE: {
       ...resBody,
       success: true,
@@ -97,6 +99,38 @@ export const respBody = {
       ...resBody,
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.SUPPLIER_DELETE),
+    },
+
+    NEW_ITEM_CAT_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_ITEM_CAT_CREATE),
+    },
+    ITEM_CAT_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.ITEM_CAT_UPDATE),
+    },
+    ITEM_CAT_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.ITEM_CAT_DELETE),
+    },
+
+    NEW_ITEM_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_ITEM_CREATE),
+    },
+    ITEM_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.ITEM_UPDATE),
+    },
+    ITEM_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.ITEM_DELETE),
     },
 
     SIGN_IN_SUCCESS: {

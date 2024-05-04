@@ -1,3 +1,5 @@
+import { BaseFormProps } from "../global";
+
 export interface ISupplierDocument extends Document {
   email: string;
   supplierCode: string;
@@ -53,14 +55,6 @@ export type ISupplierForm = {
   tel: string;
 };
 
-export enum FormMode {
-  ADD = "ADD",
-  VIEW = "VIEW",
-  EDIT = "EDIT",
-}
-
 export type SupplierFormProps = {
-  mode: FormMode;
   initialFormVals: ISupplierForm;
-  doRefresh: () => void;
-};
+} & BaseFormProps;
