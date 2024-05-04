@@ -92,8 +92,14 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
   };
 
   const handleReset = () => {
-    itemCatForm.setValue("description", "");
-    itemCatForm.setValue("name", "");
+    itemCatForm.setValue(
+      "description",
+      mode == FormMode.ADD ? "" : initialFormVals.description
+    );
+    itemCatForm.setValue(
+      "name",
+      mode == FormMode.ADD ? "" : initialFormVals.name
+    );
   };
 
   const itemCatForm = useForm<z.infer<typeof ItemCatFormSchema>>({

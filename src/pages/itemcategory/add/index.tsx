@@ -6,9 +6,9 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { useTranslations } from "next-intl";
 import { noop } from "^/utils/helpers";
-import ItemCategoryForm from "@/components/Item/ItemForm";
 import { FormMode } from "^/@types/global";
 import { initialItemForm } from "^/config/item/config";
+import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
 
 const AddItemCatPage: FC = () => {
   const t = useTranslations("");

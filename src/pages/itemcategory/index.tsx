@@ -13,8 +13,9 @@ import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
 import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
+import { capitalizeStr } from "^/utils/capitalizeStr";
 
-const Item = () => {
+const ItemCategory = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.itemCategory")}`;
 
@@ -23,17 +24,16 @@ const Item = () => {
   const header = useMemo(
     () => [
       {
-        value: t("Common.code"),
-        className: "sticky left-0 z-20 text-left text-xs w-[15rem]",
-        sort: true,
-      },
-      {
         value: t("Signup.name"),
         className: "text-left text-xs w-[6rem] p-0",
       },
       {
         value: t("Index.description"),
         className: "text-left text-xs w-[9rem] p-0",
+      },
+      {
+        value: capitalizeStr(t("Common.action")),
+        className: "sticky right-0 z-20 text-left text-xs w-[3rem]",
       },
     ],
     [t]
@@ -74,4 +74,4 @@ const Item = () => {
 
 export { getStaticProps };
 
-export default withAuth(Item);
+export default withAuth(ItemCategory);

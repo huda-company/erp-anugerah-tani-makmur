@@ -95,13 +95,34 @@ const SupplierForm: FC<SupplierFormProps> = ({
   };
 
   const handleReset = () => {
-    supplierForm.setValue("email", "");
-    supplierForm.setValue("name", "");
-    supplierForm.setValue("managerName", "");
-    supplierForm.setValue("managerSurname", "");
-    supplierForm.setValue("address", "");
-    supplierForm.setValue("bankAccount", "");
-    supplierForm.setValue("tel", "");
+    supplierForm.setValue(
+      "email",
+      mode == FormMode.ADD ? "" : initialFormVals.email
+    );
+    supplierForm.setValue(
+      "name",
+      mode == FormMode.ADD ? "" : initialFormVals.company
+    );
+    supplierForm.setValue(
+      "managerName",
+      mode == FormMode.ADD ? "" : initialFormVals.managerName
+    );
+    supplierForm.setValue(
+      "managerSurname",
+      mode == FormMode.ADD ? "" : initialFormVals.managerSurname
+    );
+    supplierForm.setValue(
+      "address",
+      mode == FormMode.ADD ? "" : initialFormVals.address
+    );
+    supplierForm.setValue(
+      "bankAccount",
+      mode == FormMode.ADD ? "" : initialFormVals.bankAccount
+    );
+    supplierForm.setValue(
+      "tel",
+      mode == FormMode.ADD ? "" : initialFormVals.tel
+    );
   };
 
   const supplierForm = useForm<z.infer<typeof SupplierFormSchema>>({

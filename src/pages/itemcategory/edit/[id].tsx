@@ -12,7 +12,7 @@ import { FormMode } from "^/@types/global";
 import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
 
-const EditItemPage: FC = () => {
+const EditItemCatPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.itemCategory")}`;
 
@@ -43,4 +43,4 @@ const EditItemPage: FC = () => {
 
 export { getStaticPaths, getStaticProps };
 
-export default EditItemPage;
+export default EditItemCatPage;

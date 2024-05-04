@@ -5,7 +5,7 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
+import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import { FormMode } from "^/@types/global";
 import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import { bcData } from "^/config/itemcategory/config";
@@ -26,7 +26,7 @@ const ViewItemCatPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={SUPPLIER_PAGE.ADD}
+            addPageURL={ITEM_CAT_PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

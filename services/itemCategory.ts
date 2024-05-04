@@ -60,7 +60,7 @@ export const editItemCatAPI = async (
   }
 };
 
-export const deleteItemCateAPI = async (sess: Session | null, id: string) => {
+export const deleteItemCatAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
   const reqURL = `${BASE_ITEM_CAT_API_URL}/delete/${id}`;
