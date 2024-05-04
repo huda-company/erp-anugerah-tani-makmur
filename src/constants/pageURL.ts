@@ -42,11 +42,11 @@ export const ITEM_PAGE = {
   VIEW: "/item/view",
 };
 
-export const BRANCHES_PAGE = {
-  ROOT: "/branches",
-  ADD: "/branches/add",
-  EDIT: "/branches/edit",
-  VIEW: "/branches/view",
+export const BRANCH_PAGE = {
+  ROOT: "/branch",
+  ADD: "/branch/add",
+  EDIT: "/branch/edit",
+  VIEW: "/branch/view",
 };
 
 export const USER_PAGE = {

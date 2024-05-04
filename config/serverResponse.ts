@@ -133,6 +133,22 @@ export const respBody = {
       message: capitalizeStr(API_MSG.SUCCESS.ITEM_DELETE),
     },
 
+    NEW_BRANCH_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_BRANCH_CREATE),
+    },
+    BRANCH_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.BRANCH_UPDATE),
+    },
+    BRANCH_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.BRANCH_DELETE),
+    },
+
     SIGN_IN_SUCCESS: {
       ...resBody,
       success: true,

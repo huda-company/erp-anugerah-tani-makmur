@@ -33,6 +33,10 @@ export const API_MSG = {
     ITEM_UPDATE: "item updated successfully",
     ITEM_DELETE: "item deleted successfully",
 
+    NEW_BRANCH_CREATE: "new branch created successfully",
+    BRANCH_UPDATE: "branch updated successfully",
+    BRANCH_DELETE: "branch deleted successfully",
+
     SIGN_IN_SUCCESS: "signin successfully",
     RETRIEVED_DATA_SUCCESS: "data retrieved successfully",
     EMAIL_VERIF_SUCCESS: "your email verified successfully",
