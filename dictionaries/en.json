@@ -95,17 +95,29 @@
       "NEW_SUPPLIER_CREATE": "new supplier created successfully",
       "SUPPLIER_UPDATE": "supplier updated successfully",
       "SUPPLIER_DELETE": "supplier deleted successfully",
-      "NEW_ITEM_CAT_CREATE": "berhasil menambah kategori item",
-      "ITEM_CAT_UPDATE": "berhasil mengubah data kategori item",
-      "ITEM_CAT_DELETE": "berhasil menghapus data kategori item"
+      "NEW_ITEM_CAT_CREATE": "new item category created successfully",
+      "ITEM_CAT_UPDATE": "item category updated successfully",
+      "ITEM_CAT_DELETE": "item category deleted successfully",
+      "NEW_ITEM_CREATE": "new item created successfully",
+      "ITEM_UPDATE": "item updated successfully",
+      "ITEM_DELETE": "item deleted successfully",
+      "NEW_BRANCH_CREATE": "new branch created successfully",
+      "BRANCH_UPDATE": "branch updated successfully",
+      "BRANCH_DELETE": "branch deleted successfully"
     },
     "ERROR": {
       "NEW_SUPPLIER_CREATE": "failed to create new supplier",
       "SUPPLIER_UPDATE": "failed to update supplier",
       "SUPPLIER_DELETE": "failed to delete supplier",
-      "NEW_ITEM_CAT_CREATE": "gagal menambah data kategori item",
-      "ITEM_CAT_UPDATE": "gagal mengubah data kategori item",
-      "ITEM_CAT_DELETE": "gagal menghapus data kategori item"
+      "NEW_ITEM_CAT_CREATE": "failed to create new item category",
+      "ITEM_CAT_UPDATE": "failed to update item category",
+      "ITEM_CAT_DELETE": "failed to delete item category",
+      "NEW_ITEM_CREATE": "failed to create new item",
+      "ITEM_UPDATE": "failed to update item",
+      "ITEM_DELETE": "failed to delete item",
+      "NEW_BRANCH_CREATE": "failed to create new branch",
+      "BRANCH_UPDATE": "failed to update branch",
+      "BRANCH_DELETE": "failed to delete branch"
     }
   }
 }

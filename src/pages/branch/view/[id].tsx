@@ -5,17 +5,17 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
+import { BRANCH_PAGE } from "@/constants/pageURL";
 import { FormMode } from "^/@types/global";
-import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import { bcData } from "^/config/itemcategory/config";
-import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
+import BranchForm from "@/components/Branch/BranchForm";
+import useGetBranchById from "@/hooks/branch/useGetBranchById";
 
-const ViewItemCatPage: FC = () => {
+const ViewBranchPage: FC = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Common.detail")} ${t("Sidebar.itemCategory")}`;
+  const titlePage = `${t("Common.detail")} ${t("Sidebar.branch")}`;
 
-  const { formVal, fetch } = useGetItemCatById();
+  const { formVal, fetch } = useGetBranchById();
 
   const doRefreshData = () => {
     fetch();
@@ -26,13 +26,13 @@ const ViewItemCatPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={ITEM_CAT_PAGE.ADD}
+            addPageURL={BRANCH_PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemCategoryForm
+            <BranchForm
               doRefresh={doRefreshData}
               initialFormVals={formVal}
               mode={FormMode.VIEW}
@@ -46,4 +46,4 @@ const ViewItemCatPage: FC = () => {
 
 export { getStaticPaths, getStaticProps };
 
-export default ViewItemCatPage;
+export default ViewBranchPage;

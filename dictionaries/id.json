@@ -100,7 +100,10 @@
       "ITEM_CAT_DELETE": "berhasil menghapus data kategori item",
       "NEW_ITEM_CREATE": "berhasil menambah item",
       "ITEM_UPDATE": "berhasil mengubah data item",
-      "ITEM_DELETE": "berhasil menghapus data item"
+      "ITEM_DELETE": "berhasil menghapus data item",
+      "NEW_BRANCH_CREATE": "berhasil menambah branch",
+      "BRANCH_UPDATE": "berhasil mengubah data branch",
+      "BRANCH_DELETE": "berhasil menghapus data branch"
     },
     "ERROR": {
       "NEW_SUPPLIER_CREATE": "gagal menambah data supplier",
@@ -111,7 +114,10 @@
       "ITEM_CAT_DELETE": "gagal menghapus data kategori item",
       "NEW_ITEM_CREATE": "gagal menambah data item",
       "ITEM_UPDATE": "gagal mengubah data item",
-      "ITEM_DELETE": "gagal menghapus data item"
+      "ITEM_DELETE": "gagal menghapus data item",
+      "NEW_BRANCH_CREATE": "gagal menambah data branch",
+      "BRANCH_UPDATE": "gagal mengubah data branch",
+      "BRANCH_DELETE": "gagal menghapus data branch"
     }
   }
 }

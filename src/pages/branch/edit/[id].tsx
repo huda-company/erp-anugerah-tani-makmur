@@ -4,26 +4,35 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { bcData } from "^/config/supplier/config";
 import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
+import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
+import { BRANCH_PAGE } from "@/constants/pageURL";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
-import { initialItemForm } from "^/config/item/config";
-import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
+import BranchForm from "@/components/Branch/BranchForm";
+import useGetBranchById from "@/hooks/branch/useGetBranchById";
 
-const AddItemCatPage: FC = () => {
+const EditBranchPage: FC = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Common.add")} ${t("Sidebar.itemCategory")}`;
+  const titlePage = `${t("Common.edit")} ${t("Sidebar.branch")}`;
+
+  const { formVal } = useGetBranchById();
 
   return (
     <DashboardLayout>
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
-          <HeaderModule title={titlePage} bcumbs={bcData} />
+          <HeaderModule
+            addPageURL={BRANCH_PAGE.ADD}
+            title={titlePage}
+            bcumbs={bcData}
+          />
+
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemCategoryForm
+            <BranchForm
               doRefresh={noop}
-              mode={FormMode.ADD}
-              initialFormVals={initialItemForm}
+              initialFormVals={formVal}
+              mode={FormMode.EDIT}
             />
           </div>
         </div>
@@ -32,6 +41,6 @@ const AddItemCatPage: FC = () => {
   );
 };
 
-export { getStaticProps };
+export { getStaticPaths, getStaticProps };
 
-export default AddItemCatPage;
+export default EditBranchPage;

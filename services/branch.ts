@@ -1,3 +1,4 @@
+import { IBranchForm } from "^/@types/models/branch";
 import { IItemCatForm } from "^/@types/models/itemcategory";
 import { ISupplierFieldRequest } from "^/@types/models/supplier";
 import { API_VERSION, BASE_URL } from "^/config/env";
@@ -6,16 +7,16 @@ import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
 
-const BASE_ITEM_CAT_API_URL = `${BASE_URL}/api/${API_VERSION}/item-category`;
+const BASE_BRANCH_API_URL = `${BASE_URL}/api/${API_VERSION}/branch`;
 
-export const getItemCatAPI = async (
+export const getBranchAPI = async (
   sess: Session | null,
   params: Omit<ISupplierFieldRequest["query"], "name">
 ) => {
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_ITEM_CAT_API_URL}?${qStr}`;
+  const reqURL = `${BASE_BRANCH_API_URL}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -26,13 +27,13 @@ export const getItemCatAPI = async (
   }
 };
 
-export const addItemCatAPI = async (
+export const addBranchAPI = async (
   sess: Session | null,
-  params: IItemCatForm
+  params: IBranchForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_CAT_API_URL}`;
+  const reqURL = `${BASE_BRANCH_API_URL}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -43,13 +44,13 @@ export const addItemCatAPI = async (
   }
 };
 
-export const editItemCatAPI = async (
+export const editBranchAPI = async (
   sess: Session | null,
   params: IItemCatForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_CAT_API_URL}/update/${params.id}`;
+  const reqURL = `${BASE_BRANCH_API_URL}/update/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -60,10 +61,10 @@ export const editItemCatAPI = async (
   }
 };
 
-export const deleteItemCatAPI = async (sess: Session | null, id: string) => {
+export const deleteBranchAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_CAT_API_URL}/delete/${id}`;
+  const reqURL = `${BASE_BRANCH_API_URL}/delete/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

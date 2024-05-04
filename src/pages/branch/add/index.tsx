@@ -1,18 +1,17 @@
 import DashboardLayout from "@/components/DashboardLayout";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { bcData } from "^/config/supplier/config";
 import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { useTranslations } from "next-intl";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
-import { initialItemForm } from "^/config/item/config";
-import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
+import BranchForm from "@/components/Branch/BranchForm";
+import { bcData, initialBranchForm } from "^/config/branch/config";
 
-const AddItemCatPage: FC = () => {
+const AddBranchPage: FC = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Common.add")} ${t("Sidebar.itemCategory")}`;
+  const titlePage = `${t("Common.add")} ${t("Sidebar.branch")}`;
 
   return (
     <DashboardLayout>
@@ -20,10 +19,10 @@ const AddItemCatPage: FC = () => {
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule title={titlePage} bcumbs={bcData} />
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemCategoryForm
+            <BranchForm
               doRefresh={noop}
               mode={FormMode.ADD}
-              initialFormVals={initialItemForm}
+              initialFormVals={initialBranchForm}
             />
           </div>
         </div>
@@ -34,4 +33,4 @@ const AddItemCatPage: FC = () => {
 
 export { getStaticProps };
 
-export default AddItemCatPage;
+export default AddBranchPage;

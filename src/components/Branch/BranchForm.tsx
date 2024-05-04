@@ -23,11 +23,11 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { FormMode } from "^/@types/global";
-import { IItemCatForm, ItemCatFormProps } from "^/@types/models/itemcategory";
-import { ItemCatFormSchema } from "^/config/itemcategory/config";
-import { addItemCatAPI, editItemCatAPI } from "^/services/itemCategory";
+import { BranchFormProps, IBranchForm } from "^/@types/models/branch";
+import { addBranchAPI, editBranchAPI } from "^/services/branch";
+import { BranchFormSchema } from "^/config/branch/config";
 
-const ItemCategoryForm: FC<ItemCatFormProps> = ({
+const BranchForm: FC<BranchFormProps> = ({
   mode,
   initialFormVals,
   doRefresh,
@@ -44,17 +44,19 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const onFormSubmit = async (values: z.infer<typeof ItemCatFormSchema>) => {
+  const onFormSubmit = async (values: z.infer<typeof BranchFormSchema>) => {
     setLoading(true);
-    const prm: IItemCatForm = {
+    const prm: IBranchForm = {
       name: values.name,
+      city: values.city,
+      address: values.address,
       description: values.description,
       id: initialFormVals.id ?? "",
     };
     const res =
       mode === FormMode.ADD
-        ? await addItemCatAPI(session, prm)
-        : await editItemCatAPI(session, prm);
+        ? await addBranchAPI(session, prm)
+        : await editBranchAPI(session, prm);
     if (res && res.status == 200) {
       dispatch(
         toastActs.callShowToast({
@@ -63,8 +65,8 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
             <div className="flex flex-col py-[1rem]">
               <span>
                 {mode === FormMode.ADD
-                  ? t("API_MSG.SUCCESS.NEW_ITEM_CAT_CREATE")
-                  : t("API_MSG.SUCCESS.ITEM_CAT_UPDATE")}
+                  ? t("API_MSG.SUCCESS.NEW_BRANCH_CREATE")
+                  : t("API_MSG.SUCCESS.BRANCH_UPDATE")}
               </span>
             </div>
           ),
@@ -92,47 +94,59 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
   };
 
   const handleReset = () => {
-    itemCatForm.setValue(
+    branchForm.setValue(
+      "city",
+      mode == FormMode.ADD ? "" : initialFormVals.city
+    );
+    branchForm.setValue(
+      "address",
+      mode == FormMode.ADD ? "" : initialFormVals.address
+    );
+    branchForm.setValue(
       "description",
       mode == FormMode.ADD ? "" : initialFormVals.description
     );
-    itemCatForm.setValue(
+    branchForm.setValue(
       "name",
       mode == FormMode.ADD ? "" : initialFormVals.name
     );
   };
 
-  const itemCatForm = useForm<z.infer<typeof ItemCatFormSchema>>({
-    resolver: zodResolver(ItemCatFormSchema),
+  const branchForm = useForm<z.infer<typeof BranchFormSchema>>({
+    resolver: zodResolver(BranchFormSchema),
     defaultValues: mode == FormMode.ADD ? initialSupplierForm : initialFormVals,
   });
 
   useEffect(() => {
     if (mode !== FormMode.ADD && initialFormVals.id === id) {
-      itemCatForm.setValue("description", initialFormVals.description);
-      itemCatForm.setValue("name", initialFormVals.name);
+      branchForm.setValue("description", initialFormVals.description);
+      branchForm.setValue("name", initialFormVals.name);
+      branchForm.setValue("city", initialFormVals.city);
+      branchForm.setValue("address", initialFormVals.address);
     }
   }, [
+    branchForm,
     id,
+    initialFormVals.address,
+    initialFormVals.city,
     initialFormVals.description,
     initialFormVals.id,
     initialFormVals.name,
-    itemCatForm,
     mode,
   ]);
 
   return (
-    <Form {...itemCatForm}>
+    <Form {...branchForm}>
       <form
-        onReset={() => itemCatForm.reset}
-        onSubmit={itemCatForm.handleSubmit(onFormSubmit)}
+        onReset={() => branchForm.reset}
+        onSubmit={branchForm.handleSubmit(onFormSubmit)}
         className="space-y-8"
       >
         <FormField
           disabled={mode == FormMode.VIEW}
-          control={itemCatForm.control}
+          control={branchForm.control}
           name="name"
-          defaultValue={itemCatForm.getValues("name")}
+          defaultValue={branchForm.getValues("name")}
           render={({ field }) => (
             <>
               <FormItem>
@@ -145,9 +159,43 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
             </>
           )}
         />
+
         <FormField
           disabled={mode == FormMode.VIEW}
-          control={itemCatForm.control}
+          control={branchForm.control}
+          name="city"
+          render={({ field }) => (
+            <>
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input placeholder="City" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </>
+          )}
+        />
+
+        <FormField
+          disabled={mode == FormMode.VIEW}
+          control={branchForm.control}
+          name="address"
+          render={({ field }) => (
+            <>
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </>
+          )}
+        />
+        <FormField
+          disabled={mode == FormMode.VIEW}
+          control={branchForm.control}
           name="description"
           render={({ field }) => (
             <>
@@ -189,4 +237,4 @@ const ItemCategoryForm: FC<ItemCatFormProps> = ({
 
 export { getStaticProps };
 
-export default ItemCategoryForm;
+export default BranchForm;

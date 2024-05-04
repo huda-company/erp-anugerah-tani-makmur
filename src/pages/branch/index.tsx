@@ -11,21 +11,30 @@ import { bcData } from "^/config/itemcategory/config";
 import CustomTable from "@/components/CustomTable/CustomTable";
 import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
-import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
+import { BRANCH_PAGE } from "@/constants/pageURL";
+import useGetBranch from "@/hooks/branch/useGetBranch";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 
-const ItemCategory = () => {
+const BranchPage = () => {
   const t = useTranslations("");
-  const titlePage = `${t("Sidebar.itemCategory")}`;
+  const titlePage = `${t("Sidebar.branch")}`;
 
-  const { loading, tblBd } = useGetItemCat();
+  const { loading, tblBd } = useGetBranch();
 
   const header = useMemo(
     () => [
       {
         value: t("Signup.name"),
+        className: "sticky left-0 z-20 text-left text-xs w-[15rem]",
+        sort: true,
+      },
+      {
+        value: t("ParkingField.city"),
         className: "text-left text-xs w-[6rem] p-0",
+      },
+      {
+        value: t("ParkingField.address"),
+        className: "text-left text-xs w-[9rem] p-0",
       },
       {
         value: t("Index.description"),
@@ -53,7 +62,7 @@ const ItemCategory = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={ITEM_CAT_PAGE.ADD}
+              addPageURL={BRANCH_PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />
@@ -74,4 +83,4 @@ const ItemCategory = () => {
 
 export { getStaticProps };
 
-export default withAuth(ItemCategory);
+export default withAuth(BranchPage);

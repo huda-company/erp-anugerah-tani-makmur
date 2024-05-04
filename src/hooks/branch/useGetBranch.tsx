@@ -12,7 +12,6 @@ import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -21,11 +20,11 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { IItemCatFieldRequest } from "^/@types/models/itemcategory";
-import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
-import { Options } from "^/@types/global";
+import { deleteBranchAPI, getBranchAPI } from "^/services/branch";
+import { IBranchFieldRequest } from "^/@types/models/branch";
+import { BRANCH_PAGE } from "@/constants/pageURL";
 
-const useGetItemCat = () => {
+const useGetBranch = () => {
   const t = useTranslations("");
 
   const fetched = useRef(false);
@@ -39,13 +38,12 @@ const useGetItemCat = () => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(true);
-  const [itemCat, setItemCat] = useState<any>(null);
+  const [branches, setBranches] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
-  const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
 
   const fetch = useCallback(
     async (
-      payload: Omit<IItemCatFieldRequest["query"], "name"> = {
+      payload: Omit<IBranchFieldRequest["query"], "name"> = {
         page: 1,
         limit: pageRowsArr[2],
         "sort[key]": "name",
@@ -56,7 +54,7 @@ const useGetItemCat = () => {
       setLoading(true);
 
       try {
-        const response = await getItemCatAPI(session, payload);
+        const response = await getBranchAPI(session, payload);
 
         if (!response || (response && response.status !== 200)) {
           return null;
@@ -64,7 +62,7 @@ const useGetItemCat = () => {
 
         if (response.data) {
           const { data: resData } = response;
-          setItemCat(resData);
+          setBranches(resData);
           setLoading(false);
         }
       } catch (error) {
@@ -78,7 +76,7 @@ const useGetItemCat = () => {
   const confirmDelOk = useCallback(
     async (id: string) => {
       setLoading(true);
-      const resDelete = await deleteItemCatAPI(session, id);
+      const resDelete = await deleteBranchAPI(session, id);
       if (resDelete.data.success) {
         await fetch();
         await dispatch(
@@ -94,7 +92,7 @@ const useGetItemCat = () => {
               <div className="flex flex-col py-[1rem]">
                 <span>
                   {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.ITEM_CAT_DELETE"))}{" "}
+                  {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))}{" "}
                 </span>
               </div>
             ),
@@ -109,7 +107,7 @@ const useGetItemCat = () => {
             msg: (
               <div className="flex flex-col py-[1rem] capitalize">
                 <span>
-                  {t(capitalizeStr(t("API_MSG.ERROR.ITEM_CAT_DELETE")))}
+                  {t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}
                 </span>
               </div>
             ),
@@ -171,31 +169,22 @@ const useGetItemCat = () => {
   }, [fetch, session]);
 
   useEffect(() => {
-    if (itemCat) {
-      const items = itemCat.data.items;
-      // build opts
-      const opts =
-        itemCat && Array.isArray(items) && items.length > 0
-          ? items.map((x: any) => {
-              return {
-                value: x.id,
-                text: x.name,
-              };
-            })
-          : [];
-      setItemCatOpts(opts);
-    }
-  }, [itemCat]);
-
-  useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
-    if (itemCat && Array.isArray(itemCat.data.items)) {
-      formattedBody = itemCat.data.items.map((x: any) => {
+    if (branches && Array.isArray(branches.data.items)) {
+      formattedBody = branches.data.items.map((x: any) => {
         return {
           items: [
             {
               value: x.name,
               className: "text-left w-[15rem]",
+            },
+            {
+              value: x.city,
+              className: "text-left w-[6rem] pl-0",
+            },
+            {
+              value: x.address,
+              className: "text-left w-[6rem] pl-0",
             },
             {
               value: x.description,
@@ -212,15 +201,13 @@ const useGetItemCat = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${ITEM_CAT_PAGE.EDIT}/${x.id}`)
-                      }
+                      onClick={() => router.push(`${BRANCH_PAGE.EDIT}/${x.id}`)}
                     >
                       {capitalizeStr(t("Common.edit"))}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() =>
-                        router.push(`${ITEM_CAT_PAGE.VIEW}/${String(x.id)}`)
+                        router.push(`${BRANCH_PAGE.VIEW}/${String(x.id)}`)
                       }
                     >
                       {capitalizeStr(t("Common.view"))}
@@ -238,15 +225,14 @@ const useGetItemCat = () => {
       });
     }
     setTblBd(formattedBody);
-  }, [confirmDeletion, itemCat, router, t]);
+  }, [branches, confirmDeletion, router, t]);
 
   return {
     loading,
     fetch,
-    itemCat,
+    branches,
     tblBd,
-    itemCatOpts,
   };
 };
 
-export default useGetItemCat;
+export default useGetBranch;

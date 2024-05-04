@@ -1,5 +1,5 @@
 import {
-  BRANCHES_PAGE,
+  BRANCH_PAGE,
   ITEM_CAT_PAGE,
   ITEM_PAGE,
   PO_PAGE,
@@ -41,7 +41,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: "branch",
-    href: BRANCHES_PAGE.ROOT,
+    href: BRANCH_PAGE.ROOT,
     icon: "store",
     label: "store",
   },
