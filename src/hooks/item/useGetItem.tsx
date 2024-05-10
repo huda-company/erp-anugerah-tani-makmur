@@ -24,6 +24,14 @@ import useAppSelector from "../useAppSelector";
 import { IItemFieldRequest } from "^/@types/models/item";
 import { deleteItemAPI, getItemAPI } from "^/services/item";
 import { Options } from "^/@types/global";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import {
+  handlePrmChangeInputPage,
+  handlePrmChangeNextBtn,
+  handlePrmChangePrevBtn,
+  handlePrmChangeRowPage,
+  initPgPrms,
+} from "@/components/PaginationCustom/config";
 
 const useGetItem = () => {
   const t = useTranslations("");
@@ -42,6 +50,8 @@ const useGetItem = () => {
   const [itemData, setItemData] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
+  const [itemPgntn, setItemTblPgntn] =
+    useState<PaginationCustomPrms>(initPgPrms);
 
   const fetch = useCallback(
     async (
@@ -63,7 +73,16 @@ const useGetItem = () => {
         }
 
         if (response.data) {
-          setItemData(response.data);
+          const { data: resData } = response;
+
+          setItemData(resData);
+          setItemTblPgntn({
+            page: resData.data.page,
+            limit: resData.data.limit,
+            nextPage: resData.data.nextPage,
+            prevPage: resData.data.prevPage,
+            totalPages: resData.data.totalPages,
+          });
           setLoading(false);
         }
       } catch (error) {
@@ -160,6 +179,40 @@ const useGetItem = () => {
     [closeAlertModal, confirmDelOk, dispatch, t]
   );
 
+  const onPaginationChange = useCallback(
+    (prm: PaginationCustomPrms) => {
+      const pgntParam: Omit<IItemFieldRequest["query"], "name"> = {
+        page: prm.page,
+        limit: prm.limit,
+        "sort[key]": "name",
+        "sort[direction]": "asc",
+      };
+
+      fetch(pgntParam);
+    },
+    [fetch]
+  );
+
+  const handleNextClck = () => {
+    const newPrms = handlePrmChangeNextBtn(itemPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePrevClck = () => {
+    const newPrms = handlePrmChangePrevBtn(itemPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    const newPrms = handlePrmChangeInputPage(itemPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageRowChange = (prm: number) => {
+    const newPrms = handlePrmChangeRowPage(itemPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
@@ -188,7 +241,10 @@ const useGetItem = () => {
         return {
           items: [
             {
-              value: x.itemCategory,
+              value:
+                x && x.itemCategory && typeof x.itemCategory.name == "string"
+                  ? x.itemCategory.name
+                  : "wrong value format",
               className: "text-left w-[15rem]",
             },
             {
@@ -246,6 +302,11 @@ const useGetItem = () => {
     itemData,
     tblBd,
     itemDataOpts,
+    itemPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
   };
 };
 

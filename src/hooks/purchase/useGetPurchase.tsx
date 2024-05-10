@@ -25,6 +25,15 @@ import { IBranchFieldRequest } from "^/@types/models/branch";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { getPurchaseAPI } from "^/services/purchase";
 import { formatDate } from "^/utils/dateFormatting";
+import {
+  handlePrmChangeInputPage,
+  handlePrmChangeNextBtn,
+  handlePrmChangePrevBtn,
+  handlePrmChangeRowPage,
+  initPgPrms,
+} from "@/components/PaginationCustom/config";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import { IPurchaseFieldRequest } from "^/@types/models/purchase";
 
 const useGetPurchase = () => {
   const t = useTranslations("");
@@ -40,14 +49,16 @@ const useGetPurchase = () => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(true);
-  const [branches, setBranches] = useState<any>(null);
+  const [purchData, setPurchData] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [purchPgntn, setPurchTblPgntn] =
+    useState<PaginationCustomPrms>(initPgPrms);
 
   const fetch = useCallback(
     async (
       payload: Omit<IBranchFieldRequest["query"], "name"> = {
         page: 1,
-        limit: pageRowsArr[2],
+        limit: pageRowsArr[0],
         "sort[key]": "name",
         "sort[direction]": "asc",
       }
@@ -64,7 +75,14 @@ const useGetPurchase = () => {
 
         if (response.data) {
           const { data: resData } = response;
-          setBranches(resData);
+          setPurchData(resData);
+          setPurchTblPgntn({
+            page: resData.data.page,
+            limit: resData.data.limit,
+            nextPage: resData.data.nextPage,
+            prevPage: resData.data.prevPage,
+            totalPages: resData.data.totalPages,
+          });
           setLoading(false);
         }
       } catch (error) {
@@ -166,14 +184,48 @@ const useGetPurchase = () => {
     [closeAlertModal, confirmDelOk, dispatch, t]
   );
 
+  const onPaginationChange = useCallback(
+    (prm: PaginationCustomPrms) => {
+      const pgntParam: Omit<IPurchaseFieldRequest["query"], "name"> = {
+        page: prm.page,
+        limit: prm.limit,
+        "sort[key]": "name",
+        "sort[direction]": "asc",
+      };
+
+      fetch(pgntParam);
+    },
+    [fetch]
+  );
+
+  const handleNextClck = () => {
+    const newPrms = handlePrmChangeNextBtn(purchPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePrevClck = () => {
+    const newPrms = handlePrmChangePrevBtn(purchPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    const newPrms = handlePrmChangeInputPage(purchPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageRowChange = (prm: number) => {
+    const newPrms = handlePrmChangeRowPage(purchPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
 
   useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
-    if (branches && Array.isArray(branches.data.items)) {
-      formattedBody = branches.data.items.map((x: any) => {
+    if (purchData && Array.isArray(purchData.data.items)) {
+      formattedBody = purchData.data.items.map((x: any) => {
         return {
           items: [
             {
@@ -236,13 +288,19 @@ const useGetPurchase = () => {
       });
     }
     setTblBd(formattedBody);
-  }, [branches, confirmDeletion, router, t]);
+  }, [purchData, confirmDeletion, router, t]);
 
   return {
     loading,
     fetch,
-    branches,
+    purchData,
+    purchPgntn,
     tblBd,
+    handleNextClck,
+    handlePrevClck,
+    handlePageInputChange,
+    handlePageRowChange,
+    onPaginationChange,
   };
 };
 
