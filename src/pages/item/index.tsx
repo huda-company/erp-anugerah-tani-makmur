@@ -14,30 +14,40 @@ import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
 import { ITEM_PAGE } from "@/constants/pageURL";
 import useGetItem from "@/hooks/item/useGetItem";
+import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 
 const Item = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.item")}`;
 
-  const { loading, tblBd } = useGetItem();
+  const {
+    loading,
+    tblBd,
+    itemPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageInputChange,
+    handlePageRowChange,
+  } = useGetItem();
+  console.log("tblBd", tblBd);
 
   const header = useMemo(
     () => [
       {
-        value: t("Sidebar.itemCategory"),
+        value: capitalizeStr(t("Sidebar.itemCategory")),
         className: "sticky left-0 z-20 text-left text-xs w-[15rem]",
         sort: true,
       },
       {
-        value: t("Signup.name"),
+        value: capitalizeStr(t("Signup.name")),
         className: "text-left text-xs w-[6rem] p-0",
       },
       {
-        value: t("Index.description"),
+        value: capitalizeStr(t("Index.description")),
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
-        value: t("Index.price"),
+        value: capitalizeStr(t("Index.price")),
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
@@ -72,6 +82,26 @@ const Item = () => {
             {loading == false && (
               <div className="rounded-[1rem] bg-[#CAF4AB]">
                 <CustomTable data={tblData} />
+
+                <PaginationCustom
+                  key="itemTbl"
+                  page={itemPgntn.page}
+                  nextPage={itemPgntn.nextPage}
+                  prevPage={itemPgntn.prevPage}
+                  row={itemPgntn.limit}
+                  totalPages={itemPgntn.totalPages}
+                  onNextClick={handleNextClck}
+                  onPrevClick={handlePrevClck}
+                  onPageNumberClick={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                  onPageRowChange={(limitNo: number) =>
+                    handlePageRowChange(limitNo)
+                  }
+                  onPageInputChange={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                />
               </div>
             )}
           </div>

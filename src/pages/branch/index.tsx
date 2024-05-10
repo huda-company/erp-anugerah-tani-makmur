@@ -14,12 +14,21 @@ import Loading from "@/components/Loading";
 import { BRANCH_PAGE } from "@/constants/pageURL";
 import useGetBranch from "@/hooks/branch/useGetBranch";
 import { capitalizeStr } from "^/utils/capitalizeStr";
+import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 
 const BranchPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.branch")}`;
 
-  const { loading, tblBd } = useGetBranch();
+  const {
+    loading,
+    tblBd,
+    branchPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
+  } = useGetBranch();
 
   const header = useMemo(
     () => [
@@ -72,6 +81,26 @@ const BranchPage = () => {
             {loading == false && (
               <div className="rounded-[1rem] bg-[#CAF4AB]">
                 <CustomTable data={tblData} />
+
+                <PaginationCustom
+                  key="branchTbl"
+                  page={branchPgntn.page}
+                  nextPage={branchPgntn.nextPage}
+                  prevPage={branchPgntn.prevPage}
+                  row={branchPgntn.limit}
+                  totalPages={branchPgntn.totalPages}
+                  onNextClick={handleNextClck}
+                  onPrevClick={handlePrevClck}
+                  onPageNumberClick={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                  onPageRowChange={(limitNo: number) =>
+                    handlePageRowChange(limitNo)
+                  }
+                  onPageInputChange={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                />
               </div>
             )}
           </div>

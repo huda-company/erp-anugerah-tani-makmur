@@ -24,6 +24,14 @@ import useAppSelector from "../useAppSelector";
 import { IItemCatFieldRequest } from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
 import { Options } from "^/@types/global";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import {
+  handlePrmChangeInputPage,
+  handlePrmChangeNextBtn,
+  handlePrmChangePrevBtn,
+  handlePrmChangeRowPage,
+  initPgPrms,
+} from "@/components/PaginationCustom/config";
 
 const useGetItemCat = () => {
   const t = useTranslations("");
@@ -42,12 +50,14 @@ const useGetItemCat = () => {
   const [itemCat, setItemCat] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
+  const [itemCatPgntn, setItemCatTblPgntn] =
+    useState<PaginationCustomPrms>(initPgPrms);
 
   const fetch = useCallback(
     async (
       payload: Omit<IItemCatFieldRequest["query"], "name"> = {
         page: 1,
-        limit: pageRowsArr[2],
+        limit: pageRowsArr[0],
         "sort[key]": "name",
         "sort[direction]": "asc",
       }
@@ -64,7 +74,17 @@ const useGetItemCat = () => {
 
         if (response.data) {
           const { data: resData } = response;
+
           setItemCat(resData);
+
+          setItemCatTblPgntn({
+            page: resData.data.page,
+            limit: resData.data.limit,
+            nextPage: resData.data.nextPage,
+            prevPage: resData.data.prevPage,
+            totalPages: resData.data.totalPages,
+          });
+
           setLoading(false);
         }
       } catch (error) {
@@ -166,6 +186,40 @@ const useGetItemCat = () => {
     [closeAlertModal, confirmDelOk, dispatch, t]
   );
 
+  const onPaginationChange = useCallback(
+    (prm: PaginationCustomPrms) => {
+      const pgntParam: Omit<IItemCatFieldRequest["query"], "name"> = {
+        page: prm.page,
+        limit: prm.limit,
+        "sort[key]": "name",
+        "sort[direction]": "asc",
+      };
+
+      fetch(pgntParam);
+    },
+    [fetch]
+  );
+
+  const handleNextClck = () => {
+    const newPrms = handlePrmChangeNextBtn(itemCatPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePrevClck = () => {
+    const newPrms = handlePrmChangePrevBtn(itemCatPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    const newPrms = handlePrmChangeInputPage(itemCatPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageRowChange = (prm: number) => {
+    const newPrms = handlePrmChangeRowPage(itemCatPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
@@ -246,6 +300,11 @@ const useGetItemCat = () => {
     itemCat,
     tblBd,
     itemCatOpts,
+    itemCatPgntn,
+    handlePageInputChange,
+    handlePageRowChange,
+    handleNextClck,
+    handlePrevClck,
   };
 };
 

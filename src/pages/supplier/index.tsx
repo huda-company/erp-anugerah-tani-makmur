@@ -14,12 +14,21 @@ import { CustomTblData } from "@/components/CustomTable/types";
 import useGetSupplier from "@/hooks/supplier/useGetSupplier";
 import Loading from "@/components/Loading";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
+import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 
 const Supplier = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.supplier")}`;
 
-  const { loading, tblBd } = useGetSupplier();
+  const {
+    loading,
+    tblBd,
+    suppPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageInputChange,
+    handlePageRowChange,
+  } = useGetSupplier();
 
   const header = useMemo(
     () => [
@@ -76,6 +85,26 @@ const Supplier = () => {
             {loading == false && (
               <div className="rounded-[1rem] bg-[#CAF4AB]">
                 <CustomTable data={tblData} />
+
+                <PaginationCustom
+                  key="suppTbl"
+                  page={suppPgntn.page}
+                  nextPage={suppPgntn.nextPage}
+                  prevPage={suppPgntn.prevPage}
+                  row={suppPgntn.limit}
+                  totalPages={suppPgntn.totalPages}
+                  onNextClick={handleNextClck}
+                  onPrevClick={handlePrevClck}
+                  onPageNumberClick={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                  onPageRowChange={(limitNo: number) =>
+                    handlePageRowChange(limitNo)
+                  }
+                  onPageInputChange={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                />
               </div>
             )}
           </div>

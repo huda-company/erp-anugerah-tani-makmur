@@ -24,6 +24,14 @@ import {
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
 import { Options } from "^/@types/global";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import {
+  handlePrmChangeInputPage,
+  handlePrmChangeNextBtn,
+  handlePrmChangePrevBtn,
+  handlePrmChangeRowPage,
+  initPgPrms,
+} from "@/components/PaginationCustom/config";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
@@ -42,6 +50,8 @@ const useGetSupplier = () => {
   const [suppliers, setSuppliers] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [supplierOpts, setSupplierOpts] = useState<Options[]>([]);
+  const [suppPgntn, setSuppTblPgntn] =
+    useState<PaginationCustomPrms>(initPgPrms);
 
   const fetch = useCallback(
     async (
@@ -63,7 +73,16 @@ const useGetSupplier = () => {
         }
 
         if (response.data) {
-          setSuppliers(response.data);
+          const { data: resData } = response;
+
+          setSuppliers(resData);
+          setSuppTblPgntn({
+            page: resData.data.page,
+            limit: resData.data.limit,
+            nextPage: resData.data.nextPage,
+            prevPage: resData.data.prevPage,
+            totalPages: resData.data.totalPages,
+          });
           setLoading(false);
         }
       } catch (error) {
@@ -165,6 +184,40 @@ const useGetSupplier = () => {
     [closeAlertModal, confirmDelOk, dispatch, t]
   );
 
+  const onPaginationChange = useCallback(
+    (prm: PaginationCustomPrms) => {
+      const pgntParam: Omit<ISupplierFieldRequest["query"], "name"> = {
+        page: prm.page,
+        limit: prm.limit,
+        "sort[key]": "name",
+        "sort[direction]": "asc",
+      };
+
+      fetch(pgntParam);
+    },
+    [fetch]
+  );
+
+  const handleNextClck = () => {
+    const newPrms = handlePrmChangeNextBtn(suppPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePrevClck = () => {
+    const newPrms = handlePrmChangePrevBtn(suppPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    const newPrms = handlePrmChangeInputPage(suppPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageRowChange = (prm: number) => {
+    const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
@@ -257,6 +310,11 @@ const useGetSupplier = () => {
     suppliers,
     supplierOpts,
     tblBd,
+    suppPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageInputChange,
+    handlePageRowChange,
   };
 };
 

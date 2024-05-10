@@ -14,12 +14,21 @@ import { capitalizeStr } from "^/utils/capitalizeStr";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { bcData } from "^/config/purchase/config";
 import useGetPurchase from "@/hooks/purchase/useGetPurchase";
+import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 
 const PurchasePage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.purchaseOrder")}`;
 
-  const { loading, tblBd } = useGetPurchase();
+  const {
+    loading,
+    tblBd,
+    purchPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageInputChange,
+    handlePageRowChange,
+  } = useGetPurchase();
 
   const header = useMemo(
     () => [
@@ -76,6 +85,26 @@ const PurchasePage = () => {
             {loading == false && (
               <div className="rounded-[1rem] bg-[#CAF4AB]">
                 <CustomTable data={tblData} />
+
+                <PaginationCustom
+                  key="purchaseTbl"
+                  page={purchPgntn.page}
+                  nextPage={purchPgntn.nextPage}
+                  prevPage={purchPgntn.prevPage}
+                  row={purchPgntn.limit}
+                  totalPages={purchPgntn.totalPages}
+                  onNextClick={handleNextClck}
+                  onPrevClick={handlePrevClck}
+                  onPageNumberClick={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                  onPageRowChange={(limitNo: number) =>
+                    handlePageRowChange(limitNo)
+                  }
+                  onPageInputChange={(pageNo: number) =>
+                    handlePageInputChange(pageNo)
+                  }
+                />
               </div>
             )}
           </div>

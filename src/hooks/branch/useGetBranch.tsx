@@ -23,6 +23,14 @@ import useAppSelector from "../useAppSelector";
 import { deleteBranchAPI, getBranchAPI } from "^/services/branch";
 import { IBranchFieldRequest } from "^/@types/models/branch";
 import { BRANCH_PAGE } from "@/constants/pageURL";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import {
+  handlePrmChangeInputPage,
+  handlePrmChangeNextBtn,
+  handlePrmChangePrevBtn,
+  handlePrmChangeRowPage,
+  initPgPrms,
+} from "@/components/PaginationCustom/config";
 
 const useGetBranch = () => {
   const t = useTranslations("");
@@ -40,6 +48,8 @@ const useGetBranch = () => {
   const [loading, setLoading] = useState(true);
   const [branches, setBranches] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [branchPgntn, setBranchTblPgntn] =
+    useState<PaginationCustomPrms>(initPgPrms);
 
   const fetch = useCallback(
     async (
@@ -63,6 +73,13 @@ const useGetBranch = () => {
         if (response.data) {
           const { data: resData } = response;
           setBranches(resData);
+          setBranchTblPgntn({
+            page: resData.data.page,
+            limit: resData.data.limit,
+            nextPage: resData.data.nextPage,
+            prevPage: resData.data.prevPage,
+            totalPages: resData.data.totalPages,
+          });
           setLoading(false);
         }
       } catch (error) {
@@ -164,6 +181,40 @@ const useGetBranch = () => {
     [closeAlertModal, confirmDelOk, dispatch, t]
   );
 
+  const onPaginationChange = useCallback(
+    (prm: PaginationCustomPrms) => {
+      const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
+        page: prm.page,
+        limit: prm.limit,
+        "sort[key]": "name",
+        "sort[direction]": "asc",
+      };
+
+      fetch(pgntParam);
+    },
+    [fetch]
+  );
+
+  const handleNextClck = () => {
+    const newPrms = handlePrmChangeNextBtn(branchPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePrevClck = () => {
+    const newPrms = handlePrmChangePrevBtn(branchPgntn);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    const newPrms = handlePrmChangeInputPage(branchPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
+  const handlePageRowChange = (prm: number) => {
+    const newPrms = handlePrmChangeRowPage(branchPgntn, prm);
+    onPaginationChange(newPrms);
+  };
+
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
@@ -232,6 +283,11 @@ const useGetBranch = () => {
     fetch,
     branches,
     tblBd,
+    branchPgntn,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
   };
 };
 
