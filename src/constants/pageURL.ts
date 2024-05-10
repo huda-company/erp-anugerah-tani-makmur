@@ -49,6 +49,20 @@ export const BRANCH_PAGE = {
   VIEW: "/branch/view",
 };
 
+export const PURCHASE_PAGE = {
+  ROOT: "/purchase",
+  ADD: "/purchase/add",
+  EDIT: "/purchase/edit",
+  VIEW: "/purchase/view",
+};
+
+export const BILL_DOC_PAGE = {
+  ROOT: "/billdoc",
+  ADD: "/billdoc/add",
+  EDIT: "/billdoc/edit",
+  VIEW: "/billdoc/view",
+};
+
 export const USER_PAGE = {
   ROOT: "/user",
   ADD: "/user/add",
