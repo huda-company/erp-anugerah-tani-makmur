@@ -29,7 +29,6 @@ const Item = () => {
     handlePageInputChange,
     handlePageRowChange,
   } = useGetItem();
-  console.log("tblBd", tblBd);
 
   const header = useMemo(
     () => [
