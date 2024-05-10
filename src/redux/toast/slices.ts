@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { initialState } from "./data";
