@@ -23,6 +23,7 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
+import { Options } from "^/@types/global";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
@@ -40,6 +41,7 @@ const useGetSupplier = () => {
   const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [supplierOpts, setSupplierOpts] = useState<Options[]>([]);
 
   const fetch = useCallback(
     async (
@@ -168,6 +170,23 @@ const useGetSupplier = () => {
   }, [fetch, session]);
 
   useEffect(() => {
+    if (suppliers) {
+      const items = suppliers.data.items;
+      // build opts
+      const opts =
+        suppliers && Array.isArray(items) && items.length > 0
+          ? items.map((x: any) => {
+              return {
+                value: x.id,
+                text: x.company,
+              };
+            })
+          : [];
+      setSupplierOpts(opts);
+    }
+  }, [suppliers]);
+
+  useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
     if (suppliers && Array.isArray(suppliers.data.items)) {
       formattedBody = suppliers.data.items.map((x: any) => {
@@ -236,6 +255,7 @@ const useGetSupplier = () => {
     loading,
     fetch,
     suppliers,
+    supplierOpts,
     tblBd,
   };
 };

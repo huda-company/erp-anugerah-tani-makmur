@@ -23,6 +23,7 @@ import {
 import useAppSelector from "../useAppSelector";
 import { IItemFieldRequest } from "^/@types/models/item";
 import { deleteItemAPI, getItemAPI } from "^/services/item";
+import { Options } from "^/@types/global";
 
 const useGetItem = () => {
   const t = useTranslations("");
@@ -40,6 +41,7 @@ const useGetItem = () => {
   const [loading, setLoading] = useState(true);
   const [itemData, setItemData] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
 
   const fetch = useCallback(
     async (
@@ -163,6 +165,23 @@ const useGetItem = () => {
   }, [fetch, session]);
 
   useEffect(() => {
+    if (itemData) {
+      const items = itemData.data.items;
+      // build opts
+      const opts =
+        itemData && Array.isArray(items) && items.length > 0
+          ? items.map((x: any) => {
+              return {
+                value: x.id,
+                text: x.name,
+              };
+            })
+          : [];
+      setItemDataOpts(opts);
+    }
+  }, [itemData]);
+
+  useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
     if (itemData && Array.isArray(itemData.data.items)) {
       formattedBody = itemData.data.items.map((x: any) => {
@@ -226,6 +245,7 @@ const useGetItem = () => {
     fetch,
     itemData,
     tblBd,
+    itemDataOpts,
   };
 };
 
