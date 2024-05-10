@@ -24,6 +24,7 @@
   "Common": {
     "signOut": "sign out",
     "back": "kembali",
+    "create": "create",
     "add": "add",
     "edit": "edit",
     "view": "view",
@@ -35,6 +36,7 @@
     "cancel": "cancel",
     "confirm": "confirm",
     "code": "code",
+    "empty": "empty",
     "detail": "detail"
   },
   "AboutUs": {
@@ -72,6 +74,17 @@
   "SupplierPage": {
     "revenue": "revenue"
   },
+  "PurchasePage": {
+    "poNo": "PO No",
+    "expDate": "Expired date",
+    "year": "year",
+    "status": "status",
+    "price": "price",
+    "quantity": "quantity",
+    "discount": "discount",
+    "total": "total",
+    "noFileFound": "no file found"
+  },
   "PageLayout": {
     "pageTitle": "Page title"
   },
@@ -92,6 +105,7 @@
   },
   "API_MSG": {
     "SUCCESS": {
+      "UPLOAD_FILE": "file uploaded successfully",
       "NEW_SUPPLIER_CREATE": "new supplier created successfully",
       "SUPPLIER_UPDATE": "supplier updated successfully",
       "SUPPLIER_DELETE": "supplier deleted successfully",
@@ -103,9 +117,13 @@
       "ITEM_DELETE": "item deleted successfully",
       "NEW_BRANCH_CREATE": "new branch created successfully",
       "BRANCH_UPDATE": "branch updated successfully",
-      "BRANCH_DELETE": "branch deleted successfully"
+      "BRANCH_DELETE": "branch deleted successfully",
+      "NEW_PURCHASE_CREATE": "new purchase created successfully",
+      "PURCHASE_UPDATE": "purchase updated successfully",
+      "PURCHASE_DELETE": "purchase deleted successfully"
     },
     "ERROR": {
+      "UPLOAD_FILE": "upload file failed",
       "NEW_SUPPLIER_CREATE": "failed to create new supplier",
       "SUPPLIER_UPDATE": "failed to update supplier",
       "SUPPLIER_DELETE": "failed to delete supplier",
@@ -117,7 +135,10 @@
       "ITEM_DELETE": "failed to delete item",
       "NEW_BRANCH_CREATE": "failed to create new branch",
       "BRANCH_UPDATE": "failed to update branch",
-      "BRANCH_DELETE": "failed to delete branch"
+      "BRANCH_DELETE": "failed to delete branch",
+      "NEW_PURCHASE_CREATE": "failed to create new purchase",
+      "PURCHASE_UPDATE": "failed to update purchase",
+      "PURCHASE_DELETE": "failed to delete purchase"
     }
   }
 }
