@@ -1,5 +1,4 @@
 import { IBranchForm } from "^/@types/models/branch";
-import { IItemCatForm } from "^/@types/models/itemcategory";
 import { ISupplierFieldRequest } from "^/@types/models/supplier";
 import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
@@ -46,7 +45,7 @@ export const addBranchAPI = async (
 
 export const editBranchAPI = async (
   sess: Session | null,
-  params: IItemCatForm
+  params: IBranchForm
 ) => {
   if (!sess) return null;
 
