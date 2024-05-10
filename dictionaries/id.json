@@ -24,6 +24,7 @@
   "Common": {
     "signOut": "keluar",
     "back": "kembali",
+    "create": "buat",
     "add": "tambah",
     "edit": "edit",
     "view": "lihat",
@@ -35,6 +36,7 @@
     "cancel": "batal",
     "confirm": "Konfirmasi",
     "code": "Kode",
+    "empty": "kosong",
     "detail": "detail"
   },
   "AboutUs": {
@@ -72,6 +74,17 @@
   "SupplierPage": {
     "revenue": "pendapatan"
   },
+  "PurchasePage": {
+    "poNo": "PO No",
+    "expDate": "Tanggal Kadaluwarsa",
+    "year": "tahun",
+    "price": "harga",
+    "status": "status",
+    "quantity": "quantity",
+    "discount": "diskon",
+    "total": "total",
+    "noFileFound": "tidak ada berkas file"
+  },
   "PageLayout": {
     "pageTitle": "Judul Halaman"
   },
@@ -92,6 +105,7 @@
   },
   "API_MSG": {
     "SUCCESS": {
+      "UPLOAD_FILE": "berhasil upload file",
       "NEW_SUPPLIER_CREATE": "berhasil menambah supplier",
       "SUPPLIER_UPDATE": "berhasil mengubah data supplier",
       "SUPPLIER_DELETE": "berhasil menghapus data supplier",
@@ -103,9 +117,13 @@
       "ITEM_DELETE": "berhasil menghapus data item",
       "NEW_BRANCH_CREATE": "berhasil menambah branch",
       "BRANCH_UPDATE": "berhasil mengubah data branch",
-      "BRANCH_DELETE": "berhasil menghapus data branch"
+      "BRANCH_DELETE": "berhasil menghapus data branch",
+      "NEW_PURCHASE_CREATE": "berhasil membuat purchase",
+      "PURCHASE_UPDATE": "berhasil mengubah data purchase",
+      "PURCHASE_DELETE": "berhasil menghapus data purchase"
     },
     "ERROR": {
+      "UPLOAD_FILE": "gagal upload file",
       "NEW_SUPPLIER_CREATE": "gagal menambah data supplier",
       "SUPPLIER_UPDATE": "gagal mengubah data supplier",
       "SUPPLIER_DELETE": "gagal menghapus data tempat parkir",
@@ -117,7 +135,10 @@
       "ITEM_DELETE": "gagal menghapus data item",
       "NEW_BRANCH_CREATE": "gagal menambah data branch",
       "BRANCH_UPDATE": "gagal mengubah data branch",
-      "BRANCH_DELETE": "gagal menghapus data branch"
+      "BRANCH_DELETE": "gagal menghapus data branch",
+      "NEW_PURCHASE_CREATE": "gagal menambah data purchase",
+      "PURCHASE_UPDATE": "gagal mengubah data purchase",
+      "PURCHASE_DELETE": "gagal menghapus data purchase"
     }
   }
 }

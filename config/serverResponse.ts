@@ -22,6 +22,10 @@ export const respBody = {
       ...resBody,
       message: capitalizeStr(API_MSG.ERROR.UNEXPECTED_ERROR),
     },
+    UPLOAD_ERROR: {
+      ...resBody,
+      message: capitalizeStr(API_MSG.ERROR.UPLOAD_ERROR),
+    },
     EXPIRED_INVALID_TOKEN: {
       ...resBody,
       message: capitalizeStr(API_MSG.ERROR.EXPIRED_INVALID_TOKEN),
@@ -66,12 +70,40 @@ export const respBody = {
       ...resBody,
       message: capitalizeStr(API_MSG.ERROR.METHOD_NOT_ALLOWED),
     },
+    INCORRECT_PAYLOAD: {
+      ...resBody,
+      message: capitalizeStr(API_MSG.ERROR.INCORRECT_PAYLOAD),
+    },
+    INVALID_PO: {
+      ...resBody,
+      message: capitalizeStr(API_MSG.ERROR.INVALID_PO),
+    },
+    NEW_PURCHASE_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.ERROR.NEW_PURCHASE_CREATE),
+    },
+    PURCHASE_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.ERROR.PURCHASE_UPDATE),
+    },
+    PURCHASE_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.ERROR.PURCHASE_DELETE),
+    },
   },
   SUCCESS: {
     RETRIEVED_DATA_SUCCESS: {
       ...resBody,
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.RETRIEVED_DATA_SUCCESS),
+    },
+    UPLOAD_FILE_SUCCESS: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.UPLOAD_FILE_SUCCESS),
     },
     NEW_USER_CREATE: {
       ...resBody,
@@ -147,6 +179,22 @@ export const respBody = {
       ...resBody,
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.BRANCH_DELETE),
+    },
+
+    NEW_PURCHASE_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_PURCHASE_CREATE),
+    },
+    PURCHASE_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.PURCHASE_UPDATE),
+    },
+    PURCHASE_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.PURCHASE_DELETE),
     },
 
     SIGN_IN_SUCCESS: {

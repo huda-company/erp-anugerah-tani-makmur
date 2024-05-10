@@ -1,6 +1,7 @@
 export const API_MSG = {
   ERROR: {
     UNEXPECTED_ERROR: "error unexpected",
+    UPLOAD_ERROR: "upload file is failed",
     EXPIRED_INVALID_TOKEN: "token not found / invalid token",
     INC_EMAIL_PASSWORD: "incorrect email or password",
     UNKNOWN_EMAIL: "unknown email",
@@ -15,6 +16,11 @@ export const API_MSG = {
     METHOD_NOT_ALLOWED: "request method not allowed",
     NEW_SUPPLIER_CREATE: "failed to add new parking field",
     SUPPLIER_UPDATE: "failed to update parking field",
+    INCORRECT_PAYLOAD: "incorrect payload",
+    INVALID_PO: "invalid po number or deleted",
+    NEW_PURCHASE_CREATE: "create purchase failed",
+    PURCHASE_UPDATE: "update purchase failed",
+    PURCHASE_DELETE: "delete purchase failed",
   },
   SUCCESS: {
     NEW_USER_CREATE: "new user created successfully",
@@ -37,8 +43,13 @@ export const API_MSG = {
     BRANCH_UPDATE: "branch updated successfully",
     BRANCH_DELETE: "branch deleted successfully",
 
+    NEW_PURCHASE_CREATE: "new purchase created successfully",
+    PURCHASE_UPDATE: "purchase updated successfully",
+    PURCHASE_DELETE: "purchase deleted successfully",
+
     SIGN_IN_SUCCESS: "signin successfully",
     RETRIEVED_DATA_SUCCESS: "data retrieved successfully",
+    UPLOAD_FILE_SUCCESS: "file uploaded successfully",
     EMAIL_VERIF_SUCCESS: "your email verified successfully",
   },
 };

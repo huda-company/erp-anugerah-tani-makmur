@@ -1,9 +1,6 @@
 import { AUTH_PAGE_URL } from "@/constants/pageURL";
 import { useSession } from "next-auth/react";
-import { Inter } from "next/font/google";
 import { useRouter } from "next/navigation";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();

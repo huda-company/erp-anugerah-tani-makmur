@@ -13,3 +13,5 @@ export const SMTP_FROM_EMAIL =
 export const SMTP_SERVICE = process.env.SMTP_SERVICE ?? "gmail";
 export const SMTP_USER = process.env.SMTP_USER ?? "nunsolution@gmail.com";
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD ?? "hpdc yvpo fzmr difu";
+
+export const timezone = process.env.NEXT_PUBLIC_TIMEZONE;

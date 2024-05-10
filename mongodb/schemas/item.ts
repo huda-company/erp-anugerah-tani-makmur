@@ -2,6 +2,7 @@ import { IItemDocument } from "^/@types/models/item";
 import mongoose, { Schema } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import ItemCategory from "./itemCategory";
+import autopopulate from "mongoose-autopopulate";
 
 type SchemaTypes = IItemDocument & mongoose.PaginateModel<IItemDocument>;
 
@@ -54,6 +55,7 @@ export const ItemSchema = new Schema<IItemDocument>(
 );
 
 ItemSchema.plugin(paginate);
+ItemSchema.plugin(autopopulate);
 
 const Item =
   (mongoose.models?.Item as SchemaTypes) ??

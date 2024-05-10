@@ -1,21 +1,20 @@
-import { IBranchForm } from "^/@types/models/branch";
-import { ISupplierFieldRequest } from "^/@types/models/supplier";
+import { IPurchaseFieldRequest, IPurchaseForm } from "^/@types/models/purchase";
 import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
 
-const BASE_BRANCH_API_URL = `${BASE_URL}/api/${API_VERSION}/branch`;
+const BASE_PURCHASE_API_URL = `${BASE_URL}/api/${API_VERSION}/purchase`;
 
-export const getBranchAPI = async (
+export const getPurchaseAPI = async (
   sess: Session | null,
-  params: Omit<ISupplierFieldRequest["query"], "name">
+  params: Omit<IPurchaseFieldRequest["query"], "name">
 ) => {
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_BRANCH_API_URL}?${qStr}`;
+  const reqURL = `${BASE_PURCHASE_API_URL}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -26,13 +25,13 @@ export const getBranchAPI = async (
   }
 };
 
-export const addBranchAPI = async (
+export const createPurchaseAPI = async (
   sess: Session | null,
-  params: IBranchForm
+  params: IPurchaseForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_BRANCH_API_URL}`;
+  const reqURL = `${BASE_PURCHASE_API_URL}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -43,13 +42,13 @@ export const addBranchAPI = async (
   }
 };
 
-export const editBranchAPI = async (
+export const editPurchaseAPI = async (
   sess: Session | null,
-  params: IBranchForm
+  params: IPurchaseForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_BRANCH_API_URL}/update/${params.id}`;
+  const reqURL = `${BASE_PURCHASE_API_URL}/update/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -63,7 +62,7 @@ export const editBranchAPI = async (
 export const deleteBranchAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_BRANCH_API_URL}/delete/${id}`;
+  const reqURL = `${BASE_PURCHASE_API_URL}/delete/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

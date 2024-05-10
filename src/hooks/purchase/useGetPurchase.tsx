@@ -12,7 +12,6 @@ import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { ITEM_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -21,11 +20,13 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { IItemFieldRequest } from "^/@types/models/item";
-import { deleteItemAPI, getItemAPI } from "^/services/item";
-import { Options } from "^/@types/global";
+import { deleteBranchAPI } from "^/services/branch";
+import { IBranchFieldRequest } from "^/@types/models/branch";
+import { PURCHASE_PAGE } from "@/constants/pageURL";
+import { getPurchaseAPI } from "^/services/purchase";
+import { formatDate } from "^/utils/dateFormatting";
 
-const useGetItem = () => {
+const useGetPurchase = () => {
   const t = useTranslations("");
 
   const fetched = useRef(false);
@@ -39,15 +40,14 @@ const useGetItem = () => {
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(true);
-  const [itemData, setItemData] = useState<any>(null);
+  const [branches, setBranches] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
-  const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
 
   const fetch = useCallback(
     async (
-      payload: Omit<IItemFieldRequest["query"], "name"> = {
+      payload: Omit<IBranchFieldRequest["query"], "name"> = {
         page: 1,
-        limit: pageRowsArr[0],
+        limit: pageRowsArr[2],
         "sort[key]": "name",
         "sort[direction]": "asc",
       }
@@ -56,14 +56,15 @@ const useGetItem = () => {
       setLoading(true);
 
       try {
-        const response = await getItemAPI(session, payload);
+        const response = await getPurchaseAPI(session, payload);
 
         if (!response || (response && response.status !== 200)) {
           return null;
         }
 
         if (response.data) {
-          setItemData(response.data);
+          const { data: resData } = response;
+          setBranches(resData);
           setLoading(false);
         }
       } catch (error) {
@@ -77,7 +78,7 @@ const useGetItem = () => {
   const confirmDelOk = useCallback(
     async (id: string) => {
       setLoading(true);
-      const resDelete = await deleteItemAPI(session, id);
+      const resDelete = await deleteBranchAPI(session, id);
       if (resDelete.data.success) {
         await fetch();
         await dispatch(
@@ -91,7 +92,10 @@ const useGetItem = () => {
             show: true,
             msg: (
               <div className="flex flex-col py-[1rem]">
-                <span> {capitalizeStr(t("API_MSG.SUCCESS.ITEM_DELETE"))} </span>
+                <span>
+                  {" "}
+                  {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))}{" "}
+                </span>
               </div>
             ),
             type: "success",
@@ -104,7 +108,9 @@ const useGetItem = () => {
             show: true,
             msg: (
               <div className="flex flex-col py-[1rem] capitalize">
-                <span>{t(capitalizeStr(t("API_MSG.ERROR.ITEM_DELETE")))}</span>
+                <span>
+                  {t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}
+                </span>
               </div>
             ),
             timeout: 2000,
@@ -165,42 +171,32 @@ const useGetItem = () => {
   }, [fetch, session]);
 
   useEffect(() => {
-    if (itemData) {
-      const items = itemData.data.items;
-      // build opts
-      const opts =
-        itemData && Array.isArray(items) && items.length > 0
-          ? items.map((x: any) => {
-              return {
-                value: x.id,
-                text: x.name,
-              };
-            })
-          : [];
-      setItemDataOpts(opts);
-    }
-  }, [itemData]);
-
-  useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
-    if (itemData && Array.isArray(itemData.data.items)) {
-      formattedBody = itemData.data.items.map((x: any) => {
+    if (branches && Array.isArray(branches.data.items)) {
+      formattedBody = branches.data.items.map((x: any) => {
         return {
           items: [
             {
-              value: x.itemCategory,
+              value: x.poNo,
               className: "text-left w-[15rem]",
             },
             {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.description,
+              value:
+                x.supplier && x.supplier.company
+                  ? x.supplier.company
+                  : x.supplier,
               className: "text-left w-[6rem] pl-0",
             },
             {
-              value: x.price,
+              value: formatDate(x.expDate),
+              className: "text-left w-[6rem] pl-0",
+            },
+            {
+              value: x.year,
+              className: "text-left w-[6rem] pl-0",
+            },
+            {
+              value: x.status,
               className: "text-left w-[6rem] pl-0",
             },
             {
@@ -214,13 +210,15 @@ const useGetItem = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                      onClick={() => router.push(`${ITEM_PAGE.EDIT}/${x.id}`)}
+                      onClick={() =>
+                        router.push(`${PURCHASE_PAGE.EDIT}/${x.id}`)
+                      }
                     >
                       {capitalizeStr(t("Common.edit"))}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() =>
-                        router.push(`${ITEM_PAGE.VIEW}/${String(x.id)}`)
+                        router.push(`${PURCHASE_PAGE.VIEW}/${String(x.id)}`)
                       }
                     >
                       {capitalizeStr(t("Common.view"))}
@@ -238,15 +236,14 @@ const useGetItem = () => {
       });
     }
     setTblBd(formattedBody);
-  }, [confirmDeletion, itemData, router, t]);
+  }, [branches, confirmDeletion, router, t]);
 
   return {
     loading,
     fetch,
-    itemData,
+    branches,
     tblBd,
-    itemDataOpts,
   };
 };
 
-export default useGetItem;
+export default useGetPurchase;
