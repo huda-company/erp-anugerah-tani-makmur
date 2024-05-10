@@ -5,3 +5,12 @@ export const buildReqHeader = (accToken: string) => {
     },
   };
 };
+
+export const buildReqHeaderFData = (accToken: string) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${accToken}`,
+      "Content-Type": "multipart/form-data",
+    },
+  };
+};
