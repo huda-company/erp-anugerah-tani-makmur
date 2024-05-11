@@ -23,7 +23,6 @@ export const API_MSG = {
     PURCHASE_DELETE: "delete purchase failed",
   },
   SUCCESS: {
-    NEW_USER_CREATE: "new user created successfully",
     NEW_ROLE_CREATE: "new role created successfully",
 
     SUPPLIER_UPDATE: "parking field updated successfully",
@@ -46,6 +45,10 @@ export const API_MSG = {
     NEW_PURCHASE_CREATE: "new purchase created successfully",
     PURCHASE_UPDATE: "purchase updated successfully",
     PURCHASE_DELETE: "purchase deleted successfully",
+
+    NEW_USER_CREATE: "new user created successfully",
+    USER_UPDATE: "user updated successfully",
+    USER_DELETE: "user deleted successfully",
 
     SIGN_IN_SUCCESS: "signin successfully",
     RETRIEVED_DATA_SUCCESS: "data retrieved successfully",
