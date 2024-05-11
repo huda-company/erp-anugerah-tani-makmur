@@ -27,3 +27,10 @@ export type CustomTblData = {
 export type CustomTblProps = {
   data: CustomTblData;
 };
+
+export type CustomTblOptMenuProps = {
+  rowId: string;
+  viewURL: string;
+  editURL: string;
+  confirmDel: (x: string) => void;
+};

@@ -1,20 +1,13 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { ISupplierFieldRequest } from "^/@types/models/supplier";
 import { pageRowsArr } from "^/config/supplier/config";
 import { deleteSupplierAPI, getSupplierAPI } from "^/services/supplier";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -32,6 +25,8 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
+import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { SUPPLIER_PAGE } from "@/constants/pageURL";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
@@ -278,33 +273,12 @@ const useGetSupplier = () => {
             },
             {
               value: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="bg-gray-300" asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <DotsVerticalIcon className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${SUPPLIER_PAGE.EDIT}/${x.id}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.edit"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${SUPPLIER_PAGE.VIEW}/${String(x.id)}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.view"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => confirmDeletion(x.id)}>
-                      {capitalizeStr(t("Common.delete"))}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <CustomTableOptionMenu
+                  rowId={x.id}
+                  editURL={`${SUPPLIER_PAGE.EDIT}/${x.id}`}
+                  viewURL={`${SUPPLIER_PAGE.VIEW}/${x.id}`}
+                  confirmDel={confirmDeletion}
+                />
               ),
               className: "",
             },

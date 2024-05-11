@@ -1,16 +1,10 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
@@ -32,6 +26,7 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
+import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 
 const useGetItemCat = () => {
   const t = useTranslations("");
@@ -268,33 +263,12 @@ const useGetItemCat = () => {
             },
             {
               value: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="bg-gray-300" asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <DotsVerticalIcon className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${ITEM_CAT_PAGE.EDIT}/${x.id}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.edit"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${ITEM_CAT_PAGE.VIEW}/${String(x.id)}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.view"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => confirmDeletion(x.id)}>
-                      {capitalizeStr(t("Common.delete"))}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <CustomTableOptionMenu
+                  rowId={x.id}
+                  editURL={`${ITEM_CAT_PAGE.EDIT}/${x.id}`}
+                  viewURL={`${ITEM_CAT_PAGE.VIEW}/${x.id}`}
+                  confirmDel={confirmDeletion}
+                />
               ),
               className: "",
             },
