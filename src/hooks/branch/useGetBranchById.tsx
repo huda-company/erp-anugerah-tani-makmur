@@ -74,21 +74,6 @@ const useGetBranchById = () => {
     [dispatch, id, session, t]
   );
 
-  // const onPaginationChange = useCallback(
-  //   (prm: PaginationCustomPrms) => {
-  //     const pgntParam: Omit<ISupplierFieldRequest["query"], "name"> = {
-  //       page: prm.page,
-  //       limit: prm.limit,
-  //       ownerId: session?.user?.id,
-  //       "sort[key]": "name",
-  //       "sort[direction]": "asc"
-  //     };
-
-  //     fetch(pgntParam);
-  //   },
-  //   [fetch, session?.user?.id]
-  // );
-
   useEffect(() => {
     if (!fetched.current && session && session?.accessToken) fetch();
   }, [fetch, session]);
