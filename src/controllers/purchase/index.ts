@@ -16,30 +16,37 @@ export const getPurchases = async (
 ) => {
   const { page, limit } = req.query;
 
-  await connectToDatabase();
+  try {
+    await connectToDatabase();
 
-  const sortOptions: ISortOptions = {}; // Define an empty object for sort options
+    const sortOptions: ISortOptions = { createdAt: -1 }; // Define default sort option
 
-  const filter: any = onPurchaseFilter(req.query as any);
+    const filter: any = onPurchaseFilter(req.query as any);
 
-  const purchases = await Purchase.paginate(filter, {
-    page: Number(page) || 1,
-    limit: Number(limit) || pageRowsArr[0],
-    customLabels: MONGODB.PAGINATION_LABEL,
-    sort: sortOptions,
-    populate: [
-      { path: "supplier" },
-      {
-        path: "items.item",
-        justOne: true,
-        model: "Item", // This should be the name of your Item model
-      },
-    ],
-  });
+    const purchases = await Purchase.paginate(filter, {
+      page: Number(page) || 1,
+      limit: Number(limit) || pageRowsArr[0],
+      customLabels: MONGODB.PAGINATION_LABEL,
+      sort: sortOptions,
+      populate: [
+        { path: "supplier" },
+        {
+          path: "items.item",
+          justOne: true,
+          model: "Item", // This should be the name of your Item model
+        },
+      ],
+    });
 
-  return res
-    .status(200)
-    .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: purchases });
+    return res
+      .status(200)
+      .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: purchases });
+  } catch (error) {
+    console.log("errr", error);
+    return res
+      .status(500)
+      .json({ ...respBody.ERROR.UNEXPECTED_ERROR, error: error });
+  }
 };
 
 export const createPurchase = async (
