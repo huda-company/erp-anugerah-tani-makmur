@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
+import { actions as toastActs } from "@/redux/toast";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
@@ -8,8 +8,14 @@ import {
 } from "^/@types/models/itemcategory";
 import { getItemCatAPI } from "^/services/itemCategory";
 import { initialItemCatForm } from "^/config/itemcategory/config";
+import useAppDispatch from "../useAppDispatch";
+import { useTranslations } from "next-intl";
 
 const useGetItemCatById = () => {
+  const t = useTranslations("");
+
+  const dispatch = useAppDispatch();
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -38,7 +44,18 @@ const useGetItemCatById = () => {
           const response = await getItemCatAPI(session, payload);
 
           if (!response || (response && response.status !== 200)) {
-            return null;
+            setLoading(false);
+            dispatch(
+              toastActs.callShowToast({
+                show: true,
+                msg: (
+                  <div className="flex flex-col py-[1rem]">
+                    <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
+                  </div>
+                ),
+                type: "error",
+              })
+            );
           }
 
           if (response.data) {

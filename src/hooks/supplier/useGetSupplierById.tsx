@@ -5,8 +5,14 @@ import { useRouter } from "next/router";
 import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
 import { getSupplierAPI } from "^/services/supplier";
 import { initialSupplierForm } from "^/config/supplier/config";
+import { useTranslations } from "next-intl";
+import useAppDispatch from "../useAppDispatch";
+import { actions as toastActs } from "@/redux/toast";
 
 const useGetSupplierById = () => {
+  const t = useTranslations("");
+  const dispatch = useAppDispatch();
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -35,7 +41,18 @@ const useGetSupplierById = () => {
           const response = await getSupplierAPI(session, payload);
 
           if (!response || (response && response.status !== 200)) {
-            return null;
+            setLoading(false);
+            dispatch(
+              toastActs.callShowToast({
+                show: true,
+                msg: (
+                  <div className="flex flex-col py-[1rem]">
+                    <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
+                  </div>
+                ),
+                type: "error",
+              })
+            );
           }
 
           if (response.data) {

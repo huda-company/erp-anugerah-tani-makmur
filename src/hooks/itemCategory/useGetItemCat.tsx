@@ -69,7 +69,18 @@ const useGetItemCat = () => {
         const response = await getItemCatAPI(session, payload);
 
         if (!response || (response && response.status !== 200)) {
-          return null;
+          setLoading(false);
+          dispatch(
+            toastActs.callShowToast({
+              show: true,
+              msg: (
+                <div className="flex flex-col py-[1rem]">
+                  <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
+                </div>
+              ),
+              type: "error",
+            })
+          );
         }
 
         if (response.data) {

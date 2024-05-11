@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { initialSupplierForm } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
@@ -25,7 +24,7 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import { FormMode } from "^/@types/global";
 import { BranchFormProps, IBranchForm } from "^/@types/models/branch";
 import { addBranchAPI, editBranchAPI } from "^/services/branch";
-import { BranchFormSchema } from "^/config/branch/config";
+import { BranchFormSchema, initialBranchForm } from "^/config/branch/config";
 
 const BranchForm: FC<BranchFormProps> = ({
   mode,
@@ -114,7 +113,7 @@ const BranchForm: FC<BranchFormProps> = ({
 
   const branchForm = useForm<z.infer<typeof BranchFormSchema>>({
     resolver: zodResolver(BranchFormSchema),
-    defaultValues: mode == FormMode.ADD ? initialSupplierForm : initialFormVals,
+    defaultValues: mode == FormMode.ADD ? initialBranchForm : initialFormVals,
   });
 
   useEffect(() => {

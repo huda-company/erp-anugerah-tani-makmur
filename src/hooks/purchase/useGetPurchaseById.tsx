@@ -11,8 +11,15 @@ import { getBilldocAPI } from "^/services/billdoc";
 import { IPurchaseForm } from "^/@types/models/purchase";
 import { initialPurchaseForm } from "^/config/purchase/config";
 import moment from "moment";
+import { useTranslations } from "next-intl";
+import useAppDispatch from "../useAppDispatch";
+
+import { actions as toastActs } from "@/redux/toast";
 
 const useGetPurchaseById = () => {
+  const t = useTranslations("");
+  const dispatch = useAppDispatch();
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -43,7 +50,18 @@ const useGetPurchaseById = () => {
           const response = await getBilldocAPI(session, payload);
 
           if (!response || (response && response.status !== 200)) {
-            return null;
+            setLoading(false);
+            dispatch(
+              toastActs.callShowToast({
+                show: true,
+                msg: (
+                  <div className="flex flex-col py-[1rem]">
+                    <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
+                  </div>
+                ),
+                type: "error",
+              })
+            );
           }
 
           if (response.data) {
