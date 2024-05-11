@@ -80,7 +80,7 @@ const useGetPurchaseById = () => {
           const response = await getPurchaseAPI(session, payload);
 
           if (!response || (response && response.status !== 200)) {
-            return null;
+            setLoading(false);
           }
 
           if (response.data) {

@@ -33,7 +33,7 @@ const ViewBranchPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            {!loading && formVal && formVal.id ? (
+            {!loading && typeof formVal !== "undefined" && formVal.id ? (
               <BranchForm
                 doRefresh={doRefreshData}
                 initialFormVals={formVal}
