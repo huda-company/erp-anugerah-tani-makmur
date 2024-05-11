@@ -1,16 +1,10 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
@@ -20,10 +14,8 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { deleteBranchAPI } from "^/services/branch";
-import { IBranchFieldRequest } from "^/@types/models/branch";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
-import { getPurchaseAPI } from "^/services/purchase";
+import { deletePurchaseAPI, getPurchaseAPI } from "^/services/purchase";
 import { formatDate } from "^/utils/dateFormatting";
 import {
   handlePrmChangeInputPage,
@@ -34,6 +26,7 @@ import {
 } from "@/components/PaginationCustom/config";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import { IPurchaseFieldRequest } from "^/@types/models/purchase";
+import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 
 const useGetPurchase = () => {
   const t = useTranslations("");
@@ -56,7 +49,7 @@ const useGetPurchase = () => {
 
   const fetch = useCallback(
     async (
-      payload: Omit<IBranchFieldRequest["query"], "name"> = {
+      payload: Omit<IPurchaseFieldRequest["query"], "name"> = {
         page: 1,
         limit: pageRowsArr[0],
         "sort[key]": "name",
@@ -107,7 +100,7 @@ const useGetPurchase = () => {
   const confirmDelOk = useCallback(
     async (id: string) => {
       setLoading(true);
-      const resDelete = await deleteBranchAPI(session, id);
+      const resDelete = await deletePurchaseAPI(session, id);
       if (resDelete.data.success) {
         await fetch();
         await dispatch(
@@ -123,7 +116,7 @@ const useGetPurchase = () => {
               <div className="flex flex-col py-[1rem]">
                 <span>
                   {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))}{" "}
+                  {capitalizeStr(t("API_MSG.SUCCESS.PURCHASE_DELETE"))}{" "}
                 </span>
               </div>
             ),
@@ -138,7 +131,7 @@ const useGetPurchase = () => {
             msg: (
               <div className="flex flex-col py-[1rem] capitalize">
                 <span>
-                  {t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}
+                  {t(capitalizeStr(t("API_MSG.ERROR.PURCHASE_DELETE")))}
                 </span>
               </div>
             ),
@@ -264,33 +257,12 @@ const useGetPurchase = () => {
             },
             {
               value: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="bg-gray-300" asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <DotsVerticalIcon className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${PURCHASE_PAGE.EDIT}/${x.id}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.edit"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`${PURCHASE_PAGE.VIEW}/${String(x.id)}`)
-                      }
-                    >
-                      {capitalizeStr(t("Common.view"))}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => confirmDeletion(x.id)}>
-                      {capitalizeStr(t("Common.delete"))}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <CustomTableOptionMenu
+                  rowId={x.id}
+                  editURL={`${PURCHASE_PAGE.EDIT}/${x.id}`}
+                  viewURL={`${PURCHASE_PAGE.VIEW}/${x.id}`}
+                  confirmDel={confirmDeletion}
+                />
               ),
               className: "",
             },
