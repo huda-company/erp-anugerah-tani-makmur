@@ -69,3 +69,10 @@ export const USER_PAGE = {
   EDIT: "/user/edit",
   VIEW: "/user/view",
 };
+
+export const ROLE_PAGE = {
+  ROOT: "/role",
+  ADD: "/role/add",
+  EDIT: "/role/edit",
+  VIEW: "/role/view",
+};

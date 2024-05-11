@@ -59,7 +59,7 @@ export const editPurchaseAPI = async (
   }
 };
 
-export const deleteBranchAPI = async (sess: Session | null, id: string) => {
+export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
   const reqURL = `${BASE_PURCHASE_API_URL}/delete/${id}`;
