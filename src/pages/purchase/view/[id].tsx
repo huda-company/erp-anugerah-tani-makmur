@@ -143,7 +143,7 @@ const ViewPurchasePage: FC = () => {
 
           {loading && <Loading />}
 
-          {!loading && (
+          {!loading && purchase && (
             <div className="justify-betwenn flex gap-x-4 rounded-[1rem] border-2 border-primary p-1">
               <Card className="w-2/3">
                 <CardHeader className="bg-[#EAE2E1]">
