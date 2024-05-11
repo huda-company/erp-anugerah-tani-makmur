@@ -10,12 +10,13 @@ import { FormMode } from "^/@types/global";
 import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import { bcData } from "^/config/itemcategory/config";
 import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const ViewItemCatPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.itemCategory")}`;
 
-  const { formVal, fetch } = useGetItemCatById();
+  const { loading, formVal, fetch } = useGetItemCatById();
 
   const doRefreshData = () => {
     fetch();
@@ -32,11 +33,15 @@ const ViewItemCatPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemCategoryForm
-              doRefresh={doRefreshData}
-              initialFormVals={formVal}
-              mode={FormMode.VIEW}
-            />
+            {!loading && formVal ? (
+              <ItemCategoryForm
+                doRefresh={doRefreshData}
+                initialFormVals={formVal}
+                mode={FormMode.VIEW}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

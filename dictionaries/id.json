@@ -96,6 +96,7 @@
     "address": "Alamat"
   },
   "NotFound": {
+    "dataNotFound": "Data tidak ditemukan",
     "page404": "halaman tidak ditemukan",
     "page404desc": "Maaf, halaman yang anda kunjungi tidak ditemukan atau sudah dipindahkan",
     "backToDashboard": "kembali ke dashboard"

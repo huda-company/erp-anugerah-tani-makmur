@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const ViewPurchasePage: FC = () => {
   const router = useRouter();
@@ -143,160 +144,164 @@ const ViewPurchasePage: FC = () => {
 
           {loading && <Loading />}
 
-          {!loading && purchase && (
-            <div className="justify-betwenn flex gap-x-4 rounded-[1rem] border-2 border-primary p-1">
-              <Card className="w-2/3">
-                <CardHeader className="bg-[#EAE2E1]">
-                  <CardTitle>
-                    <div className="flex justify-between">
-                      <span>PO : {purchase.poNo}</span>
-                      <div>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger
-                            className="bg-black hover:bg-black"
-                            asChild
-                          >
-                            <Button
-                              variant="ghost"
-                              className="hover:none h-6 w-6 p-0"
-                            >
-                              <span className="sr-only">Open menu</span>
-                              <DotsVerticalIcon className="h-4 w-4 text-white" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                router.push(`${PURCHASE_PAGE.EDIT}/${id}`)
-                              }
-                            >
-                              {capitalizeStr(t("Common.edit"))}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                router.push(
-                                  `${PURCHASE_PAGE.VIEW}/${String(id)}`
-                                )
-                              }
-                            >
-                              {capitalizeStr(t("Common.view"))}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="mt-[1rem] flex flex-col">
-                    <div className="flex flex-row capitalize">
-                      <span className="w-[35%] capitalize">status</span>{" "}
-                      <Badge variant="destructive">
-                        {capitalizeStr(purchase.status)}
-                      </Badge>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">supplier</span>{" "}
-                      <span>{purchase.supplier.company}</span>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">
-                        purchase method
-                      </span>{" "}
-                      <span>{purchase.purchPaymentMethod}</span>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">billing code</span>{" "}
-                      <span>{purchase.billingCode}</span>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">so number</span>{" "}
-                      <span>{purchase.soNumber}</span>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">date</span>{" "}
-                      <span>{formatDate(purchase.date)}</span>
-                    </div>
-                    <div className="flex flex-row">
-                      <span className="w-[35%] capitalize">expired</span>{" "}
-                      <span>{formatDate(purchase.expDate)}</span>
-                    </div>
-                  </div>
-                  <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
-                    <CustomTable data={tblData} />
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="w-1/3">
-                <CardHeader className="bg-[#EAE2E1]">
-                  <CardTitle>Files</CardTitle>
-                </CardHeader>
-                <CardContent className="p-2">
-                  <form onSubmit={handleSubmitUpload}>
-                    <div className="flex flex-col gap-y-2 rounded-[0.4rem] bg-[#E0EDF0] p-1 py-[0.5rem]">
-                      <div className=" flex flex-row gap-x-2">
+          <div className="justify-betwenn flex gap-x-4 rounded-[1rem] border-2 border-primary p-1">
+            {!loading && purchase ? (
+              <>
+                <Card className="w-2/3">
+                  <CardHeader className="bg-[#EAE2E1]">
+                    <CardTitle>
+                      <div className="flex justify-between">
+                        <span>PO : {purchase.poNo}</span>
                         <div>
-                          <select
-                            name="title"
-                            onChange={(e: any) => {
-                              setTitle(e.target.value);
-                            }}
-                          >
-                            <option value={"invoice"}>Invoice</option>
-                            <option value={"billcode"}>Billing code</option>
-                            <option value={"other"}>Other</option>
-                          </select>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger
+                              className="bg-black hover:bg-black"
+                              asChild
+                            >
+                              <Button
+                                variant="ghost"
+                                className="hover:none h-6 w-6 p-0"
+                              >
+                                <span className="sr-only">Open menu</span>
+                                <DotsVerticalIcon className="h-4 w-4 text-white" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  router.push(`${PURCHASE_PAGE.EDIT}/${id}`)
+                                }
+                              >
+                                {capitalizeStr(t("Common.edit"))}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  router.push(
+                                    `${PURCHASE_PAGE.VIEW}/${String(id)}`
+                                  )
+                                }
+                              >
+                                {capitalizeStr(t("Common.view"))}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
-
-                      <Input type="file" onChange={handleFileChange} />
-                      <Input
-                        type="text"
-                        name="description"
-                        placeholder="Description"
-                        onChange={(e: any) => {
-                          setDescription(e.target.value);
-                        }}
-                      />
-
-                      <div className="">
-                        <button
-                          type="submit"
-                          className="flex items-center rounded-[0.5rem] bg-[#5FBEDB] p-1"
-                        >
-                          <MdDriveFolderUpload />
-                          upload
-                        </button>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="mt-[1rem] flex flex-col">
+                      <div className="flex flex-row capitalize">
+                        <span className="w-[35%] capitalize">status</span>{" "}
+                        <Badge variant="destructive">
+                          {capitalizeStr(purchase.status)}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">supplier</span>{" "}
+                        <span>{purchase.supplier.company}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">
+                          purchase method
+                        </span>{" "}
+                        <span>{purchase.purchPaymentMethod}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">billing code</span>{" "}
+                        <span>{purchase.billingCode}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">so number</span>{" "}
+                        <span>{purchase.soNumber}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">date</span>{" "}
+                        <span>{formatDate(purchase.date)}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">expired</span>{" "}
+                        <span>{formatDate(purchase.expDate)}</span>
                       </div>
                     </div>
-                  </form>
+                    <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
+                      <CustomTable data={tblData} />
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="w-1/3">
+                  <CardHeader className="bg-[#EAE2E1]">
+                    <CardTitle>Files</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    <form onSubmit={handleSubmitUpload}>
+                      <div className="flex flex-col gap-y-2 rounded-[0.4rem] bg-[#E0EDF0] p-1 py-[0.5rem]">
+                        <div className=" flex flex-row gap-x-2">
+                          <div>
+                            <select
+                              name="title"
+                              onChange={(e: any) => {
+                                setTitle(e.target.value);
+                              }}
+                            >
+                              <option value={"invoice"}>Invoice</option>
+                              <option value={"billcode"}>Billing code</option>
+                              <option value={"other"}>Other</option>
+                            </select>
+                          </div>
+                        </div>
 
-                  <div className="mt-[1rem] rounded-[1rem] bg-red-100 p-2">
-                    {billdocs && billdocs.length > 1
-                      ? billdocs.map((x: any, idx: number) => {
-                          const billDocUrl = `${BASE_URL}${billDocURL}`;
-                          return (
-                            <ol key="file-list">
-                              <li key={idx} className="flex justify-between">
-                                {`${x.title}`}
-                                <span className="text-sm">{`${moment(x.createdAt).format("DD/MM/YY")} `}</span>
-                                <a
-                                  href={`${billDocUrl}/${x.fileName}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <FaRegEye />
-                                </a>
-                              </li>
-                            </ol>
-                          );
-                        })
-                      : `-- ${capitalizeStr(t("PurchasePage.noFileFound"))} --`}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+                        <Input type="file" onChange={handleFileChange} />
+                        <Input
+                          type="text"
+                          name="description"
+                          placeholder="Description"
+                          onChange={(e: any) => {
+                            setDescription(e.target.value);
+                          }}
+                        />
+
+                        <div className="">
+                          <button
+                            type="submit"
+                            className="flex items-center rounded-[0.5rem] bg-[#5FBEDB] p-1"
+                          >
+                            <MdDriveFolderUpload />
+                            upload
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+
+                    <div className="mt-[1rem] rounded-[1rem] bg-red-100 p-2">
+                      {billdocs && billdocs.length > 1
+                        ? billdocs.map((x: any, idx: number) => {
+                            const billDocUrl = `${BASE_URL}${billDocURL}`;
+                            return (
+                              <ol key="file-list">
+                                <li key={idx} className="flex justify-between">
+                                  {`${x.title}`}
+                                  <span className="text-sm">{`${moment(x.createdAt).format("DD/MM/YY")} `}</span>
+                                  <a
+                                    href={`${billDocUrl}/${x.fileName}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <FaRegEye />
+                                  </a>
+                                </li>
+                              </ol>
+                            );
+                          })
+                        : `-- ${capitalizeStr(t("PurchasePage.noFileFound"))} --`}
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <EmptyContent />
+            )}
+          </div>
         </div>
       </ScrollArea>
     </DashboardLayout>

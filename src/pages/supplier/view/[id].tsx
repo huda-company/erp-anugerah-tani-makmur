@@ -10,12 +10,13 @@ import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import SupplierForm from "../../../components/Supplier/SupplierForm";
 import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
 import { FormMode } from "^/@types/global";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const ViewSupplierPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.supplier")}`;
 
-  const { formVal, fetch } = useGetSupplierById();
+  const { loading, formVal, fetch } = useGetSupplierById();
 
   const doRefreshData = () => {
     fetch();
@@ -32,11 +33,15 @@ const ViewSupplierPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <SupplierForm
-              doRefresh={doRefreshData}
-              initialFormVals={formVal}
-              mode={FormMode.VIEW}
-            />
+            {!loading && formVal && formVal.company ? (
+              <SupplierForm
+                doRefresh={doRefreshData}
+                initialFormVals={formVal}
+                mode={FormMode.VIEW}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

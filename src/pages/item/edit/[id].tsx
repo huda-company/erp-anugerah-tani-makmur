@@ -11,12 +11,13 @@ import { FormMode } from "^/@types/global";
 import ItemForm from "@/components/Item/ItemForm";
 import useGetItemById from "@/hooks/item/useGetItemById";
 import { bcData } from "^/config/item/config";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const EditItemPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.item")}`;
 
-  const { formVal } = useGetItemById();
+  const { loading, formVal } = useGetItemById();
 
   return (
     <DashboardLayout>
@@ -29,11 +30,15 @@ const EditItemPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemForm
-              doRefresh={noop}
-              initialFormVals={formVal}
-              mode={FormMode.EDIT}
-            />
+            {!loading && formVal && formVal.id ? (
+              <ItemForm
+                doRefresh={noop}
+                initialFormVals={formVal}
+                mode={FormMode.EDIT}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

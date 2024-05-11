@@ -11,12 +11,13 @@ import SupplierForm from "../../../components/Supplier/SupplierForm";
 import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const EditSupplierPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.supplier")}`;
 
-  const { formVal } = useGetSupplierById();
+  const { loading, formVal } = useGetSupplierById();
 
   return (
     <DashboardLayout>
@@ -29,11 +30,15 @@ const EditSupplierPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <SupplierForm
-              doRefresh={noop}
-              initialFormVals={formVal}
-              mode={FormMode.EDIT}
-            />
+            {!loading && formVal && formVal.company ? (
+              <SupplierForm
+                doRefresh={noop}
+                initialFormVals={formVal}
+                mode={FormMode.EDIT}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

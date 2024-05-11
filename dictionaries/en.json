@@ -96,6 +96,7 @@
     "address": "Address"
   },
   "NotFound": {
+    "dataNotFound": "no data found",
     "page404": "Page not found",
     "page404desc": "Sorry, the page you are looking for doesn't exist or has been moved",
     "backToDashboard": "back to dashboard"
