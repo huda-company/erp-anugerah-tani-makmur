@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Image from "next/image";
 
 import { APP_NAME } from "^/config/env";
 
@@ -63,10 +62,9 @@ const Footer = () => {
           <div className="sm:flex sm:items-center sm:justify-between">
             <div className="mb-6 md:mb-0">
               <a href="#" className="flex items-center">
-                <Image
+                <img
                   src="/logo.png"
-                  className="mr-3 h-10"
-                  alt="Company Logo"
+                  alt="FlowBite Logo"
                   height={120}
                   width={40}
                 />
