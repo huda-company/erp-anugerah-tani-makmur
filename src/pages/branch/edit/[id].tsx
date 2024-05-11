@@ -11,12 +11,13 @@ import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import BranchForm from "@/components/Branch/BranchForm";
 import useGetBranchById from "@/hooks/branch/useGetBranchById";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const EditBranchPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.branch")}`;
 
-  const { formVal } = useGetBranchById();
+  const { loading, formVal } = useGetBranchById();
 
   return (
     <DashboardLayout>
@@ -29,11 +30,15 @@ const EditBranchPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <BranchForm
-              doRefresh={noop}
-              initialFormVals={formVal}
-              mode={FormMode.EDIT}
-            />
+            {!loading && formVal && formVal.id ? (
+              <BranchForm
+                doRefresh={noop}
+                initialFormVals={formVal}
+                mode={FormMode.EDIT}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

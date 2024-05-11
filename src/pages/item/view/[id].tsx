@@ -10,12 +10,13 @@ import { FormMode } from "^/@types/global";
 import ItemForm from "@/components/Item/ItemForm";
 import useGetItemById from "@/hooks/item/useGetItemById";
 import { bcData } from "^/config/item/config";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const ViewSupplierPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.item")}`;
 
-  const { formVal, fetch } = useGetItemById();
+  const { loading, formVal, fetch } = useGetItemById();
 
   const doRefreshData = () => {
     fetch();
@@ -32,11 +33,15 @@ const ViewSupplierPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemForm
-              doRefresh={doRefreshData}
-              initialFormVals={formVal}
-              mode={FormMode.VIEW}
-            />
+            {!loading && formVal && formVal.id ? (
+              <ItemForm
+                doRefresh={doRefreshData}
+                initialFormVals={formVal}
+                mode={FormMode.VIEW}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

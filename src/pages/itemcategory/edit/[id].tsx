@@ -11,12 +11,13 @@ import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const EditItemCatPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.itemCategory")}`;
 
-  const { formVal } = useGetItemCatById();
+  const { loading, formVal } = useGetItemCatById();
 
   return (
     <DashboardLayout>
@@ -29,11 +30,15 @@ const EditItemCatPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <ItemCategoryForm
-              doRefresh={noop}
-              initialFormVals={formVal}
-              mode={FormMode.EDIT}
-            />
+            {!loading && formVal && formVal.id ? (
+              <ItemCategoryForm
+                doRefresh={noop}
+                initialFormVals={formVal}
+                mode={FormMode.EDIT}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>

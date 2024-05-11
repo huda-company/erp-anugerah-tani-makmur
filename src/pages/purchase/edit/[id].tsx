@@ -11,6 +11,7 @@ import { FormMode } from "^/@types/global";
 import PurchaseForm from "@/components/Purchase/PurchaseForm";
 import { bcData } from "^/config/purchase/config";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const EditBranchPage: FC = () => {
   const t = useTranslations("");
@@ -28,15 +29,17 @@ const EditBranchPage: FC = () => {
             bcumbs={bcData}
           />
 
-          {!loading && (
-            <div className="rounded-[1rem] border-2 border-primary p-2">
+          <div className="rounded-[1rem] border-2 border-primary p-2">
+            {!loading && formVal && formVal.poNo ? (
               <PurchaseForm
                 doRefresh={noop}
                 initialFormVals={formVal}
                 mode={FormMode.EDIT}
               />
-            </div>
-          )}
+            ) : (
+              <EmptyContent />
+            )}
+          </div>
         </div>
       </ScrollArea>
     </DashboardLayout>

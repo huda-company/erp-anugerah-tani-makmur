@@ -10,12 +10,13 @@ import { FormMode } from "^/@types/global";
 import { bcData } from "^/config/itemcategory/config";
 import BranchForm from "@/components/Branch/BranchForm";
 import useGetBranchById from "@/hooks/branch/useGetBranchById";
+import EmptyContent from "@/components/EmptyContent/EmptyContent";
 
 const ViewBranchPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.branch")}`;
 
-  const { formVal, fetch } = useGetBranchById();
+  const { loading, formVal, fetch } = useGetBranchById();
 
   const doRefreshData = () => {
     fetch();
@@ -32,11 +33,15 @@ const ViewBranchPage: FC = () => {
           />
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            <BranchForm
-              doRefresh={doRefreshData}
-              initialFormVals={formVal}
-              mode={FormMode.VIEW}
-            />
+            {!loading && formVal && formVal.id ? (
+              <BranchForm
+                doRefresh={doRefreshData}
+                initialFormVals={formVal}
+                mode={FormMode.VIEW}
+              />
+            ) : (
+              <EmptyContent />
+            )}
           </div>
         </div>
       </ScrollArea>
