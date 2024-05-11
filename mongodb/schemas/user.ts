@@ -3,11 +3,20 @@ import mongoose, { Schema } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
 import { Gender, IUserDocument } from "^/@types/models/user";
+import Role from "./role";
 
 type SchemaTypes = IUserDocument & mongoose.PaginateModel<IUserDocument>;
 
 export const UserSchema = new Schema<IUserDocument>(
   {
+    removed: {
+      type: Boolean,
+      default: false,
+    },
+    enabled: {
+      type: Boolean,
+      default: true,
+    },
     name: {
       type: String,
       required: true,
@@ -49,7 +58,7 @@ export const UserSchema = new Schema<IUserDocument>(
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
+        ref: Role,
       },
     ],
   },

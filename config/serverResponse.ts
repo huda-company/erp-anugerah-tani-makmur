@@ -105,11 +105,6 @@ export const respBody = {
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.UPLOAD_FILE_SUCCESS),
     },
-    NEW_USER_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_USER_CREATE),
-    },
 
     NEW_ROLE_CREATE: {
       ...resBody,
@@ -195,6 +190,22 @@ export const respBody = {
       ...resBody,
       success: true,
       message: capitalizeStr(API_MSG.SUCCESS.PURCHASE_DELETE),
+    },
+
+    NEW_USER_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_USER_CREATE),
+    },
+    USER_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.USER_UPDATE),
+    },
+    USER_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.USER_DELETE),
     },
 
     SIGN_IN_SUCCESS: {
