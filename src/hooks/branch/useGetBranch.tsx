@@ -98,7 +98,7 @@ const useGetBranch = () => {
         return null;
       }
     },
-    [session]
+    [dispatch, session, t]
   );
 
   const confirmDelOk = useCallback(

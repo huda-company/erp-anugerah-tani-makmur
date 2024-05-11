@@ -103,7 +103,7 @@ const useGetItemCat = () => {
         return null;
       }
     },
-    [session]
+    [dispatch, session, t]
   );
 
   const confirmDelOk = useCallback(

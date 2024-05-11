@@ -77,7 +77,7 @@ const useGetPurchaseById = () => {
 
       setLoading(false);
     },
-    [id, session]
+    [dispatch, id, session, t]
   );
 
   const fetch = useCallback(

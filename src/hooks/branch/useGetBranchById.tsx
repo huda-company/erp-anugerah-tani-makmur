@@ -71,7 +71,7 @@ const useGetBranchById = () => {
 
       setLoading(false);
     },
-    [dispatch, id, session]
+    [dispatch, id, session, t]
   );
 
   // const onPaginationChange = useCallback(

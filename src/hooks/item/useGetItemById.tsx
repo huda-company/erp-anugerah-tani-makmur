@@ -70,7 +70,7 @@ const useGetItemById = () => {
 
       setLoading(false);
     },
-    [id, session]
+    [dispatch, id, session, t]
   );
 
   // const onPaginationChange = useCallback(
