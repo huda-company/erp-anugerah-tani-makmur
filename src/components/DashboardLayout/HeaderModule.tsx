@@ -8,7 +8,7 @@ import { BsArrowLeftSquare } from "react-icons/bs";
 
 import { noop } from "^/utils/helpers";
 import { capitalizeStr } from "^/utils/capitalizeStr";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { MdOutlineAddToPhotos } from "react-icons/md";
 
 const CustomBcumbNoSSR = dynamic(
   () => import("../CustomBreadcrumb/CustomBreadcrumb"),
@@ -25,27 +25,24 @@ const HeaderModule: FC<HeaderModuleProps> = ({ title, bcumbs, addPageURL }) => {
           <div onClick={router.back} className="cursor-pointer">
             <BsArrowLeftSquare color="black" size={20} />
           </div>
-        </div>
-      </div>
+          <Typography className="text-xl font-bold text-black underline">
+            {capitalizeStr(title)}
+          </Typography>
 
-      {bcumbs && (
-        <div className="flex items-center gap-x-2">
-          {/* <CustomBcumbNoSSR separator=">" items={bcumbs} /> */}
-          <AiFillPlusCircle
+          <MdOutlineAddToPhotos
             onClick={() => {
               addPageURL ? router.push(addPageURL) : noop;
             }}
             className="h-6 w-6 cursor-pointer"
           />
-          <Typography className="text-xl font-bold text-black underline">
-            {capitalizeStr(title)}
-          </Typography>
+        </div>
+      </div>
+
+      {bcumbs && (
+        <div className="flex">
+          <CustomBcumbNoSSR separator=">" items={bcumbs} />
         </div>
       )}
-
-      <div className="flex">
-        <CustomBcumbNoSSR separator=">" items={bcumbs} />
-      </div>
     </div>
   );
 };
