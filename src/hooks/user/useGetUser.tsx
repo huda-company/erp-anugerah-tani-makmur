@@ -101,7 +101,7 @@ const useGetUser = () => {
         return null;
       }
     },
-    [session]
+    [dispatch, session, t]
   );
 
   const confirmDelOk = useCallback(

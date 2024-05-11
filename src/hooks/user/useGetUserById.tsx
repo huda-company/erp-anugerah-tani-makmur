@@ -74,7 +74,7 @@ const useGetUserById = () => {
 
       setLoading(false);
     },
-    [id, session]
+    [dispatch, id, session, t]
   );
 
   useEffect(() => {
