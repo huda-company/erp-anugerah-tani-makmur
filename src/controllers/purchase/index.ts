@@ -42,7 +42,6 @@ export const getPurchases = async (
       .status(200)
       .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: purchases });
   } catch (error) {
-    console.log("errr", error);
     return res
       .status(500)
       .json({ ...respBody.ERROR.UNEXPECTED_ERROR, error: error });
