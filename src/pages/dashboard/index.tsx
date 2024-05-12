@@ -1,6 +1,4 @@
-import { GetStaticPropsContext } from "next";
 import React from "react";
-
 import DashboardLayout from "@/components/DashboardLayout";
 import {
   Card,
@@ -11,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getStaticProps } from "^/utils/getStaticProps";
 
 import { withAuth } from "^/utils/withAuth";
 import useGetOverview from "@/hooks/dashboard/useGetOverview";
@@ -24,14 +23,27 @@ import { PiUserSoundFill } from "react-icons/pi";
 import { LiaUserSlashSolid } from "react-icons/lia";
 import { FaBox } from "react-icons/fa6";
 import { BiCategoryAlt } from "react-icons/bi";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { AUTH_PAGE_URL } from "@/constants/pageURL";
 
 const Dashboard = () => {
   const t = useTranslations("");
 
+  const router = useRouter();
+
+  useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push(AUTH_PAGE_URL.SIGNIN);
+    },
+  });
+
   const { loading, overview } = useGetOverview();
+
   return (
     <>
-      {loading && <Loading />}
+      {loading == true && <Loading />}
 
       {!loading && overview && (
         <DashboardLayout>
@@ -313,12 +325,6 @@ const Dashboard = () => {
   );
 };
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  return {
-    props: {
-      messages: (await import(`^/dictionaries/${locale}.json`)).default,
-    },
-  };
-}
+export { getStaticProps };
 
 export default withAuth(Dashboard);
