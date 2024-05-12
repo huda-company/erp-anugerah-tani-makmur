@@ -174,7 +174,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
           <div className="flex-1">
             <label>Year</label>
             <Input
-              value={new Date().getFullYear()}
+              // value={new Date().getFullYear()}
               {...register("year")}
               placeholder="Year"
             />
