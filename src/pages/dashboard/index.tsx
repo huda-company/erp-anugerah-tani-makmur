@@ -29,7 +29,6 @@ const Dashboard = () => {
   const t = useTranslations("");
 
   const { loading, overview } = useGetOverview();
-  console.log("overview", overview);
   return (
     <>
       {loading && <Loading />}
