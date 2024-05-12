@@ -62,6 +62,7 @@ const SupplierForm: FC<SupplierFormProps> = ({
         ? await addSupplierAPI(session, prm)
         : await editSupplierAPI(session, prm);
     if (res && res.status == 200) {
+      await handleReset();
       dispatch(
         toastActs.callShowToast({
           show: true,
@@ -90,7 +91,7 @@ const SupplierForm: FC<SupplierFormProps> = ({
         })
       );
     }
-    doRefresh;
+    doRefresh();
     setLoading(false);
   };
 
