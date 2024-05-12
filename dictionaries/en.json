@@ -71,6 +71,11 @@
     "branch": "branch",
     "user": "user"
   },
+  "DashboardPage": {
+    "totalUser": "total user",
+    "activeUser": "active user",
+    "inActiveUser": "inactive user"
+  },
   "SupplierPage": {
     "revenue": "revenue"
   },
