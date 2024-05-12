@@ -71,6 +71,11 @@
     "branch": "cabang",
     "user": "pengguna"
   },
+  "DashboardPage": {
+    "totalUser": "total pengguna",
+    "activeUser": "pengguna aktif",
+    "inActiveUser": "pengguna tidak aktif"
+  },
   "SupplierPage": {
     "revenue": "pendapatan"
   },
