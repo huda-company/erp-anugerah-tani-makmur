@@ -7,6 +7,7 @@ import { pageRowsArr } from "^/config/supplier/config";
 import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
+import { firstLetterWord, formatNumberToNDigits } from "^/utils/helpers";
 
 export const getSuppliers = async (
   req: NextApiRequest,
@@ -50,7 +51,7 @@ export const addSupplier = async (
   await connectToDatabase();
 
   try {
-    const dataToInsert = {
+    let dataToInsert = {
       name,
       address,
       company,
@@ -61,7 +62,17 @@ export const addSupplier = async (
       email,
     };
 
-    const field = await Supplier.create(dataToInsert);
+    let suppCode = (await firstLetterWord(company)).trim();
+
+    const checkCompCode = await Supplier.find({ supplierCode: suppCode });
+    if (checkCompCode.length > 0) {
+      suppCode = `${suppCode}${formatNumberToNDigits(checkCompCode.length, 2)}`;
+    }
+
+    const field = await Supplier.create({
+      ...dataToInsert,
+      supplierCode: suppCode,
+    });
 
     return res
       .status(200)
