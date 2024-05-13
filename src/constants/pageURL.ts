@@ -54,6 +54,7 @@ export const PURCHASE_PAGE = {
   ADD: "/purchase/add",
   EDIT: "/purchase/edit",
   VIEW: "/purchase/view",
+  PDF: "/purchase/pdf",
 };
 
 export const BILL_DOC_PAGE = {
