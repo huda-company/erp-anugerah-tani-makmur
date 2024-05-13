@@ -34,6 +34,7 @@ import {
 } from "../ui/select";
 import { handleFocusSelectAll } from "^/utils/helpers";
 import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
+import useMount from "@/hooks/useMount";
 
 const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
   const t = useTranslations("");
@@ -46,7 +47,7 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
 
   const { data: session } = useSession();
 
-  const { itemCatOpts } = useGetItemCat();
+  const { itemCatOpts, fetch } = useGetItemCat();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -118,6 +119,12 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
   const itemForm = useForm<z.infer<typeof ItemFormSchema>>({
     resolver: zodResolver(ItemFormSchema),
     defaultValues: mode == FormMode.ADD ? initialItemForm : initialFormVals,
+  });
+
+  useMount(() => {
+    fetch({
+      limit: 50,
+    });
   });
 
   useEffect(() => {
