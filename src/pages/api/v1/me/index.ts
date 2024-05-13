@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { me } from "@/controllers/me";
 
-import { respBody } from "^/config/serverResponse";
+import { ErrorType } from "^/config/apiRespMsg";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +15,7 @@ export default async function handler(
       break;
 
     default: {
-      return res.status(405).json({ ...respBody.ERROR.METHOD_NOT_ALLLOWED });
+      return res.status(405).json({ message: ErrorType.METHOD_NOT_ALLOWED });
     }
   }
 }
