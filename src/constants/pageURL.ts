@@ -42,6 +42,13 @@ export const ITEM_PAGE = {
   VIEW: "/item/view",
 };
 
+export const UNIT_PAGE = {
+  ROOT: "/unit",
+  ADD: "/unit/add",
+  EDIT: "/unit/edit",
+  VIEW: "/unit/view",
+};
+
 export const BRANCH_PAGE = {
   ROOT: "/branch",
   ADD: "/branch/add",

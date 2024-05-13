@@ -144,6 +144,22 @@ export const respBody = {
       message: capitalizeStr(API_MSG.SUCCESS.ITEM_CAT_DELETE),
     },
 
+    NEW_UNIT_CREATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.NEW_UNIT_CREATE),
+    },
+    UNIT_UPDATE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.UNIT_UPDATE),
+    },
+    UNIT_DELETE: {
+      ...resBody,
+      success: true,
+      message: capitalizeStr(API_MSG.SUCCESS.UNIT_DELETE),
+    },
+
     NEW_ITEM_CREATE: {
       ...resBody,
       success: true,

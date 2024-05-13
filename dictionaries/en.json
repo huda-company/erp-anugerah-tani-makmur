@@ -69,6 +69,7 @@
     "item": "item",
     "itemCategory": "item category",
     "branch": "branch",
+    "unit": "unit",
     "user": "user"
   },
   "DashboardPage": {
@@ -131,7 +132,10 @@
       "NEW_PURCHASE_CREATE": "new purchase created successfully",
       "PURCHASE_UPDATE": "purchase updated successfully",
       "PURCHASE_DELETE": "purchase deleted successfully",
-      "ROLE_DELETE": "role deleted successfully"
+      "ROLE_DELETE": "role deleted successfully",
+      "NEW_UNIT_CREATE": "new unit created successfully",
+      "UNIT_UPDATE": "unit updated successfully",
+      "UNIT_DELETE": "unit deleted successfully"
     },
     "ERROR": {
       "UPLOAD_FILE": "upload file failed",
@@ -150,7 +154,10 @@
       "NEW_PURCHASE_CREATE": "failed to create new purchase",
       "PURCHASE_UPDATE": "failed to update purchase",
       "PURCHASE_DELETE": "failed to delete purchase",
-      "ROLE_DELETE": "role deleted successfully"
+      "ROLE_DELETE": "role deleted successfully",
+      "NEW_UNIT_CREATE": "failed to create new unit",
+      "UNIT_UPDATE": "failed to update unit",
+      "UNIT_DELETE": "failed to delete unit"
     }
   }
 }

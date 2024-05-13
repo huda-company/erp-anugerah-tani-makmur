@@ -42,6 +42,10 @@ export const API_MSG = {
     BRANCH_UPDATE: "branch updated successfully",
     BRANCH_DELETE: "branch deleted successfully",
 
+    NEW_UNIT_CREATE: "new unit created successfully",
+    UNIT_UPDATE: "unit updated successfully",
+    UNIT_DELETE: "unit deleted successfully",
+
     NEW_PURCHASE_CREATE: "new purchase created successfully",
     PURCHASE_UPDATE: "purchase updated successfully",
     PURCHASE_DELETE: "purchase deleted successfully",
