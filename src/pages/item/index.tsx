@@ -8,13 +8,13 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
-import { bcData } from "^/config/supplier/config";
 import CustomTable from "@/components/CustomTable/CustomTable";
 import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
 import { ITEM_PAGE } from "@/constants/pageURL";
 import useGetItem from "@/hooks/item/useGetItem";
 import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
+import { bcData } from "^/config/item/config";
 
 const Item = () => {
   const t = useTranslations("");
