@@ -2,7 +2,7 @@ import useAppDispatch from "@/hooks/useAppDispatch";
 
 import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import { getStaticProps } from "^/utils/getStaticProps";
@@ -11,7 +11,7 @@ import useGetItem from "@/hooks/item/useGetItem";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { handleFocusSelectAll } from "^/utils/helpers";
+import { handleFocusSelectAll, thsandSep } from "^/utils/helpers";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { FaSpinner } from "react-icons/fa";
 import clsxm from "^/utils/clsxm";
@@ -31,6 +31,7 @@ import { actions as toastActs } from "@/redux/toast";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import useMount from "@/hooks/useMount";
+import useGetUnit from "@/hooks/unit/useGetUnit";
 
 const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const t = useTranslations("");
@@ -47,6 +48,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
     mode == FormMode.ADD ? true : false
   );
 
+  const { unitDataOpts, fetch: fetchUnit } = useGetUnit();
   const { itemDataOpts, fetch: fetchItem } = useGetItem();
   const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
 
@@ -69,6 +71,8 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
     defaultValues: {
       year:
         mode == FormMode.ADD ? initialPurchaseForm.year : initialFormVals.year,
+      date:
+        mode == FormMode.ADD ? initialPurchaseForm.date : initialFormVals.date,
       expDate:
         mode == FormMode.ADD
           ? initialPurchaseForm.expDate
@@ -79,6 +83,8 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
           : initialFormVals.soNumber,
       note:
         mode == FormMode.ADD ? initialPurchaseForm.note : initialFormVals.note,
+      poNo:
+        mode == FormMode.ADD ? initialPurchaseForm.poNo : initialFormVals.poNo,
       billingCode:
         mode == FormMode.ADD
           ? initialPurchaseForm.billingCode
@@ -103,6 +109,15 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
     name: "items",
     control,
   });
+
+  const formValues = useWatch({
+    name: "items",
+    control,
+  });
+  const gTotal = formValues.reduce(
+    (acc, current) => acc + (current.total || 0),
+    0
+  );
 
   const onSubmit = async (data: IPurchaseForm) => {
     setLoading(true);
@@ -131,7 +146,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
             </div>
           ),
           type: "success",
-          timeout: 2000,
+          timeout: 750,
         })
       );
 
@@ -139,7 +154,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
         if (mode == FormMode.ADD) {
           router.push(`${PURCHASE_PAGE.VIEW}/${res.data.data.id}`);
         }
-      }, 1000);
+      }, 750);
     } else {
       dispatch(
         toastActs.callShowToast({
@@ -164,6 +179,9 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
     fetchSupp({
       limit: 50,
     });
+    fetchUnit({
+      limit: 20,
+    });
   });
 
   // const purchaseForm = useForm<z.infer<typeof SupplierFormSchema>>({
@@ -182,20 +200,28 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-6">
           <div className="flex-1">
-            <label>Year</label>
-            <Input
-              // value={new Date().getFullYear()}
-              {...register("year")}
-              placeholder="Year"
-            />
+            <label>{capitalizeStr(t("PurchasePage.year"))}</label>
+            <Input {...register("year")} placeholder="Year" />
           </div>
 
           <div className="flex-1">
-            <label>Exp Date</label>
+            <label>{capitalizeStr(t("PurchasePage.poNo"))}</label>
+            <Input readOnly {...register("poNo")} placeholder="Po No" />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-x-6">
+          <div className="flex-1">
+            <label>{capitalizeStr(t("PurchasePage.date"))}</label>
+            <Input type="date" {...register("date")} placeholder="Date" />
+          </div>
+
+          <div className="flex-1">
+            <label>{capitalizeStr(t("PurchasePage.expDate"))}</label>
             <Input
-              {...register("expDate")}
               type="date"
-              placeholder="Exp date"
+              {...register("expDate")}
+              placeholder={capitalizeStr(t("PurchasePage.expDate"))}
             />
           </div>
         </div>
@@ -239,7 +265,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
           </div>
 
           <div className="flex-1">
-            <label>Payment Method</label>
+            <label>{capitalizeStr(t("PurchasePage.paymentMethod"))}</label>
             <Controller
               defaultValue={""}
               name={`purchPaymentMethod`}
@@ -258,7 +284,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                         //   : itemCatOpts.find(
                         //     (y) => y.value == initialFormVals.itemCategory
                         //   )?.text
-                        "Select Payment Method"
+                        capitalizeStr(t("PurchasePage.paymentMethod"))
                       }
                     />
                   </SelectTrigger>
@@ -279,19 +305,28 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
         <div className="flex items-center gap-x-6">
           <div className="flex-grow">
-            <label>Billing Code</label>
-            <Input {...register("billingCode")} placeholder="Billing Code" />
+            <label>{capitalizeStr(t("PurchasePage.billCode"))}</label>
+            <Input
+              {...register("billingCode")}
+              placeholder={capitalizeStr(t("PurchasePage.billCode"))}
+            />
           </div>
 
           <div className="flex-grow">
-            <label>SO number</label>
-            <Input {...register("soNumber")} placeholder="SO number" />
+            <label>{capitalizeStr(t("PurchasePage.soNo"))}</label>
+            <Input
+              {...register("soNumber")}
+              placeholder={capitalizeStr(t("PurchasePage.soNo"))}
+            />
           </div>
         </div>
 
         <div className="flex flex-col gap-x-6">
-          <label>Note</label>
-          <Textarea {...register("note")} placeholder="Note" />
+          <label>{capitalizeStr(t("PurchasePage.note"))}</label>
+          <Textarea
+            {...register("note")}
+            placeholder={capitalizeStr(t("PurchasePage.note"))}
+          />
         </div>
       </div>
 
@@ -301,6 +336,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
           setIsEditing(true);
           append({
             item: "",
+            unit: "kg",
             quantity: 0,
             price: 0,
             discount: 0,
@@ -310,13 +346,13 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
         type="button"
       >
         <AiFillPlusCircle size={25} color="green" />
-        ADD ITEM
+        {capitalizeStr(`${t("Common.add")} ${t("Sidebar.item")}`)}
       </button>
       {fields.map((field, index) => {
         return (
           <div className="flex flex-row " key={field.id}>
             <section
-              className="section mt-[0.3rem] flex flex-row gap-x-4"
+              className="section mt-[0.3rem] flex w-[100%] flex-row gap-x-4"
               key={field.id}
             >
               <div className="w-[50%] flex-grow">
@@ -357,8 +393,45 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                 />
               </div>
 
+              <div className="w-[20%] flex-grow">
+                {index == 0 && capitalizeStr(t("Sidebar.unit"))}
+                <Controller
+                  defaultValue={""}
+                  name={`items.${index}.unit`}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            mode == FormMode.ADD || isEditing
+                              ? `${capitalizeStr(t("Sidebar.unit"))}`
+                              : unitDataOpts.find(
+                                  (y) =>
+                                    y.text == initialFormVals.items[index].unit
+                                )?.text
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {unitDataOpts.map((x: Options) => {
+                          return (
+                            <SelectItem key={x.value} value={x.value}>
+                              {x.text}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+
               <div className="flex-grow">
-                {index == 0 && "Price"}
+                {index == 0 && capitalizeStr(t("PurchasePage.price"))}
                 <Input
                   onFocus={handleFocusSelectAll}
                   placeholder="value"
@@ -381,7 +454,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
               </div>
 
               <div className="flex-grow">
-                {index == 0 && "Quantity"}
+                {index == 0 && capitalizeStr(t("PurchasePage.quantity"))}
                 <Input
                   onFocus={handleFocusSelectAll}
                   placeholder="quantity"
@@ -406,7 +479,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
               </div>
 
               <div className="flex-grow">
-                {index == 0 && "Discount"}
+                {index == 0 && capitalizeStr(t("PurchasePage.discount"))}
                 <Input
                   onFocus={handleFocusSelectAll}
                   placeholder="value"
@@ -436,11 +509,12 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                   placeholder="value"
                   type="text"
                   {...register(`items.${index}.total` as const, {
-                    valueAsNumber: true,
+                    // valueAsNumber: true,
                     required: true,
                   })}
                   className={errors?.items?.[index]?.total ? "bg-red-100" : ""}
-                  defaultValue={field.price * 2}
+                  defaultValue={field.total}
+                  value={thsandSep(getValues(`items.${index}.total`))}
                 />
               </div>
               <button
@@ -459,7 +533,9 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
         );
       })}
 
-      {/* <Total control={control} /> */}
+      <div className="mr-[2.5rem] mt-[1.5rem] flex justify-end">
+        <span>{`${capitalizeStr(t("PurchasePage.grandTotal"))} : Rp ${thsandSep(gTotal)}`}</span>
+      </div>
 
       <div className="mt-[1rem] flex flex-row justify-center gap-3">
         <Button

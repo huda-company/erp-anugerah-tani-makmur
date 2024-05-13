@@ -88,7 +88,13 @@
     "price": "price",
     "quantity": "quantity",
     "discount": "discount",
+    "date": "creation date",
+    "paymentMethod": "papyment method",
+    "soNo": "so number",
+    "billCode": "billing code",
+    "note": "note",
     "total": "total",
+    "grandTotal": "grand total",
     "noFileFound": "no file found"
   },
   "UserPage": {

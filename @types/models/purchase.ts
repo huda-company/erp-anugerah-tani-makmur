@@ -2,6 +2,7 @@ import { BaseFormProps, FormMode } from "../global";
 
 export type PurchItem = {
   item: string;
+  unit: string;
   quantity: number;
   price: number;
   discount: number;

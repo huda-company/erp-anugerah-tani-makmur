@@ -75,6 +75,11 @@ export const PurchaseSchema = new Schema<IPurchaseDocument>(
           type: Number,
           required: true,
         },
+        unit: {
+          type: String,
+          required: true,
+          default: "kg",
+        },
         price: {
           type: Number,
           required: true,

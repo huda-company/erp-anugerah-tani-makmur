@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
 import { actions as toastActs } from "@/redux/toast";
+import { thsandSep } from "^/utils/helpers";
 
 const useGetPurchaseById = () => {
   const t = useTranslations("");
@@ -108,6 +109,7 @@ const useGetPurchaseById = () => {
               item: entry.item.id,
               quantity: entry.quantity,
               price: entry.price,
+              unit: entry.unit,
               discount: entry.discount,
               total: entry.total,
             }));
@@ -118,6 +120,7 @@ const useGetPurchaseById = () => {
               items: formattedItems,
               supplier: prchse.supplier.id,
               expDate: moment(prchse.expDate).format("YYYY-MM-DD"),
+              date: moment(prchse.date).format("YYYY-MM-DD"),
             });
 
             fetchBilldoc();
@@ -151,7 +154,7 @@ const useGetPurchaseById = () => {
               className: "text-left w-[15rem]",
             },
             {
-              value: x.price,
+              value: thsandSep(Number(x.price)),
               className: "text-left w-[6rem] pl-0",
             },
             {
@@ -159,11 +162,15 @@ const useGetPurchaseById = () => {
               className: "text-left w-[6rem] pl-0",
             },
             {
+              value: x.unit ?? "kg",
+              className: "text-left w-[6rem] pl-0",
+            },
+            {
               value: x.discount,
               className: "text-left w-[6rem] pl-0",
             },
             {
-              value: x.total,
+              value: thsandSep(Number(x.total)),
               className: "text-left w-[6rem] pl-0",
             },
           ],
