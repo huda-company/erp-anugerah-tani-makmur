@@ -30,6 +30,7 @@ import { createPurchaseAPI, editPurchaseAPI } from "^/services/purchase";
 import { actions as toastActs } from "@/redux/toast";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
+import useMount from "@/hooks/useMount";
 
 const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const t = useTranslations("");
@@ -46,8 +47,8 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
     mode == FormMode.ADD ? true : false
   );
 
-  const { itemDataOpts } = useGetItem();
-  const { supplierOpts } = useGetSupplier();
+  const { itemDataOpts, fetch: fetchItem } = useGetItem();
+  const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
 
   const calculateSubtotal = (
     quantity: number,
@@ -155,6 +156,15 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
     setLoading(false);
   };
+
+  useMount(() => {
+    fetchItem({
+      limit: 50,
+    });
+    fetchSupp({
+      limit: 50,
+    });
+  });
 
   // const purchaseForm = useForm<z.infer<typeof SupplierFormSchema>>({
   //   resolver: zodResolver(PurchaseFormSchema),
