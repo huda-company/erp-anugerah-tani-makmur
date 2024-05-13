@@ -69,6 +69,7 @@
     "item": "item",
     "itemCategory": "kategori item",
     "branch": "cabang",
+    "unit": "unit / satuan",
     "user": "pengguna"
   },
   "DashboardPage": {
@@ -131,7 +132,10 @@
       "NEW_PURCHASE_CREATE": "berhasil membuat purchase",
       "PURCHASE_UPDATE": "berhasil mengubah data purchase",
       "PURCHASE_DELETE": "berhasil menghapus data purchase",
-      "ROLE_DELETE": "berhasil menghapus data role"
+      "ROLE_DELETE": "berhasil menghapus data role",
+      "NEW_UNIT_CREATE": "berhasil menambah unit",
+      "UNIT_UPDATE": "berhasil mengubah data unit",
+      "UNIT_DELETE": "berhasil menghapus data unit"
     },
     "ERROR": {
       "UPLOAD_FILE": "gagal upload file",
@@ -150,7 +154,10 @@
       "NEW_PURCHASE_CREATE": "gagal menambah data purchase",
       "PURCHASE_UPDATE": "gagal mengubah data purchase",
       "PURCHASE_DELETE": "gagal menghapus data purchase",
-      "ROLE_DELETE": "berhasil menghapus data role"
+      "ROLE_DELETE": "berhasil menghapus data role",
+      "NEW_UNIT_CREATE": "gagal menambah data unit",
+      "UNIT_UPDATE": "gagal mengubah data unit",
+      "UNIT_DELETE": "gagal menghapus data unit"
     }
   }
 }

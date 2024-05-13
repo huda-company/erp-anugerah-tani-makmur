@@ -34,6 +34,7 @@ import {
   Layers2,
   ShoppingCart,
   Package2,
+  Ruler,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -70,6 +71,7 @@ export const Icons = {
   store: Store,
   shoppingCart: ShoppingCart,
   item: Package2,
+  unit: Ruler,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

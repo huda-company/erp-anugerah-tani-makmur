@@ -4,6 +4,7 @@ import {
   ITEM_PAGE,
   PO_PAGE,
   SUPPLIER_PAGE,
+  UNIT_PAGE,
   USER_PAGE,
 } from "@/constants/pageURL";
 import { NavItem } from "../types";
@@ -38,6 +39,12 @@ export const navItems: NavItem[] = [
     href: ITEM_PAGE.ROOT,
     icon: "item",
     label: "item",
+  },
+  {
+    title: "unit",
+    href: UNIT_PAGE.ROOT,
+    icon: "unit",
+    label: "unit",
   },
   {
     title: "branch",

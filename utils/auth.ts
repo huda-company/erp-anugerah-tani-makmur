@@ -3,6 +3,7 @@ import { NextApiRequest } from "next/types";
 import { signOut } from "next-auth/react";
 
 import { findOneAndUpdateOrCreate } from "./mongoQuery";
+import Session from "^/mongodb/schemas/session";
 
 const SECRET_KEY = process.env.NEXTAUTH_SECRET || "";
 
@@ -40,6 +41,11 @@ export const saveTokenSessionToDB = async (token: string) => {
 
     await findOneAndUpdateOrCreate("sessions", q, updatedData);
   }
+};
+
+export const checkTokenSession = async (token: string) => {
+  const sess = await Session.findOne({ token: token });
+  return sess ?? null;
 };
 
 export const getTokenFromRequest = async (req: NextApiRequest) => {
