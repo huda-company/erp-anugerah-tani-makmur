@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { API_MSG } from "^/config/apiRespMsg";
 
 import { createPurchase, getPurchases } from "@/controllers/purchase";
+import { ErrorType } from "^/config/apiRespMsg";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,9 +18,7 @@ export default async function handler(
       break;
 
     default: {
-      return res
-        .status(405)
-        .json({ message: API_MSG.ERROR.METHOD_NOT_ALLOWED });
+      return res.status(405).json({ message: ErrorType.METHOD_NOT_ALLOWED });
     }
   }
 }

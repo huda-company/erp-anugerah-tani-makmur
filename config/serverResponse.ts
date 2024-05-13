@@ -1,7 +1,5 @@
-import { API_MSG } from "./apiRespMsg";
-
 import { ApiResponse } from "^/@types/server";
-import { capitalizeStr } from "^/utils/capitalizeStr";
+import { ErrorType, SuccessType } from "./apiRespMsg";
 
 export const statCode = {
   200: { status: 200 },
@@ -11,228 +9,57 @@ export const statCode = {
   500: { status: 500 },
 };
 
-export const resBody: ApiResponse<any> = {
-  success: false,
-  message: "",
+function cResp<T>(success: boolean, message: string): ApiResponse<T> {
+  return {
+    success,
+    message,
+  };
+}
+
+export const API_MSG = {
+  ERROR: ErrorType,
+  SUCCESS: SuccessType,
 };
 
 export const respBody = {
   ERROR: {
-    UNEXPECTED_ERROR: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.UNEXPECTED_ERROR),
-    },
-    UPLOAD_ERROR: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.UPLOAD_ERROR),
-    },
-    EXPIRED_INVALID_TOKEN: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EXPIRED_INVALID_TOKEN),
-    },
-    INC_EMAIL_PASSWORD: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.INC_EMAIL_PASSWORD),
-    },
-    UNKNOWN_EMAIL: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.UNKNOWN_EMAIL),
-    },
-    UNKNOWN_PARAMETER: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.UNKNOWN_PARAMETER),
-    },
-    EMAIL_OR_PHONE_ALREADY_REGISTERED: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_OR_PHONE_ALREADY_REGISTERED),
-    },
-    EMAIL_UNVERIFIED: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_UNVERIFIED),
-    },
-    EMAIL_VERIF_CODE_EMPTY: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_VERIF_CODE_EMPTY),
-    },
-    EMAIL_VERIF_CODE_MISMATCH: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_VERIF_CODE_MISMATCH),
-    },
-    EMAIL_ALREADY_VERIFIED: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_ALREADY_VERIFIED),
-    },
-    FEATURE_IS_DISABLE: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.EMAIL_ALREADY_VERIFIED),
-    },
-    METHOD_NOT_ALLLOWED: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.METHOD_NOT_ALLOWED),
-    },
-    INCORRECT_PAYLOAD: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.INCORRECT_PAYLOAD),
-    },
-    INVALID_PO: {
-      ...resBody,
-      message: capitalizeStr(API_MSG.ERROR.INVALID_PO),
-    },
-    NEW_PURCHASE_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.ERROR.NEW_PURCHASE_CREATE),
-    },
-    PURCHASE_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.ERROR.PURCHASE_UPDATE),
-    },
-    PURCHASE_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.ERROR.PURCHASE_DELETE),
-    },
+    UNEXPECTED_ERROR: cResp(false, ErrorType.UNEXPECTED_ERROR),
+    INVALID_PO: cResp(false, ErrorType.INVALID_PO),
+    INCORRECT_PAYLOAD: cResp(false, ErrorType.INCORRECT_PAYLOAD),
+    UPLOAD_ERROR: cResp(false, ErrorType.UPLOAD_ERROR),
+    EXPIRED_INVALID_TOKEN: cResp(false, ErrorType.EXPIRED_INVALID_TOKEN),
+    INC_EMAIL_PASSWORD: cResp(false, ErrorType.INC_EMAIL_PASSWORD),
+    EMAIL_OR_PHONE_ALREADY_REGISTERED: cResp(
+      false,
+      ErrorType.EMAIL_OR_PHONE_ALREADY_REGISTERED
+    ),
+    UNKNOWN_EMAIL: cResp(false, ErrorType.UNKNOWN_EMAIL),
+    PURCHASE_UPDATE: cResp(false, ErrorType.PURCHASE_UPDATE),
   },
   SUCCESS: {
-    RETRIEVED_DATA_SUCCESS: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.RETRIEVED_DATA_SUCCESS),
-    },
-    UPLOAD_FILE_SUCCESS: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.UPLOAD_FILE_SUCCESS),
-    },
-
-    NEW_ROLE_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_ROLE_CREATE),
-    },
-
-    NEW_SUPPLIER_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_SUPPLIER_CREATE),
-    },
-    SUPPLIER_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.SUPPLIER_UPDATE),
-    },
-    SUPPLIER_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.SUPPLIER_DELETE),
-    },
-
-    NEW_ITEM_CAT_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_ITEM_CAT_CREATE),
-    },
-    ITEM_CAT_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.ITEM_CAT_UPDATE),
-    },
-    ITEM_CAT_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.ITEM_CAT_DELETE),
-    },
-
-    NEW_UNIT_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_UNIT_CREATE),
-    },
-    UNIT_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.UNIT_UPDATE),
-    },
-    UNIT_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.UNIT_DELETE),
-    },
-
-    NEW_ITEM_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_ITEM_CREATE),
-    },
-    ITEM_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.ITEM_UPDATE),
-    },
-    ITEM_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.ITEM_DELETE),
-    },
-
-    NEW_BRANCH_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_BRANCH_CREATE),
-    },
-    BRANCH_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.BRANCH_UPDATE),
-    },
-    BRANCH_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.BRANCH_DELETE),
-    },
-
-    NEW_PURCHASE_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_PURCHASE_CREATE),
-    },
-    PURCHASE_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.PURCHASE_UPDATE),
-    },
-    PURCHASE_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.PURCHASE_DELETE),
-    },
-
-    NEW_USER_CREATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.NEW_USER_CREATE),
-    },
-    USER_UPDATE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.USER_UPDATE),
-    },
-    USER_DELETE: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.USER_DELETE),
-    },
-
-    SIGN_IN_SUCCESS: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.SIGN_IN_SUCCESS),
-    },
-    EMAIL_VERIF_SUCCESS: {
-      ...resBody,
-      success: true,
-      message: capitalizeStr(API_MSG.SUCCESS.EMAIL_VERIF_SUCCESS),
-    },
+    RETRIEVED_DATA_SUCCESS: cResp(true, SuccessType.RETRIEVED_DATA_SUCCESS),
+    SIGN_IN_SUCCESS: cResp(true, SuccessType.SIGN_IN_SUCCESS),
+    UPLOAD_FILE_SUCCESS: cResp(true, SuccessType.UPLOAD_FILE_SUCCESS),
+    NEW_ROLE_CREATE: cResp(true, SuccessType.NEW_ROLE_CREATE),
+    NEW_SUPPLIER_CREATE: cResp(true, SuccessType.NEW_SUPPLIER_CREATE),
+    SUPPLIER_UPDATE: cResp(true, SuccessType.SUPPLIER_UPDATE),
+    SUPPLIER_DELETE: cResp(true, SuccessType.SUPPLIER_DELETE),
+    NEW_USER_CREATE: cResp(true, SuccessType.NEW_USER_CREATE),
+    USER_UPDATE: cResp(true, SuccessType.USER_UPDATE),
+    USER_DELETE: cResp(true, SuccessType.USER_DELETE),
+    NEW_ITEM_CAT_CREATE: cResp(true, SuccessType.NEW_ITEM_CAT_CREATE),
+    BRANCH_UPDATE: cResp(true, SuccessType.BRANCH_UPDATE),
+    BRANCH_DELETE: cResp(true, SuccessType.BRANCH_DELETE),
+    ITEM_CAT_UPDATE: cResp(true, SuccessType.ITEM_CAT_UPDATE),
+    ITEM_CAT_DELETE: cResp(true, SuccessType.ITEM_CAT_DELETE),
+    NEW_ITEM_CREATE: cResp(true, SuccessType.NEW_ITEM_CREATE),
+    ITEM_UPDATE: cResp(true, SuccessType.ITEM_UPDATE),
+    ITEM_DELETE: cResp(true, SuccessType.ITEM_DELETE),
+    NEW_PURCHASE_CREATE: cResp(true, SuccessType.NEW_PURCHASE_CREATE),
+    PURCHASE_UPDATE: cResp(true, SuccessType.PURCHASE_UPDATE),
+    PURCHASE_DELETE: cResp(true, SuccessType.PURCHASE_DELETE),
+    NEW_UNIT_CREATE: cResp(true, SuccessType.NEW_UNIT_CREATE),
+    UNIT_UPDATE: cResp(true, SuccessType.UNIT_UPDATE),
+    UNIT_DELETE: cResp(true, SuccessType.UNIT_DELETE),
   },
 };

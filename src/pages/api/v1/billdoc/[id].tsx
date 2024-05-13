@@ -1,5 +1,5 @@
 import { addBillDoc, getBilldocs } from "@/controllers/billdoc";
-import { API_MSG } from "^/config/apiRespMsg";
+import { ErrorType } from "^/config/apiRespMsg";
 
 export const config = {
   api: {
@@ -19,8 +19,6 @@ export default async function handler(req: any, res: any) {
       break;
 
     default:
-      return res
-        .status(405)
-        .json({ message: API_MSG.ERROR.METHOD_NOT_ALLOWED });
+      return res.status(405).json({ message: ErrorType.METHOD_NOT_ALLOWED });
   }
 }
