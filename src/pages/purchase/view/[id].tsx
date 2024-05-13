@@ -183,6 +183,15 @@ const ViewPurchasePage: FC = () => {
                               >
                                 {capitalizeStr(t("Common.view"))}
                               </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <a
+                                  href={`${PURCHASE_PAGE.PDF}/${String(id)}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Generate Pdf
+                                </a>
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
