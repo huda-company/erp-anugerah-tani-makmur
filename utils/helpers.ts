@@ -39,3 +39,7 @@ export const firstLetterWord = async (str: string) => {
 export const formatNumberToNDigits = (num: number, n: number) => {
   return num.toString().padStart(n, "0");
 };
+
+export const thsandSep = (num: number) => {
+  return Number(num).toLocaleString().replace(/,/g, ".");
+};

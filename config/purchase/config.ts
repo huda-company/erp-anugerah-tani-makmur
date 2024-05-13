@@ -40,6 +40,7 @@ export const initialPurchaseForm: IPurchaseForm = {
   items: [
     {
       item: "",
+      unit: "",
       price: 0,
       quantity: 0,
       discount: 0,

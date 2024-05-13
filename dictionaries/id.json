@@ -69,7 +69,7 @@
     "item": "item",
     "itemCategory": "kategori item",
     "branch": "cabang",
-    "unit": "unit / satuan",
+    "unit": "satuan",
     "user": "pengguna"
   },
   "DashboardPage": {
@@ -88,7 +88,13 @@
     "status": "status",
     "quantity": "quantity",
     "discount": "diskon",
+    "date": "tanggal pembuatan",
+    "paymentMethod": "metode pembayaran",
+    "soNo": "nomor so",
+    "billCode": "kode billing",
+    "note": "catatan",
     "total": "total",
+    "grandTotal": "total keseluruhan",
     "noFileFound": "tidak ada berkas file"
   },
   "UserPage": {

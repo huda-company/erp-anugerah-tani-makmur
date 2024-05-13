@@ -33,8 +33,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { VscSettings } from "react-icons/vsc";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { thsandSep } from "^/utils/helpers";
 
 const ViewPurchasePage: FC = () => {
   const router = useRouter();
@@ -52,24 +53,28 @@ const ViewPurchasePage: FC = () => {
   const header = useMemo(
     () => [
       {
-        value: t("Sidebar.item"),
+        value: capitalizeStr(t("Sidebar.item")),
         className: "sticky left-0 z-20 text-left text-xs w-[15rem]",
         sort: true,
       },
       {
-        value: t("PurchasePage.price"),
+        value: capitalizeStr(t("PurchasePage.price")),
         className: "text-left text-xs w-[6rem] p-0",
       },
       {
-        value: t("PurchasePage.quantity"),
+        value: capitalizeStr(t("PurchasePage.quantity")),
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
-        value: t("PurchasePage.discount"),
+        value: capitalizeStr(t("Sidebar.unit")),
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
-        value: t("PurchasePage.total"),
+        value: capitalizeStr(t("PurchasePage.discount")),
+        className: "text-left text-xs w-[9rem] p-0",
+      },
+      {
+        value: capitalizeStr(t("PurchasePage.total")),
         className: "text-left text-xs w-[9rem] p-0",
       },
     ],
@@ -144,11 +149,11 @@ const ViewPurchasePage: FC = () => {
 
           {loading && <Loading />}
 
-          <div className="justify-betwenn flex gap-x-4 rounded-[1rem] border-2 border-primary p-1">
-            {!loading && purchase ? (
-              <>
+          {!loading && purchase ? (
+            <div className="flex flex-col gap-y-2 rounded-[1rem] border-2 border-primary p-4">
+              <div className="justify-betwenn flex gap-x-4">
                 <Card className="w-2/3">
-                  <CardHeader className="bg-[#EAE2E1]">
+                  <CardHeader className="bg-[#EAE2E1] p-2">
                     <CardTitle>
                       <div className="flex justify-between">
                         <span>PO : {purchase.poNo}</span>
@@ -163,7 +168,7 @@ const ViewPurchasePage: FC = () => {
                                 className="hover:none h-6 w-6 p-0"
                               >
                                 <span className="sr-only">Open menu</span>
-                                <DotsVerticalIcon className="h-4 w-4 text-white" />
+                                <VscSettings className="h-4 w-4 text-white" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -212,25 +217,39 @@ const ViewPurchasePage: FC = () => {
                       </div>
                       <div className="flex flex-row">
                         <span className="w-[35%] capitalize">
-                          purchase method
+                          {t("PurchasePage.paymentMethod")}
                         </span>{" "}
                         <span>{purchase.purchPaymentMethod}</span>
                       </div>
                       <div className="flex flex-row">
-                        <span className="w-[35%] capitalize">billing code</span>{" "}
+                        <span className="w-[35%] capitalize">
+                          {t("PurchasePage.billCode")}
+                        </span>{" "}
                         <span>{purchase.billingCode}</span>
                       </div>
                       <div className="flex flex-row">
-                        <span className="w-[35%] capitalize">so number</span>{" "}
+                        <span className="w-[35%] capitalize">
+                          {t("PurchasePage.soNo")}
+                        </span>{" "}
                         <span>{purchase.soNumber}</span>
                       </div>
                       <div className="flex flex-row">
-                        <span className="w-[35%] capitalize">date</span>{" "}
+                        <span className="w-[35%] capitalize">
+                          {t("PurchasePage.date")}
+                        </span>{" "}
                         <span>{formatDate(purchase.date)}</span>
                       </div>
                       <div className="flex flex-row">
-                        <span className="w-[35%] capitalize">expired</span>{" "}
+                        <span className="w-[35%] capitalize">
+                          {t("PurchasePage.expDate")}
+                        </span>{" "}
                         <span>{formatDate(purchase.expDate)}</span>
+                      </div>
+                      <div className="flex flex-row">
+                        <span className="w-[35%] capitalize">
+                          {t("PurchasePage.grandTotal")}
+                        </span>{" "}
+                        <span>Rp {thsandSep(Number(purchase.grandTotal))}</span>
                       </div>
                     </div>
                     <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
@@ -239,7 +258,7 @@ const ViewPurchasePage: FC = () => {
                   </CardContent>
                 </Card>
                 <Card className="w-1/3">
-                  <CardHeader className="bg-[#EAE2E1]">
+                  <CardHeader className="bg-[#EAE2E1] p-2">
                     <CardTitle>Files</CardTitle>
                   </CardHeader>
                   <CardContent className="p-2">
@@ -306,11 +325,15 @@ const ViewPurchasePage: FC = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </>
-            ) : (
-              <EmptyContent />
-            )}
-          </div>
+              </div>
+              {/* <Card>
+                <CardHeader className="bg-[#EAE2E1] p-2">asasasa</CardHeader>
+                <CardContent>aasas</CardContent>
+              </Card> */}
+            </div>
+          ) : (
+            <EmptyContent />
+          )}
         </div>
       </ScrollArea>
     </DashboardLayout>

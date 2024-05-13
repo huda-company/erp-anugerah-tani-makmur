@@ -26,6 +26,7 @@ import {
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { deleteUnitAPI, getUnitAPI } from "^/services/unit";
 import { IUnitFieldRequest } from "^/@types/models/unit";
+import { Options } from "^/@types/global";
 
 const useGetUnit = () => {
   const t = useTranslations("");
@@ -42,6 +43,7 @@ const useGetUnit = () => {
 
   const [loading, setLoading] = useState(true);
   const [units, setUnits] = useState<any>(null);
+  const [unitDataOpts, setUnitDataOpts] = useState<Options[]>([]);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [unitPgntn, setUnitTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
@@ -221,6 +223,23 @@ const useGetUnit = () => {
   }, [fetch, session]);
 
   useEffect(() => {
+    if (units) {
+      const items = units.data.items;
+      // build opts
+      const opts =
+        units && Array.isArray(items) && items.length > 0
+          ? items.map((x: any) => {
+              return {
+                value: x.name,
+                text: x.name,
+              };
+            })
+          : [];
+      setUnitDataOpts(opts);
+    }
+  }, [units]);
+
+  useEffect(() => {
     let formattedBody: CustomTblBody[] = [];
     if (units && Array.isArray(units.data.items)) {
       formattedBody = units.data.items.map((x: any) => {
@@ -256,6 +275,7 @@ const useGetUnit = () => {
     loading,
     fetch,
     units,
+    unitDataOpts,
     tblBd,
     unitPgntn,
     handleNextClck,
