@@ -27,12 +27,12 @@ export const SupplierSchema = new Schema<ISupplierDocument>(
     managerName: {
       type: String,
       trim: true,
-      required: true,
+      // required: true,
     },
     managerSurname: {
       type: String,
       trim: true,
-      required: true,
+      // required: true,
     },
     bankAccount: {
       type: String,
@@ -61,7 +61,7 @@ export const SupplierSchema = new Schema<ISupplierDocument>(
     tel: {
       type: String,
       trim: true,
-      required: true,
+      // required: true,
     },
     fax: {
       type: String,
