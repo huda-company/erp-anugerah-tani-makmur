@@ -7,7 +7,6 @@ import { withAuth } from "^/utils/withAuth";
 import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
-import { bcData } from "^/config/itemcategory/config";
 import CustomTable from "@/components/CustomTable/CustomTable";
 import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
@@ -15,6 +14,7 @@ import { BRANCH_PAGE } from "@/constants/pageURL";
 import useGetBranch from "@/hooks/branch/useGetBranch";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
+import { bcData } from "^/config/branch/config";
 
 const BranchPage = () => {
   const t = useTranslations("");

@@ -5,6 +5,12 @@ import { z } from "zod";
 
 export const bcData: BreadcrumbItem[] = [
   {
+    isActive: false,
+    key: "master",
+    name: "master",
+    url: "#",
+  },
+  {
     isActive: true,
     key: "branch",
     name: "branch",
