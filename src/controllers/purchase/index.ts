@@ -64,6 +64,7 @@ export const createPurchase = async (
     taxTotal,
     discount,
     note,
+    poNo: poNoReq,
   } = req.body;
 
   await connectToDatabase();
@@ -78,7 +79,7 @@ export const createPurchase = async (
       number: 1,
       supplier,
       soNumber,
-      poNo: poNo,
+      poNo: poNoReq ?? poNo,
       billingCode,
       year,
       expDate,
