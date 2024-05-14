@@ -30,18 +30,24 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(editURL ?? "#")}
-        >
-          {capitalizeStr(t("Common.edit"))}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(viewURL ?? "#")}
-        >
-          {capitalizeStr(t("Common.view"))}
-        </DropdownMenuItem>
+        {editURL && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push(editURL ?? "#")}
+          >
+            {capitalizeStr(t("Common.edit"))}
+          </DropdownMenuItem>
+        )}
+
+        {viewURL && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push(viewURL ?? "#")}
+          >
+            {capitalizeStr(t("Common.view"))}
+          </DropdownMenuItem>
+        )}
+
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => confirmDel(rowId)}
