@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 export const onPurchaseFilter = (query: Record<string, string>) => {
   const filter: any = {
-    removed: false,
+    removed: "",
   };
 
   if (query["param[search]"]) {

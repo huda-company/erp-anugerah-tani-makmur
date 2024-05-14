@@ -141,8 +141,12 @@ export const PurchaseSchema = new Schema<IPurchaseDocument>(
       type: Date,
     },
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
   },
   {
