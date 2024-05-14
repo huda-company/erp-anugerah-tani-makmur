@@ -37,6 +37,8 @@
     "confirm": "confirm",
     "code": "code",
     "empty": "empty",
+    "upload": "upload",
+    "submit": "submit",
     "detail": "detail"
   },
   "AboutUs": {
@@ -89,12 +91,17 @@
     "quantity": "quantity",
     "discount": "discount",
     "date": "creation date",
-    "paymentMethod": "papyment method",
+    "paymentMethod": "payment method",
+    "paymentDate": "payment date",
     "soNo": "so number",
     "billCode": "billing code",
     "note": "note",
     "total": "total",
+    "nominal": "nominal",
     "grandTotal": "grand total",
+    "purcPaymHistory": "Payment History",
+    "purcPaymTotal": "purchase payment total",
+    "purcPaymDiff": "purchase payment diff",
     "noFileFound": "no file found"
   },
   "UserPage": {
@@ -141,7 +148,9 @@
       "ROLE_DELETE": "role deleted successfully",
       "NEW_UNIT_CREATE": "new unit created successfully",
       "UNIT_UPDATE": "unit updated successfully",
-      "UNIT_DELETE": "unit deleted successfully"
+      "UNIT_DELETE": "unit deleted successfully",
+      "PAYMENT_PURCHASE_CREATE": "payment created successfully",
+      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully"
     },
     "ERROR": {
       "UPLOAD_FILE": "upload file failed",
@@ -163,7 +172,9 @@
       "ROLE_DELETE": "role deleted successfully",
       "NEW_UNIT_CREATE": "failed to create new unit",
       "UNIT_UPDATE": "failed to update unit",
-      "UNIT_DELETE": "failed to delete unit"
+      "UNIT_DELETE": "failed to delete unit",
+      "PAYMENT_PURCHASE_CREATE": "failed to create payment purchase",
+      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully"
     }
   }
 }

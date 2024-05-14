@@ -39,7 +39,7 @@ export const addBillDoc = async (req: any, res: any) => {
     const newFileName = currentDateTime.format("YYYYMMDDHHmmssSSS");
     const namefile = `${checkPurchase?.id}_${newFileName}`;
 
-    const { fields, files } = await readFile(req, namefile, true);
+    const { fields, files } = await readFile(req, namefile, true, pathDist);
     const firstFile = (files as any).file[0];
     const extFile = firstFile.originalFilename.split(".")[1];
 
@@ -112,14 +112,15 @@ export const addBillDoc = async (req: any, res: any) => {
   }
 };
 
-const readFile = (
+export const readFile = (
   req: NextApiRequest,
   newFilename: string,
-  saveLocally?: boolean
+  saveLocally: boolean,
+  pathDistPrm: string
 ): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
   const options: formidable.Options = {};
   if (saveLocally) {
-    options.uploadDir = pathDist;
+    options.uploadDir = pathDistPrm;
     // eslint-disable-next-line unused-imports/no-unused-vars
     options.filename = (name, ext, path, form) => {
       return `${newFilename}${ext}`;
@@ -127,6 +128,29 @@ const readFile = (
   }
   options.maxFileSize = 4000 * 1024 * 1024;
   options.keepExtensions = true;
+
+  const form = formidable.default(options);
+  return new Promise((resolve, reject) => {
+    form.parse(req, (err, fields, files) => {
+      if (err) reject(err);
+      resolve({ fields, files });
+    });
+  });
+};
+
+export const readWoFile = (
+  req: NextApiRequest
+): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
+  const options: formidable.Options = {};
+  // if (saveLocally) {
+  //   options.uploadDir = pathDistPrm;
+  //   // eslint-disable-next-line unused-imports/no-unused-vars
+  //   options.filename = (name, ext, path, form) => {
+  //     return `${newFilename}${ext}`;
+  //   };
+  // }
+  // options.maxFileSize = 4000 * 1024 * 1024;
+  // options.keepExtensions = true;
 
   const form = formidable.default(options);
   return new Promise((resolve, reject) => {

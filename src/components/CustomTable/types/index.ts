@@ -30,7 +30,7 @@ export type CustomTblProps = {
 
 export type CustomTblOptMenuProps = {
   rowId: string;
-  viewURL: string;
-  editURL: string;
+  viewURL?: string;
+  editURL?: string;
   confirmDel: (x: string) => void;
 };

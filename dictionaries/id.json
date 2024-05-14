@@ -37,6 +37,8 @@
     "confirm": "Konfirmasi",
     "code": "Kode",
     "empty": "kosong",
+    "upload": "upload",
+    "submit": "submit",
     "detail": "detail"
   },
   "AboutUs": {
@@ -90,11 +92,16 @@
     "discount": "diskon",
     "date": "tanggal pembuatan",
     "paymentMethod": "metode pembayaran",
+    "paymentDate": "tanggal pembayaran",
     "soNo": "nomor so",
     "billCode": "kode billing",
     "note": "catatan",
     "total": "total",
+    "nominal": "nominal",
     "grandTotal": "total keseluruhan",
+    "purcPaymHistory": "Riwayat Pembayaran",
+    "purcPaymTotal": "Total Pembayaran",
+    "purcPaymDiff": "Kurang Bayar",
     "noFileFound": "tidak ada berkas file"
   },
   "UserPage": {
@@ -141,7 +148,9 @@
       "ROLE_DELETE": "berhasil menghapus data role",
       "NEW_UNIT_CREATE": "berhasil menambah unit",
       "UNIT_UPDATE": "berhasil mengubah data unit",
-      "UNIT_DELETE": "berhasil menghapus data unit"
+      "UNIT_DELETE": "berhasil menghapus data unit",
+      "PAYMENT_PURCHASE_CREATE": "berhasil menambah pembayaran",
+      "PAYMENT_PURCHASE_DELETE": "berhasil menghapus pembayaran"
     },
     "ERROR": {
       "UPLOAD_FILE": "gagal upload file",
@@ -163,7 +172,9 @@
       "ROLE_DELETE": "berhasil menghapus data role",
       "NEW_UNIT_CREATE": "gagal menambah data unit",
       "UNIT_UPDATE": "gagal mengubah data unit",
-      "UNIT_DELETE": "gagal menghapus data unit"
+      "UNIT_DELETE": "gagal menghapus data unit",
+      "PAYMENT_PURCHASE_CREATE": "gagal menambah pembayaran",
+      "PAYMENT_PURCHASE_DELETE": "gagal menghapus pembayaran"
     }
   }
 }

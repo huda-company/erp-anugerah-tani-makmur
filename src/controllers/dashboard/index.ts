@@ -19,8 +19,7 @@ export const getDashboardStat = async (
     (await User.countDocuments({ removed: false, enabled: true })) ?? 0;
   const countUserInActive =
     (await User.countDocuments({ enabled: false })) ?? 0;
-  const countPurchase =
-    (await Purchase.countDocuments({ removed: false })) ?? 0;
+  const countPurchase = (await Purchase.countDocuments({ removed: "" })) ?? 0;
   const countItem = (await Item.countDocuments({ removed: false })) ?? 0;
   const countItemCat =
     (await ItemCategory.countDocuments({ removed: false })) ?? 0;

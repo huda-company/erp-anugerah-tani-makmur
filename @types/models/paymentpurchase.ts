@@ -3,10 +3,6 @@ import { BaseFormProps, FormMode } from "../global";
 
 export interface IPaymentPurchaseDocument extends Document {
   purchase: Types.ObjectId;
-  poNo: string;
-  billingCode: string;
-  number: number;
-  recurring: string;
   amount: number;
   paymentMode: Types.ObjectId;
   date: Date;
@@ -14,7 +10,8 @@ export interface IPaymentPurchaseDocument extends Document {
   description: string;
   updatedAt: Date;
   createdAt: Date;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
 }
 
 export interface IPaymentPurchaseFieldRequest {
@@ -25,6 +22,7 @@ export interface IPaymentPurchaseFieldRequest {
   query: {
     name: string;
     id?: string;
+    purchaseid?: string;
     page?: number;
     limit?: number;
     keyword?: string;
@@ -42,10 +40,9 @@ export interface ISortOptions {
 
 export type IPaymentPurchaseForm = {
   id?: string;
-  name: string;
-  city: string;
-  address: string;
-  description: string;
+  amount: number;
+  paymentMode: string;
+  file?: File | undefined;
 };
 
 export type PaymentPurchaseFormProps = {
