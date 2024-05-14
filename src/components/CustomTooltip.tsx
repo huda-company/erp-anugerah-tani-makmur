@@ -7,15 +7,15 @@ import {
 } from "./ui/tooltip";
 
 interface CustTooltipProps {
-  elm: any;
+  children: any;
   content: any;
 }
 
-const CustomToolTip: FC<CustTooltipProps> = ({ elm, content }) => {
+const CustomToolTip: FC<CustTooltipProps> = ({ children, content }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{elm}</TooltipTrigger>
+        <TooltipTrigger>{children}</TooltipTrigger>
         <TooltipContent className="bg-primary text-white">
           {content}
         </TooltipContent>

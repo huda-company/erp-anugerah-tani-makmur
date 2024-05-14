@@ -138,7 +138,7 @@ const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
         <AiFillCloseCircle
           color="red"
           className="h-5 w-5 cursor-pointer"
-          onClick={() => onclose}
+          onClick={() => onclose()}
         />
       </div>
     </>

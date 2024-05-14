@@ -41,6 +41,7 @@ export const addPaymentPurchase = async (req: any, res: any) => {
 
     const paymHist = await Paymentpurchase.find({
       purchase: purchId,
+      removed: "",
     });
 
     if (paymHist) {
