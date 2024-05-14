@@ -10,7 +10,11 @@ const CustomTableHeader: FC<CustomTblProps> = ({ data }) => {
           {data &&
             data.header &&
             data.header.map((hdr, idx: number) => {
-              return <TableHead key={`header-${idx}`}>{hdr.value}</TableHead>;
+              return (
+                <TableHead className="text-black" key={`header-${idx}`}>
+                  {hdr.value}
+                </TableHead>
+              );
             })}
         </TableRow>
       </TableHeader>
