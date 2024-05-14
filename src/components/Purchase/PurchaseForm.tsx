@@ -206,7 +206,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
           <div className="flex-1">
             <label>{capitalizeStr(t("PurchasePage.poNo"))}</label>
-            <Input readOnly {...register("poNo")} placeholder="Po No" />
+            <Input {...register("poNo")} placeholder="Po No" />
           </div>
         </div>
 
