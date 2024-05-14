@@ -10,11 +10,12 @@ type SchemaTypes = IPaymentPurchaseDocument &
 export const PaymentPurchaseSchema = new Schema<IPaymentPurchaseDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
     },
-    number: {
-      type: Number,
+    removedBy: {
+      type: String,
+      default: "",
     },
     purchase: {
       type: mongoose.Schema.ObjectId,

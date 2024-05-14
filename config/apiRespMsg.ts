@@ -21,6 +21,10 @@ export enum ErrorType {
   NEW_PURCHASE_CREATE = "create purchase failed",
   PURCHASE_UPDATE = "update purchase failed",
   PURCHASE_DELETE = "delete purchase failed",
+
+  GTOTAL_N_PAYMENT_EQUAL = "grand total and payment is equal or amount is greater",
+  PURCHASE_PAYMENT_CREATE = "create purchase payment failed",
+  PURCHASE_PAYMENT_DELETE = "delete purchase failed",
 }
 
 export enum SuccessType {
@@ -59,4 +63,7 @@ export enum SuccessType {
   RETRIEVED_DATA_SUCCESS = "data retrieved successfully",
   UPLOAD_FILE_SUCCESS = "file uploaded successfully",
   EMAIL_VERIF_SUCCESS = "your email verified successfully",
+
+  PURCHASE_PAYMENT_CREATE = "new purchase payment created successfully",
+  PURCHASE_PAYMENT_DELETE = "purchase payment deleted successfully",
 }
