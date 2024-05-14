@@ -9,6 +9,7 @@ import Purchase from "^/mongodb/schemas/purchase";
 import { onPurchaseFilter } from "./config/filter";
 import generatePoNumber from "^/utils/generatePoNo";
 import { calculateGrandTotal } from "^/config/purchase/config";
+import moment from "moment";
 
 export const getPurchases = async (
   req: NextApiRequest,
@@ -167,7 +168,9 @@ export const deletePurchase = async (
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await Purchase.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },

@@ -38,7 +38,8 @@ export interface BasePurchase {
 export interface IPurchaseDocument extends BasePurchase, Document {
   updatedAt: Date;
   createdAt: Date;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
 }
 
 export interface IPurchaseFieldRequest {
