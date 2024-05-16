@@ -5,7 +5,8 @@ export interface IBranchDocument extends Document {
   address: string;
   city: string;
   description: string;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   enabled: boolean;
 }
 
