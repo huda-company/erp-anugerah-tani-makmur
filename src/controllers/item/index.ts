@@ -1,12 +1,12 @@
 import { ISortOptions } from "^/@types/models/supplier";
 import connectToDatabase from "^/mongodb/connDb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { onSupplierFilter } from "./config/filter";
 import { pageRowsArr } from "^/config/supplier/config";
 import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import Item from "^/mongodb/schemas/item";
+import { onItemFilter } from "./config/filter";
 
 export const getItems = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, limit } = req.query;
@@ -15,7 +15,7 @@ export const getItems = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const sortOptions: ISortOptions = {}; // Define an empty object for sort options
 
-  const filter: any = onSupplierFilter(req.query as any);
+  const filter: any = onItemFilter(req.query as any);
 
   const parkingFields = await Item.paginate(filter, {
     page: Number(page) || 1,

@@ -8,7 +8,8 @@ export interface IItemDocument extends Document {
   brand: string;
   packaging: string;
   price: number;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   enabled: boolean;
 }
 
