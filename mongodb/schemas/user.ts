@@ -10,8 +10,12 @@ type SchemaTypes = IUserDocument & mongoose.PaginateModel<IUserDocument>;
 export const UserSchema = new Schema<IUserDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,
