@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb";
 import User from "^/mongodb/schemas/user";
 import { onUserFilter } from "./config/filter";
 import bcrypt from "bcrypt";
+import moment from "moment";
 
 export const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, limit } = req.query;
@@ -120,7 +121,9 @@ export const deleteUser = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await User.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },

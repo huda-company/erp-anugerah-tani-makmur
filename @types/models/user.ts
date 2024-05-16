@@ -6,7 +6,8 @@ export enum Gender {
 }
 
 export interface IUserDocument extends Document {
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   enabled: boolean;
   name: string;
   email: string;
