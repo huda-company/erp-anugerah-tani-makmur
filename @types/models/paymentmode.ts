@@ -6,7 +6,8 @@ export interface IPaymentModeDocument extends Document {
   createdAt: Date;
   enabled: boolean;
   isDefault: boolean;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   ref: string;
 }
 
