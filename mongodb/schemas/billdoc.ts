@@ -32,8 +32,12 @@ export const BillDocSchema = new Schema<IBillDocDocument>(
       type: Date,
     },
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
   },
   {
