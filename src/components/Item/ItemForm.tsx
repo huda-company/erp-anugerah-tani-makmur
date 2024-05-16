@@ -235,7 +235,8 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
             </>
           )}
         />
-        <FormField
+
+        {/* <FormField
           disabled={mode == FormMode.VIEW}
           control={itemForm.control}
           name="price"
@@ -256,7 +257,7 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
               </FormItem>
             </>
           )}
-        />
+        /> */}
 
         {mode !== FormMode.VIEW && (
           <div className="flex flex-row justify-center gap-3">
