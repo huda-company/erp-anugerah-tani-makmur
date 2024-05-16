@@ -261,10 +261,10 @@ const useGetItem = () => {
               value: x.description,
               className: "text-left w-[6rem] pl-0",
             },
-            {
-              value: x.price,
-              className: "text-left w-[6rem] pl-0",
-            },
+            // {
+            //   value: x.price,
+            //   className: "text-left w-[6rem] pl-0",
+            // },
             {
               value: (
                 <CustomTableOptionMenu

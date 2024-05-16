@@ -45,10 +45,10 @@ const Item = () => {
         value: capitalizeStr(t("Index.description")),
         className: "text-left text-xs w-[9rem] p-0",
       },
-      {
-        value: capitalizeStr(t("Index.price")),
-        className: "text-left text-xs w-[9rem] p-0",
-      },
+      // {
+      //   value: capitalizeStr(t("Index.price")),
+      //   className: "text-left text-xs w-[9rem] p-0",
+      // },
       {
         value: capitalizeStr(t("Common.action")),
         className: "sticky right-0 z-20 text-left text-xs w-[3rem]",
