@@ -8,8 +8,12 @@ type SchemaTypes = IPaymentModeDocument &
 export const PaymentModeSchema = new Schema<IPaymentModeDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,
