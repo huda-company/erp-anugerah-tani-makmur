@@ -3,7 +3,8 @@ import { BaseFormProps, FormMode } from "../global";
 export interface IItemCategoryDocument extends Document {
   name: string;
   description: string;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   enabled: boolean;
 }
 

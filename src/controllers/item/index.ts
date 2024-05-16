@@ -7,6 +7,7 @@ import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import Item from "^/mongodb/schemas/item";
 import { onItemFilter } from "./config/filter";
+import moment from "moment";
 
 export const getItems = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, limit } = req.query;
@@ -90,7 +91,9 @@ export const deleteItem = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await Item.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },

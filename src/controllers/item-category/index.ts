@@ -7,6 +7,7 @@ import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import ItemCategory from "^/mongodb/schemas/itemCategory";
+import moment from "moment";
 
 export const getItemCategories = async (
   req: NextApiRequest,
@@ -98,7 +99,9 @@ export const deleteItemCategory = async (
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await ItemCategory.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },
