@@ -9,6 +9,7 @@ import Branch from "^/mongodb/schemas/branch";
 import User from "^/mongodb/schemas/user";
 import { onRoleFilter } from "./config/filter";
 import Role from "^/mongodb/schemas/role";
+import moment from "moment";
 
 export const getRoles = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, limit } = req.query;
@@ -115,7 +116,9 @@ export const deleteBranch = async (
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await Branch.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },
