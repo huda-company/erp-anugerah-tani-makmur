@@ -7,6 +7,7 @@ import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import { onBranchFilter } from "./config/filter";
 import Branch from "^/mongodb/schemas/branch";
+import moment from "moment";
 
 export const getBranches = async (
   req: NextApiRequest,
@@ -99,7 +100,9 @@ export const deleteBranch = async (
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await Branch.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },

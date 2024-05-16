@@ -7,8 +7,12 @@ type SchemaTypes = IBranchDocument & mongoose.PaginateModel<IBranchDocument>;
 export const BranchSchema = new Schema<IBranchDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,
