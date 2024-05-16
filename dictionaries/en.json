@@ -67,6 +67,8 @@
     "dashboard": "dashboard",
     "employee": "employee",
     "supplier": "supplier",
+    "purchase": "purchase",
+    "selling": "selling",
     "purchaseOrder": "Purchase Order",
     "item": "item",
     "itemCategory": "item category",

@@ -33,8 +33,12 @@ import {
   X,
   Layers2,
   ShoppingCart,
+  ShoppingBag,
   Package2,
   Ruler,
+  ArrowDown,
+  ChevronDown,
+  Handshake,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -48,6 +52,7 @@ export const Icons = {
   profile: User2Icon,
   spinner: Loader2,
   kanban: CircuitBoardIcon,
+  chevronDown: ChevronDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,
@@ -62,6 +67,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowDown: ArrowDown,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
@@ -70,8 +76,10 @@ export const Icons = {
   parkingSquare: ParkingSquare,
   store: Store,
   shoppingCart: ShoppingCart,
+  shoppingBag: ShoppingBag,
   item: Package2,
   unit: Ruler,
+  handshake: Handshake,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

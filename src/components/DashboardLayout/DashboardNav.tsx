@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -20,6 +20,12 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
   const path = usePathname();
   const t = useTranslations("");
 
+  const [openDropdown, setOpenDropdown] = useState<Record<string, boolean>>({});
+
+  const toggleDropdown = (index: string) => {
+    setOpenDropdown((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
   if (!items?.length) {
     return null;
   }
@@ -29,13 +35,16 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
       <nav className="grid items-start gap-2 overflow-auto">
         {items.map((item, index) => {
           const Icon = Icons[item.icon || "arrowRight"];
+          const isOpen = openDropdown[`dropdown-${index}`];
           return (
-            item.href && (
+            <div key={index}>
               <Link
-                key={index}
-                href={item.disabled ? "/" : item.href}
-                onClick={() => {
-                  if (setOpen) setOpen(false);
+                href={item.disabled ? "#" : item.href || "#"}
+                onClick={(e) => {
+                  if (item.subItems) {
+                    e.preventDefault();
+                    toggleDropdown(`dropdown-${index}`);
+                  }
                 }}
               >
                 <span
@@ -46,11 +55,34 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
                   )}
                 >
                   <Icon className="mr-2 h-4 w-4" />
-                  {/* {item.icon} */}
                   <span>{capitalizeStr(t(`Sidebar.${item.title}`))}</span>
+                  {item.subItems && (
+                    <span className="ml-auto">
+                      {isOpen ? <Icons.chevronDown /> : <Icons.chevronRight />}
+                    </span>
+                  )}
                 </span>
               </Link>
-            )
+              {isOpen && item.subItems && (
+                <div className="ml-4">
+                  {item.subItems.map((subItem, subIndex) => {
+                    const SubIcon = Icons[subItem.icon || "arrowRight"];
+                    return (
+                      <Link
+                        key={subIndex}
+                        href={subItem.href || "#"}
+                        onClick={() => setOpen && setOpen(false)}
+                      >
+                        <span className="block flex px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground ">
+                          <SubIcon className="mr-2 h-4 w-4" />
+                          {capitalizeStr(t(`Sidebar.${subItem.title}`))}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
