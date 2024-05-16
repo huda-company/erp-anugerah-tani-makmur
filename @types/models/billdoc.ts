@@ -7,7 +7,8 @@ export interface IBillDocDocument extends Document {
   description: string;
   updatedAt: Date;
   createdAt: Date;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
 }
 
 export interface IBillDocFieldRequest {
