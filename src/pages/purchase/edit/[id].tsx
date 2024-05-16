@@ -18,7 +18,7 @@ const EditBranchPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.purchaseOrder")}`;
 
-  const { loading, formVal } = useGetPurchaseById();
+  const { purchLoading: loading, formVal } = useGetPurchaseById();
 
   return (
     <DashboardLayout>

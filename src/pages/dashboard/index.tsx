@@ -26,9 +26,12 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { AUTH_PAGE_URL } from "@/constants/pageURL";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { actions as toastActs } from "@/redux/toast";
 
 const Dashboard = () => {
   const t = useTranslations("");
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -39,13 +42,26 @@ const Dashboard = () => {
     },
   });
 
-  const { loading, overview } = useGetOverview();
+  const { loading, dashboardStat, error } = useGetOverview();
+  if (error) {
+    dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col py-[1rem]">
+            <span>{String(error)}</span>
+          </div>
+        ),
+        type: "error",
+      })
+    );
+  }
 
   return (
     <>
       {loading == true && <Loading />}
 
-      {!loading && overview && (
+      {!loading && (
         <DashboardLayout>
           <ScrollArea className="h-full">
             <div className="flex-1 space-y-4 md:p-8">
@@ -65,7 +81,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countPurchase)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countPurchase)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +20.1% from last month
@@ -81,8 +99,10 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countUserActive) +
-                            Number(overview.countUserInActive)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countUserActive) +
+                              Number(dashboardStat.countUserInActive)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +180.1% from last month
@@ -98,7 +118,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countBranch)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countBranch)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +19% from last month
@@ -114,7 +136,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countItem)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countItem)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +201 since last hour
@@ -130,7 +154,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countItemCat)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countItemCat)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +201 since last hour
@@ -146,7 +172,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countUserActive)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countUserActive)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +201 since last hour
@@ -162,7 +190,9 @@ const Dashboard = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">
-                          {Number(overview.countUserInActive)}
+                          {dashboardStat
+                            ? Number(dashboardStat.countUserInActive)
+                            : "NaN"}
                         </div>
                         {/* <p className="text-xs text-muted-foreground">
                             +201 since last hour

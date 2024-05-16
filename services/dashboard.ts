@@ -1,6 +1,7 @@
 import { ISupplierFieldRequest } from "^/@types/models/supplier";
 import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
+import { handleAxiosError } from "^/utils/handleAxiosError";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
@@ -21,6 +22,6 @@ export const getOverviewAPI = async (
   try {
     return await axios.create(reqHeader).get(reqURL);
   } catch (error: any) {
-    return error;
+    handleAxiosError(error);
   }
 };

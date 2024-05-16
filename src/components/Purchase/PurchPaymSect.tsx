@@ -9,18 +9,18 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { VscSettings } from "react-icons/vsc";
-import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
 import PaymentPurchaseForm from "../PaymentPurchase/PaymentPurchaseForm";
 import CustomTable from "../CustomTable/CustomTable";
 import { CustomTblData } from "../CustomTable/types";
 import { useTranslations } from "next-intl";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { getStaticProps } from "^/utils/getStaticProps";
+import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
 
 const PurchPaymSect: FC = () => {
   const t = useTranslations("");
 
-  const { paymPurcTblBd, fetchPaymPurch } = useGetPurchaseById();
+  const { fetchPaymPurch, paymPurcTblBd } = useGetPaymentPurchByPurchId();
 
   const [showPaymPurchForm, setShowPaymPurchForm] = useState<boolean>(false);
 

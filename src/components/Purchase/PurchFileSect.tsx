@@ -24,6 +24,7 @@ import { billDocURL } from "@/constants/uploadDir";
 import { FaRegEye } from "react-icons/fa";
 import moment from "moment";
 import { actions as toastActs } from "@/redux/toast";
+import useGetBilldocByPurchId from "@/hooks/purchase/useGetBilldocByPurchId";
 
 const PurchFileSect: FC = () => {
   const t = useTranslations("");
@@ -34,7 +35,8 @@ const PurchFileSect: FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { billdocs, fetch } = useGetPurchaseById();
+  const { fetch } = useGetPurchaseById();
+  const { billdocs } = useGetBilldocByPurchId();
 
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState<string>("invoice");
@@ -158,8 +160,11 @@ const PurchFileSect: FC = () => {
             ? billdocs.map((x: any, idx: number) => {
                 const billDocUrl = `${BASE_URL}${billDocURL}`;
                 return (
-                  <ol key="file-list">
-                    <li key={idx} className="flex items-center justify-between">
+                  <ol key={`file-list-${idx}`}>
+                    <li
+                      key={`file-list-li-idx`}
+                      className="flex items-center justify-between"
+                    >
                       {`${x.title}`}
                       <span className="text-sm">{`${moment(x.createdAt).format("DD/MM/YY")} `}</span>
                       <a
