@@ -15,8 +15,12 @@ export const ItemSchema = new Schema<IItemDocument>(
       autopopulate: true,
     },
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,
