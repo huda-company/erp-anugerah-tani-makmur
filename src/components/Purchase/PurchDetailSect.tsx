@@ -23,6 +23,7 @@ import clsxm from "^/utils/clsxm";
 import { CustomTblData } from "../CustomTable/types";
 import Loading from "../Loading";
 import EmptyContent from "../EmptyContent/EmptyContent";
+import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
 
 const PurchDetailSect: FC = () => {
   const t = useTranslations("");
@@ -30,7 +31,8 @@ const PurchDetailSect: FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { purchase, paymPurchTotal, tblBd, loading } = useGetPurchaseById();
+  const { purch, tblBd, purchLoading } = useGetPurchaseById();
+  const { paymPurchTotal } = useGetPaymentPurchByPurchId();
 
   const header = useMemo(
     () => [
@@ -73,24 +75,24 @@ const PurchDetailSect: FC = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {purchLoading && <Loading />}
 
-      {!loading && purchase ? (
+      {!purchLoading && purch ? (
         <Card className="">
           <CardHeader className="bg-[#EAE2E1] p-2">
             <CardTitle>
               <div className="flex justify-between">
                 <div className="flex items-center justify-center gap-x-5">
-                  <span>PO : {purchase.poNo}</span>
+                  <span>PO : {purch.poNo}</span>
 
                   <Badge
                     variant="destructive"
                     className={clsxm(
                       "text-sm text-white ",
-                      purchase.status == "draft" && "bg-green-400"
+                      purch.status == "draft" && "bg-green-400"
                     )}
                   >
-                    {capitalizeStr(purchase.status)}
+                    {capitalizeStr(purch.status)}
                   </Badge>
                 </div>
                 <div>
@@ -141,43 +143,43 @@ const PurchDetailSect: FC = () => {
             <div className="mt-[1rem] flex flex-col gap-y-1">
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">supplier</span>{" "}
-                <span>{purchase.supplier.company}</span>
+                <span>{purch.supplier.company}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.paymentMethod")}
                 </span>{" "}
-                <span>{purchase.purchPaymentMethod}</span>
+                <span>{purch.purchPaymentMethod}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.billCode")}
                 </span>{" "}
-                <span>{purchase.billingCode}</span>
+                <span>{purch.billingCode}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.soNo")}
                 </span>{" "}
-                <span>{purchase.soNumber}</span>
+                <span>{purch.soNumber}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.date")}
                 </span>{" "}
-                <span>{formatDate(purchase.date)}</span>
+                <span>{formatDate(purch.date)}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.expDate")}
                 </span>{" "}
-                <span>{formatDate(purchase.expDate)}</span>
+                <span>{formatDate(purch.expDate)}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
                   {t("PurchasePage.grandTotal")}
                 </span>{" "}
-                <span>Rp {thsandSep(Number(purchase.grandTotal))}</span>
+                <span>Rp {thsandSep(Number(purch.grandTotal))}</span>
               </div>
               <div className="flex flex-row">
                 <span className="w-[40%] capitalize">
@@ -191,9 +193,7 @@ const PurchDetailSect: FC = () => {
                 </span>{" "}
                 <span>
                   Rp{" "}
-                  {thsandSep(
-                    Number(purchase.grandTotal) - Number(paymPurchTotal)
-                  )}
+                  {thsandSep(Number(purch.grandTotal) - Number(paymPurchTotal))}
                 </span>
               </div>
             </div>

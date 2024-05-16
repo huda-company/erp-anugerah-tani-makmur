@@ -18,7 +18,7 @@ const ViewPurchasePage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.purchaseOrder")}`;
 
-  const { purchase, loading } = useGetPurchaseById();
+  const { purch, purchLoading } = useGetPurchaseById();
 
   return (
     <DashboardLayout>
@@ -30,9 +30,9 @@ const ViewPurchasePage: FC = () => {
             bcumbs={bcData}
           />
 
-          {loading && <Loading />}
+          {purchLoading && <Loading />}
 
-          {!loading && purchase ? (
+          {!purchLoading && purch ? (
             <div className="flex flex-col gap-y-2 rounded-[1rem] border-2 border-primary p-4">
               <PurchDetailSect />
 

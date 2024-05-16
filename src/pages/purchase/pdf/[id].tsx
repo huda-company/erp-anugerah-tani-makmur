@@ -24,7 +24,7 @@ interface CustomJsPDF extends jsPDF {
 const PurchPdfPage: FC = () => {
   const t = useTranslations("");
 
-  const { purchase, loading } = useGetPurchaseById();
+  const { purch: purchase, purchLoading: loading } = useGetPurchaseById();
 
   const generatePDF = useCallback(() => {
     let cc = purchase
