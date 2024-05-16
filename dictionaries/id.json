@@ -67,6 +67,8 @@
     "dashboard": "dashboard",
     "employee": "pegawai",
     "supplier": "supplier",
+    "purchase": "pembelian",
+    "selling": "penjualan",
     "purchaseOrder": "Purchase Order",
     "item": "item",
     "itemCategory": "kategori item",
