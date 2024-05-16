@@ -8,8 +8,12 @@ type SchemaTypes = IItemCategoryDocument &
 export const ItemCategorySchema = new Schema<IItemCategoryDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,
