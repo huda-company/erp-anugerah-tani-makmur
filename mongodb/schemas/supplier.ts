@@ -8,8 +8,12 @@ type SchemaTypes = ISupplierDocument &
 export const SupplierSchema = new Schema<ISupplierDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     enabled: {
       type: Boolean,

@@ -8,6 +8,7 @@ import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import { firstLetterWord, formatNumberToNDigits } from "^/utils/helpers";
+import moment from "moment";
 
 export const getSuppliers = async (
   req: NextApiRequest,
@@ -139,7 +140,9 @@ export const deleteSupplier = async (
   await connectToDatabase();
 
   try {
-    const newData = { removed: true };
+    const newData = {
+      removed: moment().utcOffset(+7).toString(),
+    };
 
     const field = await Supplier.findOneAndUpdate(
       { _id: new ObjectId(String(id)) },
