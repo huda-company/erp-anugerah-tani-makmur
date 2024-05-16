@@ -7,7 +7,8 @@ export interface IRoleDocument extends Document {
   codeName: string;
   displayName: string;
   created: Date;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
 }
 
 export interface IRoleFieldRequest {

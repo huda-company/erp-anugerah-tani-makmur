@@ -7,8 +7,12 @@ type SchemaTypes = IRoleDocument & mongoose.PaginateModel<IRoleDocument>;
 export const RoleSchema = new Schema<IRoleDocument>(
   {
     removed: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "",
+    },
+    removedBy: {
+      type: String,
+      default: "",
     },
     codeName: {
       type: String,
