@@ -14,29 +14,39 @@ export const getDashboardStat = async (
 ) => {
   await connectToDatabase();
 
-  const countBranch = (await Branch.countDocuments({ removed: false })) ?? 0;
-  const countUserActive =
-    (await User.countDocuments({ removed: false, enabled: true })) ?? 0;
-  const countUserInActive =
-    (await User.countDocuments({ enabled: false })) ?? 0;
-  const countPurchase = (await Purchase.countDocuments({ removed: "" })) ?? 0;
-  const countItem = (await Item.countDocuments({ removed: false })) ?? 0;
-  const countItemCat =
-    (await ItemCategory.countDocuments({ removed: false })) ?? 0;
-  const countSupplier =
-    (await Supplier.countDocuments({ removed: false })) ?? 0;
+  try {
+    const countBranch = (await Branch.countDocuments({ removed: false })) ?? 0;
+    const countUserActive =
+      (await User.countDocuments({ removed: false, enabled: true })) ?? 0;
+    const countUserInActive =
+      (await User.countDocuments({ enabled: false })) ?? 0;
+    const countPurchase = (await Purchase.countDocuments({ removed: "" })) ?? 0;
+    const countItem = (await Item.countDocuments({ removed: false })) ?? 0;
+    const countItemCat =
+      (await ItemCategory.countDocuments({ removed: false })) ?? 0;
+    const countSupplier =
+      (await Supplier.countDocuments({ removed: false })) ?? 0;
 
-  const overview = {
-    countBranch,
-    countUserActive,
-    countUserInActive,
-    countPurchase,
-    countItem,
-    countItemCat,
-    countSupplier,
-  };
+    const overview = {
+      countBranch,
+      countUserActive,
+      countUserInActive,
+      countPurchase,
+      countItem,
+      countItemCat,
+      countSupplier,
+    };
 
-  return res
-    .status(200)
-    .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: overview });
+    return res
+      .status(200)
+      .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: overview });
+  } catch (err: any) {
+    return res
+      .status(500)
+      .json({
+        ...respBody.ERROR.UNEXPECTED_ERROR,
+        message: "in dashboard ctrl",
+        error: err,
+      });
+  }
 };
