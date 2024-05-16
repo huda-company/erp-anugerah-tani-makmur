@@ -17,7 +17,8 @@ export interface ISupplierDocument extends Document {
   cell: string;
   website: string;
   createdAt: Date;
-  removed: boolean;
+  removed: string;
+  removedBy: string;
   enabled: boolean;
 }
 
