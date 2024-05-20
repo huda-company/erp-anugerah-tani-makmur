@@ -1,10 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -13,7 +11,6 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { UNIT_PAGE } from "@/constants/pageURL";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
@@ -22,11 +19,11 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { deleteUnitAPI, getUnitAPI } from "^/services/unit";
-import { IUnitFieldRequest } from "^/@types/models/unit";
+import { IUnitFieldRequest, UnitResp } from "^/@types/models/unit";
 import { Options } from "^/@types/global";
 import { pageRowsArr } from "^/config/request/config";
+import { initSuppReqPrm } from "^/config/supplier/config";
 
 const useGetUnit = () => {
   const t = useTranslations("");
@@ -37,16 +34,18 @@ const useGetUnit = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
+  const [reqPrm, setReqPrm] = useState<IUnitFieldRequest["query"]>({
+    ...initSuppReqPrm,
+    limit: pageRowsArr[1],
+  });
   const [loading, setLoading] = useState(true);
   const [units, setUnits] = useState<any>(null);
   const [unitDataOpts, setUnitDataOpts] = useState<Options[]>([]);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [unitPgntn, setUnitTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
+  const [data, setData] = useState<UnitResp[]>([]);
 
   const fetch = useCallback(
     async (
@@ -80,7 +79,7 @@ const useGetUnit = () => {
 
         if (response.data) {
           const { data: resData } = response;
-          setUnits(resData);
+          setUnits(resData.data.items);
           setUnitTblPgntn({
             page: resData.data.page,
             limit: resData.data.limit,
@@ -224,7 +223,7 @@ const useGetUnit = () => {
 
   useEffect(() => {
     if (units) {
-      const items = units.data.items;
+      const items = units;
       // build opts
       const opts =
         units && Array.isArray(items) && items.length > 0
@@ -240,48 +239,35 @@ const useGetUnit = () => {
   }, [units]);
 
   useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (units && Array.isArray(units.data.items)) {
-      formattedBody = units.data.items.map((x: any) => {
+    if (units) {
+      const tStackTblBd = units.map((x: UnitResp) => {
         return {
-          items: [
-            {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.description,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${UNIT_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${UNIT_PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
+          id: String(x.id),
+          name: x.name,
+          description: x.description,
+          enabled: x.enabled,
+          removed: x.removed,
+          removedBy: x.removedBy,
+        } as UnitResp;
       });
+      setData(tStackTblBd);
     }
-    setTblBd(formattedBody);
-  }, [units, confirmDeletion, router, t]);
+  }, [units]);
 
   return {
     loading,
     fetch,
     units,
     unitDataOpts,
-    tblBd,
+    data,
+    reqPrm,
+    setReqPrm,
     unitPgntn,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
+    confirmDeletion,
   };
 };
 
