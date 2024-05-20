@@ -1,10 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -36,8 +34,6 @@ const useGetUnit = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
   const [reqPrm, setReqPrm] = useState<IUnitFieldRequest["query"]>({
@@ -47,7 +43,6 @@ const useGetUnit = () => {
   const [loading, setLoading] = useState(true);
   const [units, setUnits] = useState<any>(null);
   const [unitDataOpts, setUnitDataOpts] = useState<Options[]>([]);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [unitPgntn, setUnitTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
   const [data, setData] = useState<UnitResp[]>([]);
