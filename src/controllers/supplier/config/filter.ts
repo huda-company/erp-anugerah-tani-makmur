@@ -7,7 +7,11 @@ export const onSupplierFilter = (query: Record<string, string>) => {
 
   if (query["param[search]"]) {
     filter.$or = [
-      { name: { $regex: query["param[search]"], $options: "i" } },
+      { company: { $regex: query["param[search]"], $options: "i" } },
+      { address: { $regex: query["param[search]"], $options: "i" } },
+      { supplierCode: { $regex: query["param[search]"], $options: "i" } },
+      { tel: { $regex: query["param[search]"], $options: "i" } },
+      { email: { $regex: query["param[search]"], $options: "i" } },
       {
         "createdBy.first_name": {
           $regex: query["param[search]"],

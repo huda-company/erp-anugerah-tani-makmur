@@ -1,13 +1,15 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
-import { ISupplierFieldRequest } from "^/@types/models/supplier";
-import { pageRowsArr } from "^/config/supplier/config";
+import {
+  ISupplierFieldRequest,
+  SupplierResp,
+  SupplierTanTblData,
+} from "^/@types/models/supplier";
+import { initSuppReqPrm, pageRowsArr } from "^/config/supplier/config";
 import { deleteSupplierAPI, getSupplierAPI } from "^/services/supplier";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -25,8 +27,7 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
+import React from "react";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
@@ -37,22 +38,23 @@ const useGetSupplier = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
+  const [reqPrm, setReqPrm] =
+    useState<ISupplierFieldRequest["query"]>(initSuppReqPrm);
   const [loading, setLoading] = useState(true);
-  const [suppliers, setSuppliers] = useState<any>(null);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierResp[]>([]);
   const [supplierOpts, setSupplierOpts] = useState<Options[]>([]);
   const [suppPgntn, setSuppTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
+  const [data, setData] = useState<SupplierTanTblData[]>([]);
 
   const fetch = useCallback(
     async (
       payload: Omit<ISupplierFieldRequest["query"], "name"> = {
         page: 1,
         limit: pageRowsArr[0],
+        "param[search]": "",
         "sort[key]": "name",
         "sort[direction]": "asc",
       }
@@ -81,7 +83,9 @@ const useGetSupplier = () => {
         if (response.data) {
           const { data: resData } = response;
 
-          setSuppliers(resData);
+          const suppData: SupplierResp[] = resData.data.items;
+
+          setSuppliers(suppData);
           setSuppTblPgntn({
             page: resData.data.page,
             limit: resData.data.limit,
@@ -195,6 +199,7 @@ const useGetSupplier = () => {
       const pgntParam: Omit<ISupplierFieldRequest["query"], "name"> = {
         page: prm.page,
         limit: prm.limit,
+        "param[search]": "",
         "sort[key]": "name",
         "sort[direction]": "asc",
       };
@@ -230,10 +235,10 @@ const useGetSupplier = () => {
 
   useEffect(() => {
     if (suppliers) {
-      const items = suppliers.data.items;
+      const items = suppliers;
       // build opts
       const opts =
-        suppliers && Array.isArray(items) && items.length > 0
+        suppliers && items.length > 0
           ? items.map((x: any) => {
               return {
                 value: x.id,
@@ -246,60 +251,35 @@ const useGetSupplier = () => {
   }, [suppliers]);
 
   useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (suppliers && Array.isArray(suppliers.data.items)) {
-      formattedBody = suppliers.data.items.map((x: any) => {
+    if (suppliers) {
+      const tStackTblBd = suppliers.map((x: SupplierResp) => {
         return {
-          items: [
-            {
-              value: x.supplierCode,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.company,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.tel,
-              className: "text-left w-[9rem] pl-0",
-            },
-            {
-              value: x.email,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.address,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${SUPPLIER_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${SUPPLIER_PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
+          id: String(x.id),
+          company: x.company,
+          address: x.address,
+          supplierCode: x.supplierCode,
+          tel: x.tel,
+          email: x.email,
+        } as SupplierTanTblData;
       });
+      setData(tStackTblBd);
     }
-    setTblBd(formattedBody);
-  }, [confirmDeletion, router, suppliers, t]);
+  }, [suppliers]);
 
   return {
     loading,
     fetch,
     suppliers,
     supplierOpts,
-    tblBd,
     suppPgntn,
+    data,
+    reqPrm,
+    setReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageInputChange,
     handlePageRowChange,
+    confirmDeletion,
   };
 };
 

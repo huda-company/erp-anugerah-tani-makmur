@@ -1,6 +1,6 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
-import { ISupplierForm } from "^/@types/models/supplier";
+import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
 import { z } from "zod";
 
 export const bcData: BreadcrumbItem[] = [
@@ -53,3 +53,13 @@ export const SupplierFormSchema = z.object({
     message: "invalid address",
   }),
 });
+
+export const initSuppReqPrm: ISupplierFieldRequest["query"] = {
+  name: "",
+  "param[search]": "",
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[0],
+  page: 0,
+};
