@@ -1,7 +1,6 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
-import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -27,6 +26,7 @@ import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMen
 import { deleteUnitAPI, getUnitAPI } from "^/services/unit";
 import { IUnitFieldRequest } from "^/@types/models/unit";
 import { Options } from "^/@types/global";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetUnit = () => {
   const t = useTranslations("");

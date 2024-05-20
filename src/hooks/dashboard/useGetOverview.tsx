@@ -1,10 +1,10 @@
-import { pageRowsArr } from "^/config/supplier/config";
 import { useSession } from "next-auth/react";
 
 import { IBranchFieldRequest } from "^/@types/models/branch";
 
 import { getOverviewAPI } from "^/services/dashboard";
 import { useQuery } from "@tanstack/react-query";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetOverview = () => {
   const { data: session } = useSession();

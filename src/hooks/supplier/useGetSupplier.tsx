@@ -5,7 +5,7 @@ import {
   SupplierResp,
   SupplierTanTblData,
 } from "^/@types/models/supplier";
-import { initSuppReqPrm, pageRowsArr } from "^/config/supplier/config";
+import { initSuppReqPrm } from "^/config/supplier/config";
 import { deleteSupplierAPI, getSupplierAPI } from "^/services/supplier";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
@@ -28,6 +28,7 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import React from "react";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetSupplier = () => {
   const t = useTranslations("");

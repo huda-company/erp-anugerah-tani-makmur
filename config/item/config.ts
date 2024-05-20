@@ -18,8 +18,6 @@ export const bcData: BreadcrumbItem[] = [
   },
 ];
 
-export const pageRowsArr = [5, 10, 30, 40, 50];
-
 export const initialItemForm: IItemForm = {
   name: "",
   description: "",

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 
-import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -27,6 +26,7 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { initItemCatReqPrm } from "^/config/itemcategory/config";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetItemCat = () => {
   const t = useTranslations("");
