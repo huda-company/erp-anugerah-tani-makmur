@@ -1,15 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { Column, RowData } from "@tanstack/react-table";
+import { Column } from "@tanstack/react-table";
 
 interface FilterProps {
   column: Column<any, unknown>;
-}
-
-declare module "@tanstack/react-table" {
-  //allows us to define custom properties for our columns
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: "text" | "range" | "select";
-  }
 }
 
 // A typical debounced input react component
