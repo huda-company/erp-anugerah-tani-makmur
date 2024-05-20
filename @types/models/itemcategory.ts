@@ -21,6 +21,7 @@ export interface IItemCatFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string;
     "sort[key]"?: IItemCatFieldRequest["sort"]["key"];
     "sort[direction]"?: IItemCatFieldRequest["sort"]["direction"];
   };
@@ -42,3 +43,7 @@ export type ItemCatFormProps = {
   initialFormVals: IItemCatForm;
   doRefresh: () => void;
 } & BaseFormProps;
+
+export type ItemCatResp = {
+  id: string;
+} & IItemCategoryDocument;

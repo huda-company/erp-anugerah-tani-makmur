@@ -1,12 +1,9 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -15,7 +12,10 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { IItemCatFieldRequest } from "^/@types/models/itemcategory";
+import {
+  IItemCatFieldRequest,
+  ItemCatResp,
+} from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
 import { Options } from "^/@types/global";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
@@ -26,7 +26,7 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { initItemCatReqPrm } from "^/config/itemcategory/config";
 
 const useGetItemCat = () => {
   const t = useTranslations("");
@@ -37,16 +37,16 @@ const useGetItemCat = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
+  const [reqPrm, setReqPrm] =
+    useState<IItemCatFieldRequest["query"]>(initItemCatReqPrm);
   const [loading, setLoading] = useState(true);
-  const [itemCat, setItemCat] = useState<any>(null);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
+  const [itemCat, setItemCat] = useState<ItemCatResp[]>([]);
   const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
   const [itemCatPgntn, setItemCatTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
+  const [data, setData] = useState<ItemCatResp[]>([]);
 
   const fetch = useCallback(
     async (
@@ -81,7 +81,7 @@ const useGetItemCat = () => {
         if (response.data) {
           const { data: resData } = response;
 
-          setItemCat(resData);
+          setItemCat(resData.data.items);
 
           setItemCatTblPgntn({
             page: resData.data.page,
@@ -232,7 +232,7 @@ const useGetItemCat = () => {
 
   useEffect(() => {
     if (itemCat) {
-      const items = itemCat.data.items;
+      const items = itemCat;
       // build opts
       const opts =
         itemCat && Array.isArray(items) && items.length > 0
@@ -248,48 +248,32 @@ const useGetItemCat = () => {
   }, [itemCat]);
 
   useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (itemCat && Array.isArray(itemCat.data.items)) {
-      formattedBody = itemCat.data.items.map((x: any) => {
+    if (itemCat) {
+      const tStackTblBd = itemCat.map((x: ItemCatResp) => {
         return {
-          items: [
-            {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.description,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${ITEM_CAT_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${ITEM_CAT_PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
+          id: String(x.id),
+          name: x.name,
+          description: x.description,
+        } as ItemCatResp;
       });
+      setData(tStackTblBd);
     }
-    setTblBd(formattedBody);
-  }, [confirmDeletion, itemCat, router, t]);
+  }, [itemCat]);
 
   return {
     loading,
     fetch,
     itemCat,
-    tblBd,
+    data,
     itemCatOpts,
     itemCatPgntn,
+    reqPrm,
+    setReqPrm,
     handlePageInputChange,
     handlePageRowChange,
     handleNextClck,
     handlePrevClck,
+    confirmDeletion,
   };
 };
 
