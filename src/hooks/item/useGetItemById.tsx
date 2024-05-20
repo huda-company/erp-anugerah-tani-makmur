@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getItemAPI } from "^/services/item";
-import { IItemFieldRequest, IItemForm } from "^/@types/models/item";
+import { IItemFieldRequest, IItemForm, ItemResp } from "^/@types/models/item";
 import { initialItemForm } from "^/config/item/config";
 import useAppDispatch from "../useAppDispatch";
 import { actions as toastActs } from "@/redux/toast";
@@ -21,7 +21,7 @@ const useGetItemById = () => {
 
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
-  const [itemData, setItemData] = useState<any>(null);
+  const [itemData, setItemData] = useState<ItemResp | null>(null);
   const [formVal, setFormVal] = useState<IItemForm>(initialItemForm);
 
   const fetch = useCallback(
@@ -57,8 +57,15 @@ const useGetItemById = () => {
           }
 
           if (response.data) {
-            setItemData(response.data.data.items[0]);
-            setFormVal(response.data.data.items[0]);
+            const item = response.data.data.items[0] as ItemResp;
+            setItemData(item);
+            setFormVal({
+              ...item,
+              name: String(item.name),
+              price: Number(item.price),
+              description: String(item.description),
+              itemCategory: String(item.itemCategory.id),
+            });
 
             setLoading(false);
           }

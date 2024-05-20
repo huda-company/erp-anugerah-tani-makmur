@@ -45,5 +45,5 @@ export type ItemCatFormProps = {
 } & BaseFormProps;
 
 export type ItemCatResp = {
-  id: string;
+  id?: string;
 } & IItemCategoryDocument;

@@ -1,11 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ITEM_PAGE } from "@/constants/pageURL";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -14,7 +11,11 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { IItemFieldRequest } from "^/@types/models/item";
+import {
+  IItemFieldRequest,
+  ItemResp,
+  ItemTanTblData,
+} from "^/@types/models/item";
 import { deleteItemAPI, getItemAPI } from "^/services/item";
 import { Options } from "^/@types/global";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
@@ -25,8 +26,8 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
+import { initSuppReqPrm } from "^/config/supplier/config";
 
 const useGetItem = () => {
   const t = useTranslations("");
@@ -37,16 +38,18 @@ const useGetItem = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
+  const [reqPrm, setReqPrm] = useState<IItemFieldRequest["query"]>({
+    ...initSuppReqPrm,
+    limit: pageRowsArr[1],
+  });
   const [loading, setLoading] = useState(true);
   const [itemData, setItemData] = useState<any>(null);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
   const [itemPgntn, setItemTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
+  const [data, setData] = useState<ItemTanTblData[]>([]);
 
   const fetch = useCallback(
     async (
@@ -81,7 +84,7 @@ const useGetItem = () => {
         if (response.data) {
           const { data: resData } = response;
 
-          setItemData(resData);
+          setItemData(resData.data.items);
           setItemTblPgntn({
             page: resData.data.page,
             limit: resData.data.limit,
@@ -225,7 +228,7 @@ const useGetItem = () => {
 
   useEffect(() => {
     if (itemData) {
-      const items = itemData.data.items;
+      const items = itemData;
       // build opts
       const opts =
         itemData && Array.isArray(items) && items.length > 0
@@ -241,59 +244,38 @@ const useGetItem = () => {
   }, [itemData]);
 
   useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (itemData && Array.isArray(itemData.data.items)) {
-      formattedBody = itemData.data.items.map((x: any) => {
+    if (itemData) {
+      const tStackTblBd = itemData.map((x: ItemResp) => {
         return {
-          items: [
-            {
-              value:
-                x && x.itemCategory && typeof x.itemCategory.name == "string"
-                  ? x.itemCategory.name
-                  : "wrong value format",
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.description,
-              className: "text-left w-[6rem] pl-0",
-            },
-            // {
-            //   value: x.price,
-            //   className: "text-left w-[6rem] pl-0",
-            // },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${ITEM_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${ITEM_PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
+          id: String(x.id),
+          name: x.name,
+          brand: x.brand,
+          packaging: x.packaging,
+          itemCategoryName: x && x.itemCategory.name,
+          description: x.description,
+          enabled: x.enabled,
+          removed: x.removed,
+          removedBy: x.removedBy,
+        } as ItemTanTblData;
       });
+      setData(tStackTblBd);
     }
-    setTblBd(formattedBody);
-  }, [confirmDeletion, itemData, router, t]);
+  }, [itemData]);
 
   return {
     loading,
     fetch,
     itemData,
-    tblBd,
     itemDataOpts,
     itemPgntn,
+    data,
+    reqPrm,
+    setReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
+    confirmDeletion,
   };
 };
 
