@@ -49,8 +49,6 @@ const Supplier = () => {
     confirmDeletion,
   } = useGetSupplier();
 
-  console.log("data", data);
-
   const columns = useMemo<ColumnDef<SupplierTanTblData, any>[]>(
     () => [
       {
