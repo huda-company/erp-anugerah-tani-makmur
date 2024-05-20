@@ -1,6 +1,9 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
-import { IItemCatForm } from "^/@types/models/itemcategory";
+import {
+  IItemCatFieldRequest,
+  IItemCatForm,
+} from "^/@types/models/itemcategory";
 import { z } from "zod";
 
 export const bcData: BreadcrumbItem[] = [
@@ -34,3 +37,13 @@ export const ItemCatFormSchema = z.object({
     message: "invalid description",
   }),
 });
+
+export const initItemCatReqPrm: IItemCatFieldRequest["query"] = {
+  name: "",
+  "param[search]": "",
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[0],
+  page: 0,
+};
