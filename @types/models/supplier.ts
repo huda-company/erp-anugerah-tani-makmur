@@ -35,6 +35,7 @@ export interface ISupplierFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string;
     "sort[key]"?: ISupplierFieldRequest["sort"]["key"];
     "sort[direction]"?: ISupplierFieldRequest["sort"]["direction"];
   };
@@ -46,17 +47,25 @@ export interface ISortOptions {
   // Add other sorting options as needed
 }
 
-export type ISupplierForm = {
-  id?: string;
-  company: string;
-  address: string;
-  bankAccount: string;
-  email: string;
-  managerName: string;
-  managerSurname: string;
-  tel: string;
-};
+export type ISupplierForm = Pick<
+  ISupplierDocument,
+  | "company"
+  | "address"
+  | "bankAccount"
+  | "email"
+  | "managerName"
+  | "managerSurname"
+  | "tel"
+> & { id?: string };
 
 export type SupplierFormProps = {
   initialFormVals: ISupplierForm;
 } & BaseFormProps;
+
+export type SupplierTanTblData = {
+  supplierCode: string;
+} & ISupplierForm;
+
+export type SupplierResp = {
+  id: string;
+} & ISupplierDocument;
