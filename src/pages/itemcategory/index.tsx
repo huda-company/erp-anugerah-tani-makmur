@@ -13,7 +13,6 @@ import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import useDebounce from "@/hooks/useDebounce";
-import { pageRowsArr } from "@/components/PaginationCustom/config";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -29,6 +28,7 @@ import {
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
+import { pageRowsArr } from "^/config/request/config";
 
 const ItemCategory = () => {
   const t = useTranslations("");

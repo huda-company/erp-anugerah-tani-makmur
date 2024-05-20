@@ -1,10 +1,10 @@
 import React from "react";
-import { pageRowsArr } from "../PaginationCustom/config";
 import { GrLinkPrevious } from "react-icons/gr";
 import { GrChapterPrevious } from "react-icons/gr";
 import { GrLinkNext } from "react-icons/gr";
 import { GrChapterNext } from "react-icons/gr";
 import { CstmTstackPaginationProps } from "./types";
+import { pageRowsArr } from "^/config/request/config";
 
 const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
   table,

@@ -26,10 +26,10 @@ import {
   SupplierTanTblData,
 } from "^/@types/models/supplier";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { pageRowsArr } from "^/config/branch/config";
 import useDebounce from "@/hooks/useDebounce";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
+import { pageRowsArr } from "^/config/request/config";
 
 const Supplier = () => {
   const t = useTranslations("");

@@ -7,13 +7,13 @@ import connectToDatabase from "^/mongodb/connDb";
 import { purchPaymentDir } from "@/constants/uploadDir";
 import { onPaymentPurchaseFilter } from "./config/filter";
 import { ISortOptions } from "^/@types/models/billdoc";
-import { pageRowsArr } from "^/config/branch/config";
 import { MONGODB } from "^/config/mongodb";
 import Purchase from "^/mongodb/schemas/purchase";
 import { readWoFile } from "../billdoc";
 import Paymentmode from "^/mongodb/schemas/paymentmode";
 import moment from "moment";
 import { ObjectId } from "mongodb";
+import { pageRowsArr } from "^/config/request/config";
 
 const purchPaymPathDist: string = path.join(process.cwd(), purchPaymentDir);
 

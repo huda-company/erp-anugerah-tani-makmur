@@ -23,6 +23,7 @@ export interface IBranchFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string;
     "sort[key]"?: IBranchFieldRequest["sort"]["key"];
     "sort[direction]"?: IBranchFieldRequest["sort"]["direction"];
   };
@@ -33,13 +34,21 @@ export interface ISortOptions {
   // Add other sorting options as needed
 }
 
-export type IBranchForm = {
-  id?: string;
-  name: string;
-  city: string;
-  address: string;
-  description: string;
-};
+export type IBranchForm = Pick<
+  IBranchDocument,
+  "name" | "address" | "city" | "description"
+> & { id?: string };
+
+export type BranchResp = Pick<
+  IBranchDocument,
+  | "name"
+  | "address"
+  | "city"
+  | "description"
+  | "removed"
+  | "removedBy"
+  | "enabled"
+> & { id?: string };
 
 export type BranchFormProps = {
   mode: FormMode;

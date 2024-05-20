@@ -3,12 +3,12 @@ import connectToDatabase from "^/mongodb/connDb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { onSupplierFilter } from "./config/filter";
 import Supplier from "^/mongodb/schemas/supplier";
-import { pageRowsArr } from "^/config/supplier/config";
 import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import { firstLetterWord, formatNumberToNDigits } from "^/utils/helpers";
 import moment from "moment";
+import { pageRowsArr } from "^/config/request/config";
 
 export const getSuppliers = async (
   req: NextApiRequest,

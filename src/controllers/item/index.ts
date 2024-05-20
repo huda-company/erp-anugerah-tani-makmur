@@ -1,13 +1,13 @@
 import { ISortOptions } from "^/@types/models/supplier";
 import connectToDatabase from "^/mongodb/connDb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { pageRowsArr } from "^/config/supplier/config";
 import { MONGODB } from "^/config/mongodb";
 import { respBody } from "^/config/serverResponse";
 import { ObjectId } from "mongodb";
 import Item from "^/mongodb/schemas/item";
 import { onItemFilter } from "./config/filter";
 import moment from "moment";
+import { pageRowsArr } from "^/config/request/config";
 
 export const getItems = async (req: NextApiRequest, res: NextApiResponse) => {
   const { page, limit } = req.query;

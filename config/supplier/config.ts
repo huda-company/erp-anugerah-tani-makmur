@@ -2,6 +2,7 @@ import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
 import { z } from "zod";
+import { pageRowsArr } from "../request/config";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -17,8 +18,6 @@ export const bcData: BreadcrumbItem[] = [
     url: SUPPLIER_PAGE.ROOT,
   },
 ];
-
-export const pageRowsArr = [5, 10, 30, 40, 50];
 
 export const initialSupplierForm: ISupplierForm = {
   company: "",

@@ -12,8 +12,8 @@ import connectToDatabase from "^/mongodb/connDb";
 import { billDocDir } from "@/constants/uploadDir";
 import { onBillDocFilter } from "./config/filter";
 import { ISortOptions } from "^/@types/models/billdoc";
-import { pageRowsArr } from "^/config/branch/config";
 import { MONGODB } from "^/config/mongodb";
+import { pageRowsArr } from "^/config/request/config";
 
 const pathDist: string = path.join(process.cwd(), billDocDir);
 

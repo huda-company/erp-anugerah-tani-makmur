@@ -1,7 +1,6 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
-import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -27,6 +26,7 @@ import {
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import { IPurchaseFieldRequest } from "^/@types/models/purchase";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetPurchase = () => {
   const t = useTranslations("");

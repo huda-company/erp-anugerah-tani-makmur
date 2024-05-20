@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { pageRowsArr } from "./config";
+import { pageRowsArr } from "^/config/request/config";
 
 const PgntRowCmpnt: FC<PaginationCustomProp> = ({
   row = pageRowsArr[0],

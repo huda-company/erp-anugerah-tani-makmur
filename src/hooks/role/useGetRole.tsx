@@ -1,7 +1,6 @@
 import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
-import { pageRowsArr } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -30,6 +29,7 @@ import { IRoleFieldRequest } from "^/@types/models/role";
 import { getRoleAPI } from "^/services/role";
 import { Options } from "^/@types/global";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetRole = () => {
   const t = useTranslations("");
