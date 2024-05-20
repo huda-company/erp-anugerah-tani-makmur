@@ -21,6 +21,7 @@ export interface IUnitFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string;
     "sort[key]"?: IUnitFieldRequest["sort"]["key"];
     "sort[direction]"?: IUnitFieldRequest["sort"]["direction"];
   };
@@ -31,11 +32,14 @@ export interface ISortOptions {
   // Add other sorting options as needed
 }
 
-export type IUnitForm = {
+export type IUnitForm = Pick<IUnitDocument, "name" | "description"> & {
   id?: string;
-  name: string;
-  description: string;
 };
+
+export type UnitResp = Pick<
+  IUnitDocument,
+  "name" | "description" | "removed" | "removedBy" | "enabled"
+> & { id?: string };
 
 export type UnitFormProps = {
   mode: FormMode;
