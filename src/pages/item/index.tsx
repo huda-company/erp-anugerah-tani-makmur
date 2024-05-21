@@ -6,7 +6,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { withAuth } from "^/utils/withAuth";
 import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
 import { ITEM_PAGE } from "@/constants/pageURL";
@@ -25,6 +24,7 @@ import {
 import useDebounce from "@/hooks/useDebounce";
 import { IItemFieldRequest, ItemTanTblData } from "^/@types/models/item";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
 const Item = () => {
   const t = useTranslations("");
@@ -49,12 +49,7 @@ const Item = () => {
       {
         accessorFn: (row) => `${row.itemCategoryName}`,
         id: "itemCategory",
-        header: () => (
-          <div className="flex items-start justify-start">
-            {capitalizeStr(t("Sidebar.itemCategory"))}
-          </div>
-        ),
-
+        header: () => <CstmTstackHeaderCell str={t("Sidebar.itemCategory")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
@@ -62,22 +57,14 @@ const Item = () => {
         accessorFn: (row) => row.name,
         id: "name",
         cell: (info: any) => info.getValue(),
-        header: () => (
-          <div className="flex items-start justify-start">
-            {capitalizeStr(t("Signup.name"))}
-          </div>
-        ),
+        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
         enableColumnFilter: false,
       },
 
       {
         accessorFn: (row) => `${row.description}`,
         accessorKey: "description",
-        header: () => (
-          <div className="flex items-start justify-start">
-            {capitalizeStr(t("Index.description"))}
-          </div>
-        ),
+        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
         enableColumnFilter: false,
         meta: {
           filterVariant: "text",
@@ -98,7 +85,7 @@ const Item = () => {
             </div>
           );
         },
-        header: () => <span>{capitalizeStr(t("Common.action"))}</span>,
+        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
         enableColumnFilter: false,
       },
     ],

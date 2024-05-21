@@ -10,7 +10,6 @@ import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
 import { BRANCH_PAGE } from "@/constants/pageURL";
 import useGetBranch from "@/hooks/branch/useGetBranch";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 import { bcData } from "^/config/branch/config";
 import {
   ColumnDef,
@@ -25,6 +24,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { BranchResp, IBranchFieldRequest } from "^/@types/models/branch";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
+import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
 const BranchPage = () => {
   const t = useTranslations("");
@@ -49,7 +49,7 @@ const BranchPage = () => {
       {
         accessorFn: (row) => `${row.name}`,
         id: "name",
-        header: t("Signup.name"),
+        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
@@ -57,14 +57,14 @@ const BranchPage = () => {
         accessorFn: (row) => row.address,
         id: "address",
         cell: (info: any) => info.getValue(),
-        header: () => t("ParkingField.address"),
+        header: () => <CstmTstackHeaderCell str={t("ParkingField.addres")} />,
         enableColumnFilter: false,
       },
 
       {
         accessorFn: (row) => `${row.description}`,
         accessorKey: "description",
-        header: () => t("Index.description"),
+        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
         enableColumnFilter: false,
         meta: {
           filterVariant: "text",
@@ -85,7 +85,7 @@ const BranchPage = () => {
             </div>
           );
         },
-        header: () => <span>{capitalizeStr(t("Common.action"))}</span>,
+        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
         enableColumnFilter: false,
       },
     ],
