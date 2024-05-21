@@ -11,7 +11,6 @@ import { bcData, initItemCatReqPrm } from "^/config/itemcategory/config";
 import Loading from "@/components/Loading";
 import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 import useDebounce from "@/hooks/useDebounce";
 import {
   ColumnDef,
@@ -29,6 +28,7 @@ import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMen
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { pageRowsArr } from "^/config/request/config";
+import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
 const ItemCategory = () => {
   const t = useTranslations("");
@@ -53,14 +53,14 @@ const ItemCategory = () => {
       {
         accessorFn: (row) => `${row.name}`,
         id: "name",
-        header: t("Signup.name"),
+        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
       {
         accessorFn: (row) => `${row.description}`,
         id: "description",
-        header: t("Index.description"),
+        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
@@ -79,7 +79,7 @@ const ItemCategory = () => {
             </div>
           );
         },
-        header: () => <span>{capitalizeStr(t("Common.action"))}</span>,
+        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
         enableColumnFilter: false,
       },
     ],

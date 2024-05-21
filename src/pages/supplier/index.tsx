@@ -6,7 +6,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { withAuth } from "^/utils/withAuth";
 import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { bcData, initSuppReqPrm } from "^/config/supplier/config";
 import useGetSupplier from "@/hooks/supplier/useGetSupplier";
@@ -30,6 +29,7 @@ import useDebounce from "@/hooks/useDebounce";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { pageRowsArr } from "^/config/request/config";
+import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
 const Supplier = () => {
   const t = useTranslations("");
@@ -54,14 +54,14 @@ const Supplier = () => {
       {
         accessorFn: (row) => `${row.supplierCode}`,
         id: "supplierCode",
-        header: t("Common.code"),
+        header: () => <CstmTstackHeaderCell str={t("Common.code")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
       {
         accessorFn: (row) => `${row.company}`,
         id: "company",
-        header: t("Signup.name"),
+        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
@@ -69,13 +69,13 @@ const Supplier = () => {
         accessorFn: (row) => row.address,
         id: "address",
         cell: (info: any) => info.getValue(),
-        header: () => t("ParkingField.address"),
+        header: () => <CstmTstackHeaderCell str={t("ParkingField.address")} />,
         enableColumnFilter: false,
       },
 
       {
         accessorKey: "tel",
-        header: () => t("Signup.phone"),
+        header: () => <CstmTstackHeaderCell str={t("Signup.phone")} />,
         enableColumnFilter: false,
         meta: {
           filterVariant: "text",
@@ -85,7 +85,7 @@ const Supplier = () => {
         accessorKey: "email",
         accessorFn: (row) => row.email,
         id: "email",
-        header: () => <span>Email</span>,
+        header: () => <CstmTstackHeaderCell str={t("Signup.email")} />,
         cell: (info: any) => info.getValue(),
         enableColumnFilter: false,
         meta: {
@@ -107,7 +107,7 @@ const Supplier = () => {
             </div>
           );
         },
-        header: () => <span>{capitalizeStr(t("Common.action"))}</span>,
+        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
         enableColumnFilter: false,
       },
     ],

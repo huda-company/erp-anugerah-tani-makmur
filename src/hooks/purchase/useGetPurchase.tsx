@@ -1,10 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -13,9 +11,7 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { deletePurchaseAPI, getPurchaseAPI } from "^/services/purchase";
-import { formatDate } from "^/utils/dateFormatting";
 import {
   handlePrmChangeInputPage,
   handlePrmChangeNextBtn,
@@ -24,9 +20,9 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import { IPurchaseFieldRequest } from "^/@types/models/purchase";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { IPurchaseFieldRequest, PurchTanTblData, PurchaseResp } from "^/@types/models/purchase";
 import { pageRowsArr } from "^/config/request/config";
+import { initSuppReqPrm } from "^/config/supplier/config";
 
 const useGetPurchase = () => {
   const t = useTranslations("");
@@ -37,21 +33,24 @@ const useGetPurchase = () => {
 
   const toast = useAppSelector(toastSelectors.toast);
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
+  const [reqPrm, setReqPrm] = useState<IPurchaseFieldRequest["query"]>({
+    ...initSuppReqPrm,
+    limit: pageRowsArr[0],
+  });
   const [loading, setLoading] = useState(true);
   const [purchData, setPurchData] = useState<any>(null);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
   const [purchPgntn, setPurchTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
+  const [data, setData] = useState<PurchTanTblData[]>([]);
 
   const fetch = useCallback(
     async (
       payload: Omit<IPurchaseFieldRequest["query"], "name"> = {
         page: 1,
         limit: pageRowsArr[0],
+        "param[search]": "",
         "sort[key]": "name",
         "sort[direction]": "asc",
       }
@@ -79,7 +78,8 @@ const useGetPurchase = () => {
 
         if (response.data) {
           const { data: resData } = response;
-          setPurchData(resData);
+          const purchData = resData.data.items as PurchaseResp[]
+          setPurchData(purchData);
           setPurchTblPgntn({
             page: resData.data.page,
             limit: resData.data.limit,
@@ -227,63 +227,35 @@ const useGetPurchase = () => {
   }, [fetch, session]);
 
   useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (purchData && Array.isArray(purchData.data.items)) {
-      formattedBody = purchData.data.items.map((x: any) => {
+    if (purchData) {
+      const tStackTblBd = purchData.map((x: PurchaseResp) => {
         return {
-          items: [
-            {
-              value: x.poNo,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value:
-                x.supplier && x.supplier.company
-                  ? x.supplier.company
-                  : x.supplier,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: formatDate(x.expDate),
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.year,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.status,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${PURCHASE_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${PURCHASE_PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
+          id: String(x.id),
+          poNo: x.poNo,
+          supplierName: x.supplier.company,
+          expDate: x.expDate,
+          year: x.year,
+          status: x.status,
+        } as PurchTanTblData;
       });
+      setData(tStackTblBd);
     }
-    setTblBd(formattedBody);
-  }, [purchData, confirmDeletion, router, t]);
+  }, [purchData]);
 
   return {
     loading,
     fetch,
     purchData,
     purchPgntn,
-    tblBd,
+    data,
+    reqPrm,
+    setReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageInputChange,
     handlePageRowChange,
     onPaginationChange,
+    confirmDeletion
   };
 };
 

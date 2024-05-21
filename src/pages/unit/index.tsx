@@ -9,7 +9,6 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
 import { UNIT_PAGE } from "@/constants/pageURL";
-import { capitalizeStr } from "^/utils/capitalizeStr";
 import useGetUnit from "@/hooks/unit/useGetUnit";
 import { bcData } from "^/config/unit/config";
 import {
@@ -26,6 +25,7 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import useDebounce from "@/hooks/useDebounce";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { IUnitForm } from "^/@types/models/unit";
+import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
 const UnitPage = () => {
   const t = useTranslations("");
@@ -50,14 +50,14 @@ const UnitPage = () => {
       {
         accessorFn: (row) => `${row.name}`,
         id: "name",
-        header: t("Signup.name"),
+        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
         cell: (info) => info.getValue(),
         enableColumnFilter: false,
       },
       {
         accessorFn: (row) => `${row.description}`,
         accessorKey: "description",
-        header: () => t("Index.description"),
+        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
         enableColumnFilter: false,
         meta: {
           filterVariant: "text",
@@ -78,7 +78,7 @@ const UnitPage = () => {
             </div>
           );
         },
-        header: () => <span>{capitalizeStr(t("Common.action"))}</span>,
+        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
         enableColumnFilter: false,
       },
     ],
