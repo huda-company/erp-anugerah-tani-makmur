@@ -229,7 +229,6 @@ const useGetPurchase = () => {
   useEffect(() => {
     if (purchData) {
       const tStackTblBd = purchData.map((x: PurchaseResp) => {
-        console.log("xxxx", x)
         return {
           id: String(x.id),
           poNo: x.poNo,
