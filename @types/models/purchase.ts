@@ -1,4 +1,6 @@
 import { BaseFormProps, FormMode } from "../global";
+import { ItemResp } from "./item";
+import { SupplierResp } from "./supplier";
 
 export type PurchItem = {
   item: string;
@@ -18,7 +20,7 @@ export interface BasePurchase {
   year: number;
   date: Date;
   expDate: Date;
-  supplier: string;
+  supplier: SupplierResp;
   ppnIncluded: boolean;
   subTotal: number;
   taxRate: number;
@@ -55,6 +57,7 @@ export interface IPurchaseFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string,
     "sort[key]"?: IPurchaseFieldRequest["sort"]["key"];
     "sort[direction]"?: IPurchaseFieldRequest["sort"]["direction"];
   };
@@ -75,3 +78,30 @@ export type PurchaseFormProps = {
   initialFormVals: IPurchaseForm;
   doRefresh: () => void;
 } & BaseFormProps;
+
+
+export type PurchItemResp = {
+  item: ItemResp;
+  unit: string;
+  quantity: number;
+  price: number;
+  discount: number;
+  total: number;
+};
+
+export type PurchaseResp = Omit<
+  BasePurchase,
+  "items"
+> & {
+  id?: string,
+  items: PurchItemResp[];
+};
+
+
+export type PurchTanTblData = Pick<
+  PurchaseResp,
+  | "poNo"
+  | "expDate"
+  | "year"
+  | "status"
+> & { id?: string, supplierName: string };

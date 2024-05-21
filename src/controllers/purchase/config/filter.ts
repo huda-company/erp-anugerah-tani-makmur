@@ -8,13 +8,7 @@ export const onPurchaseFilter = (query: Record<string, string>) => {
   if (query["param[search]"]) {
     filter.$or = [
       { name: { $regex: query["param[search]"], $options: "i" } },
-      {
-        "createdBy.first_name": {
-          $regex: query["param[search]"],
-          $options: "i",
-        },
-      },
-      { "createdBy.email": { $regex: query["param[search]"], $options: "i" } },
+      { poNo: { $regex: query["param[search]"], $options: "i" } },
     ];
   }
   if (query["param[startDate]"] && query["param[endDate]"]) {
