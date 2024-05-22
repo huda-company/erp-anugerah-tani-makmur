@@ -20,7 +20,7 @@ export interface BasePurchase {
   year: number;
   date: Date;
   expDate: Date;
-  supplier: SupplierResp;
+  supplier: string;
   ppnIncluded: boolean;
   subTotal: number;
   taxRate: number;
@@ -57,7 +57,7 @@ export interface IPurchaseFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
-    "param[search]"?: string,
+    "param[search]"?: string;
     "sort[key]"?: IPurchaseFieldRequest["sort"]["key"];
     "sort[direction]"?: IPurchaseFieldRequest["sort"]["direction"];
   };
@@ -79,7 +79,6 @@ export type PurchaseFormProps = {
   doRefresh: () => void;
 } & BaseFormProps;
 
-
 export type PurchItemResp = {
   item: ItemResp;
   unit: string;
@@ -89,19 +88,13 @@ export type PurchItemResp = {
   total: number;
 };
 
-export type PurchaseResp = Omit<
-  BasePurchase,
-  "items"
-> & {
-  id?: string,
-  items: PurchItemResp[];
+export type PurchaseResp = Omit<BasePurchase, "items" | "supplier"> & {
+  id?: string;
+  itemResp: PurchItemResp[];
+  supplier: SupplierResp;
 };
-
 
 export type PurchTanTblData = Pick<
   PurchaseResp,
-  | "poNo"
-  | "expDate"
-  | "year"
-  | "status"
-> & { id?: string, supplierName: string };
+  "poNo" | "expDate" | "year" | "status"
+> & { id?: string; supplierName: string };

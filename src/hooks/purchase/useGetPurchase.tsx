@@ -20,7 +20,11 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import { IPurchaseFieldRequest, PurchTanTblData, PurchaseResp } from "^/@types/models/purchase";
+import {
+  IPurchaseFieldRequest,
+  PurchTanTblData,
+  PurchaseResp,
+} from "^/@types/models/purchase";
 import { pageRowsArr } from "^/config/request/config";
 import { initSuppReqPrm } from "^/config/supplier/config";
 
@@ -40,7 +44,7 @@ const useGetPurchase = () => {
     limit: pageRowsArr[0],
   });
   const [loading, setLoading] = useState(true);
-  const [purchData, setPurchData] = useState<any>(null);
+  const [purchData, setPurchData] = useState<PurchaseResp[]>([]);
   const [purchPgntn, setPurchTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
   const [data, setData] = useState<PurchTanTblData[]>([]);
@@ -78,7 +82,8 @@ const useGetPurchase = () => {
 
         if (response.data) {
           const { data: resData } = response;
-          const purchData = resData.data.items as PurchaseResp[]
+          const purchData: PurchaseResp[] = resData.data.items;
+
           setPurchData(purchData);
           setPurchTblPgntn({
             page: resData.data.page,
@@ -228,16 +233,19 @@ const useGetPurchase = () => {
 
   useEffect(() => {
     if (purchData) {
-      const tStackTblBd = purchData.map((x: PurchaseResp) => {
-        return {
-          id: String(x.id),
-          poNo: x.poNo,
-          supplierName: x.supplier.company,
-          expDate: x.expDate,
-          year: x.year,
-          status: x.status,
-        } as PurchTanTblData;
-      });
+      const tStackTblBd: PurchTanTblData[] = purchData.map(
+        (x: PurchaseResp) => {
+          return {
+            id: String(x.id),
+            poNo: x.poNo,
+            supplierName:
+              x.supplier && x.supplier.company ? x.supplier.company : "--",
+            expDate: x.expDate,
+            year: x.year,
+            status: x.status,
+          };
+        }
+      );
       setData(tStackTblBd);
     }
   }, [purchData]);
@@ -255,7 +263,7 @@ const useGetPurchase = () => {
     handlePageInputChange,
     handlePageRowChange,
     onPaginationChange,
-    confirmDeletion
+    confirmDeletion,
   };
 };
 
