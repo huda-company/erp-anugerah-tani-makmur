@@ -68,4 +68,4 @@ export type SupplierTanTblData = {
 
 export type SupplierResp = {
   id: string;
-} & ISupplierDocument;
+} & SupplierTanTblData;
