@@ -43,3 +43,7 @@ export const formatNumberToNDigits = (num: number, n: number) => {
 export const thsandSep = (num: number) => {
   return Number(num).toLocaleString().replace(/,/g, ".");
 };
+
+export function formNumLeadZeros(num: number, length: number = 3): string {
+  return num.toString().padStart(length, "0");
+}

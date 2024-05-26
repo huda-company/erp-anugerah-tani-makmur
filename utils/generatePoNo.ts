@@ -5,6 +5,7 @@ import Supplier from "^/mongodb/schemas/supplier";
 import Purchase from "^/mongodb/schemas/purchase";
 import intToRoman from "./intToRoman";
 import { timezone } from "^/config/env";
+import { formNumLeadZeros } from "./helpers";
 
 const generatePoNumber = async (suppId: string) => {
   let poNo = "";
@@ -13,7 +14,7 @@ const generatePoNumber = async (suppId: string) => {
   const monthInRoman = intToRoman(Number(currentDateInTimezone.format("MM")));
   const year = currentDateInTimezone.format("YYYY");
 
-  const supplier = await Supplier.findOne({ _id: suppId, removed: false });
+  const supplier = await Supplier.findOne({ _id: suppId, removed: "" });
 
   if (supplier) {
     const searchTerm = `ATM\\/${supplier.supplierCode}\\/${monthInRoman}\\/${year}`;
@@ -24,9 +25,9 @@ const generatePoNumber = async (suppId: string) => {
       poNo: { $regex: regexTerm },
     });
 
-    poNo = `${checkTotalRow + 1}/ATM/${
-      supplier.supplierCode
-    }/${monthInRoman}/${year}`;
+    const formatIncrementNo = formNumLeadZeros(checkTotalRow + 1, 3);
+
+    poNo = `${formatIncrementNo}/ATM/${supplier.supplierCode}/${monthInRoman}/${year}`;
   }
 
   return poNo;
