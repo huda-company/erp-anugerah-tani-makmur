@@ -7,13 +7,12 @@ import connectToDatabase from "^/mongodb/connDb";
 import { purchPaymentDir } from "@/constants/uploadDir";
 import { onPaymentPurchaseFilter } from "./config/filter";
 import { ISortOptions } from "^/@types/models/billdoc";
-import { MONGODB } from "^/config/mongodb";
 import Purchase from "^/mongodb/schemas/purchase";
 import { readWoFile } from "../billdoc";
 import Paymentmode from "^/mongodb/schemas/paymentmode";
 import moment from "moment";
 import { ObjectId } from "mongodb";
-import { pageRowsArr } from "^/config/request/config";
+import { MONGODB } from "^/config/mongodb";
 
 const purchPaymPathDist: string = path.join(process.cwd(), purchPaymentDir);
 
@@ -51,13 +50,50 @@ export const addPaymentPurchase = async (req: any, res: any) => {
 
     const { fields } = await readWoFile(req);
 
-    const { amount, paymentMode } = fields;
+    const {
+      amount,
+      paymentMode,
+      item,
+      price,
+      quantity,
+      unit,
+      total,
+      date,
+      description,
+    } = fields;
 
-    if (!amount || !paymentMode) {
+    if (
+      !amount ||
+      !paymentMode ||
+      !item ||
+      !price ||
+      !unit ||
+      !quantity ||
+      !total
+    ) {
       return res.status(400).json({ ...respBody.ERROR.INCORRECT_PAYLOAD });
     }
 
+    // items format conversion
+    const items = item[0].split(";");
+    const units = unit[0].split(";");
+    const prices = price[0].split(";").map(Number);
+    const quantities = quantity[0].split(";").map(Number);
+    const totals = total[0].split(";").map(Number);
+
+    // Create an array of objects dynamically
+    const formattedItems = items.map((item, index) => ({
+      item,
+      unit: units[index],
+      price: prices[index],
+      quantity: quantities[index],
+      total: totals[index],
+    }));
+
     const amt = amount[0];
+    const desc = description && description[0] ? description[0] : "";
+    const dateCreated =
+      date && date[0] ? date[0] : moment().utcOffset(+7).toString();
     const paymMode = paymentMode[0];
 
     if (paymAmt >= gTotal || diff <= 0 || diff < Number(amt)) {
@@ -68,8 +104,11 @@ export const addPaymentPurchase = async (req: any, res: any) => {
 
     const addPurcPaym = Paymentpurchase.create({
       purchase: checkPurchase._id,
+      date: dateCreated,
       amount: Number(amt),
       paymentMode: pMode?._id,
+      items: formattedItems,
+      description: desc,
     });
 
     if (!addPurcPaym)
@@ -93,23 +132,111 @@ export const getPaymentPurch = async (
 
   await connectToDatabase();
 
-  const sortOptions: ISortOptions = {}; // Define an empty object for sort options
+  const sortOptions: ISortOptions = { createdAt: -1 }; // Define an empty object for sort options
 
   const filter: any = onPaymentPurchaseFilter(req.query as any);
 
-  const paymPurchases = await Paymentpurchase.paginate(filter, {
-    page: Number(page) || 1,
-    limit: Number(limit) || pageRowsArr[2],
-    customLabels: MONGODB.PAGINATION_LABEL,
-    sort: sortOptions,
-    populate: [
-      {
-        path: "paymentMode",
-        justOne: true,
-        model: "Paymentmode", // This should be the name of your Item model
+  const aggregate = Paymentpurchase.aggregate([
+    {
+      $match: filter,
+    },
+    {
+      $lookup: {
+        from: "pickupdocs", // The name of the PickupDoc collection
+        localField: "_id",
+        foreignField: "paymentPurchase",
+        as: "pickupDocs",
       },
-    ],
-  });
+    },
+    {
+      $unwind: {
+        path: "$pickupDocs",
+        preserveNullAndEmptyArrays: true, // If you want to keep Paymentpurchases without Pickupdocs
+      },
+    },
+    {
+      $unwind: {
+        path: "$items",
+        preserveNullAndEmptyArrays: true, // If you want to keep Paymentpurchases without items
+      },
+    },
+    {
+      $lookup: {
+        from: "items", // The name of the Item collection
+        localField: "items.item",
+        foreignField: "_id",
+        as: "itemDetails",
+      },
+    },
+    {
+      $unwind: {
+        path: "$itemDetails",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        "items.item": "$itemDetails",
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        removed: { $first: "$removed" },
+        purchase: { $first: "$purchase" },
+        items: { $push: "$items" },
+        date: { $first: "$date" },
+        amount: { $first: "$amount" },
+        paymentMode: { $first: "$paymentMode" },
+        ref: { $first: "$ref" },
+        description: { $first: "$description" },
+        updatedAt: { $first: "$updatedAt" },
+        createdAt: { $first: "$createdAt" },
+        pickupDocs: { $first: "$pickupDocs" },
+      },
+    },
+    {
+      $sort: {
+        "pickupDocs.createdAt": -1, // Example sorting by pickupDocs' updatedAt field
+      },
+    },
+    {
+      $project: {
+        // Add any specific fields you want to include in the response
+        _id: 1,
+        removed: 1,
+        purchase: 1,
+        items: 1,
+        date: 1,
+        amount: 1,
+        paymentMode: 1,
+        ref: 1,
+        description: 1,
+        updatedAt: 1,
+        createdAt: 1,
+        "pickupDocs._id": 1,
+        "pickupDocs.code": 1,
+        "pickupDocs.type": 1,
+        "pickupDocs.note": 1,
+        "pickupDocs.vehicleType": 1,
+        "pickupDocs.driverName": 1,
+        "pickupDocs.updatedAt": 1,
+        "pickupDocs.createdAt": 1,
+      },
+    },
+  ]);
+
+  const options = {
+    customLabels: MONGODB.PAGINATION_LABEL,
+    page: parseInt(page as string, 10),
+    limit: parseInt(limit as string, 10),
+    sort: sortOptions,
+  };
+
+  const paymPurchases = await Paymentpurchase.aggregatePaginate(
+    aggregate,
+    options
+  );
 
   return res
     .status(200)

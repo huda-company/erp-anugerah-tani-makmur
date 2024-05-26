@@ -94,6 +94,7 @@
     "quantity": "quantity",
     "discount": "diskon",
     "date": "tanggal pembuatan",
+    "payment": "pembayaran",
     "paymentMethod": "metode pembayaran",
     "paymentDate": "tanggal pembayaran",
     "soNo": "nomor so",
@@ -105,6 +106,11 @@
     "purcPaymHistory": "Riwayat Pembayaran",
     "purcPaymTotal": "Total Pembayaran",
     "purcPaymDiff": "Kurang Bayar",
+    "pickupDoc": "dokumen pengambilan barang",
+    "vehicleType": "tipe kendaraan",
+    "flatNo": "plat nomor",
+    "driverName": "nama pengemudi",
+    "docType": "jenis dokumen",
     "noFileFound": "tidak ada berkas file"
   },
   "UserPage": {
@@ -153,7 +159,10 @@
       "UNIT_UPDATE": "berhasil mengubah data unit",
       "UNIT_DELETE": "berhasil menghapus data unit",
       "PAYMENT_PURCHASE_CREATE": "berhasil menambah pembayaran",
-      "PAYMENT_PURCHASE_DELETE": "berhasil menghapus pembayaran"
+      "PAYMENT_PURCHASE_DELETE": "berhasil menghapus pembayaran",
+      "PICKUP_DOC_CREATE": "berhasil membuat dokumen pengambilan barang",
+      "PICKUP_DOC_UPDATE": "berhasil mengubah dokumen pengambilan barang",
+      "PICKUP_DOC_PURCHASE_DELETE": "berhasil menghapus dokumen pengambilan barang"
     },
     "ERROR": {
       "UPLOAD_FILE": "gagal upload file",
@@ -177,7 +186,10 @@
       "UNIT_UPDATE": "gagal mengubah data unit",
       "UNIT_DELETE": "gagal menghapus data unit",
       "PAYMENT_PURCHASE_CREATE": "gagal menambah pembayaran",
-      "PAYMENT_PURCHASE_DELETE": "gagal menghapus pembayaran"
+      "PAYMENT_PURCHASE_DELETE": "gagal menghapus pembayaran",
+      "PICKUP_DOC_CREATE": "gagal membuat dokumen pengambilan barang",
+      "PICKUP_DOC_UPDATE": "gagal mengubah dokumen pengambilan barang",
+      "PICKUP_DOC_PURCHASE_DELETE": "gagal menghapus dokumen pengambilan barang"
     }
   }
 }

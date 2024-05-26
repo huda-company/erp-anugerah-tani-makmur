@@ -26,6 +26,7 @@ export const respBody = {
     UNEXPECTED_ERROR: cResp(false, ErrorType.UNEXPECTED_ERROR),
     GTOTAL_N_PAYMENT_EQUAL: cResp(false, ErrorType.GTOTAL_N_PAYMENT_EQUAL),
     INVALID_PO: cResp(false, ErrorType.INVALID_PO),
+    INVALID_PAYMENT_PURCH_ID: cResp(false, ErrorType.INVALID_PAYMENT_PURCH_ID),
     INCORRECT_PAYLOAD: cResp(false, ErrorType.INCORRECT_PAYLOAD),
     UPLOAD_ERROR: cResp(false, ErrorType.UPLOAD_ERROR),
     EXPIRED_INVALID_TOKEN: cResp(false, ErrorType.EXPIRED_INVALID_TOKEN),
@@ -37,6 +38,7 @@ export const respBody = {
     UNKNOWN_EMAIL: cResp(false, ErrorType.UNKNOWN_EMAIL),
     PURCHASE_UPDATE: cResp(false, ErrorType.PURCHASE_UPDATE),
     PURCHASE_PAYMENT_CREATE: cResp(true, SuccessType.PURCHASE_PAYMENT_CREATE),
+    PICKUP_DOC_CREATE: cResp(true, SuccessType.PICKUP_DOC_CREATE),
   },
   SUCCESS: {
     RETRIEVED_DATA_SUCCESS: cResp(true, SuccessType.RETRIEVED_DATA_SUCCESS),
@@ -64,5 +66,6 @@ export const respBody = {
     UNIT_UPDATE: cResp(true, SuccessType.UNIT_UPDATE),
     UNIT_DELETE: cResp(true, SuccessType.UNIT_DELETE),
     PURCHASE_PAYMENT_CREATE: cResp(true, SuccessType.PURCHASE_PAYMENT_CREATE),
+    PICKUP_DOC_CREATE: cResp(true, SuccessType.PICKUP_DOC_CREATE),
   },
 };

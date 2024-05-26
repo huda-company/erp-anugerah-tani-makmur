@@ -14,6 +14,7 @@ export enum ErrorType {
   METHOD_NOT_ALLOWED = "request method not allowed",
   INCORRECT_PAYLOAD = "incorrect payload",
   INVALID_PO = "invalid po number or deleted",
+  INVALID_PAYMENT_PURCH_ID = "invalid payment purchase id",
 
   NEW_SUPPLIER_CREATE = "failed to add new parking field",
   SUPPLIER_UPDATE = "failed to update parking field",
@@ -25,6 +26,9 @@ export enum ErrorType {
   GTOTAL_N_PAYMENT_EQUAL = "grand total and payment is equal or amount is greater",
   PURCHASE_PAYMENT_CREATE = "create purchase payment failed",
   PURCHASE_PAYMENT_DELETE = "delete purchase failed",
+
+  PICKUP_DOC_CREATE = "create pickup doc failed",
+  PICKUP_DOC_DELETE = "delete pickup doc failed",
 }
 
 export enum SuccessType {
@@ -66,4 +70,7 @@ export enum SuccessType {
 
   PURCHASE_PAYMENT_CREATE = "new purchase payment created successfully",
   PURCHASE_PAYMENT_DELETE = "purchase payment deleted successfully",
+
+  PICKUP_DOC_CREATE = "pickup doc created successfully",
+  PICKUP_DOC_DELETE = "pickup doc deleted successfully",
 }

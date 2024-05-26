@@ -36,9 +36,11 @@ const ViewPurchasePage: FC = () => {
             <div className="flex flex-col gap-y-2 rounded-[1rem] border-2 border-primary p-4">
               <PurchDetailSect />
 
-              <div className="mt-[0.5rem] flex gap-x-4">
-                <PurchPaymSect />
+              <PurchPaymSect />
+              {/* <PickupDocSect /> */}
+              <div className="mt-[0.5rem] flex gap-x-4"></div>
 
+              <div className="mt-[0.5rem] flex gap-x-4">
                 <PurchFileSect />
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import {
@@ -16,13 +16,30 @@ import { useTranslations } from "next-intl";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { getStaticProps } from "^/utils/getStaticProps";
 import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import {
+  actions as toastActs,
+  selectors as toastSelectors,
+} from "@/redux/toast";
+import useAppSelector from "@/hooks/useAppSelector";
+import { useRouter } from "next/router";
+import { FormMode } from "^/@types/global";
+import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
 
 const PurchPaymSect: FC = () => {
   const t = useTranslations("");
 
-  const { fetchPaymPurch, paymPurcTblBd } = useGetPaymentPurchByPurchId();
+  const dispatch = useAppDispatch();
 
-  const [showPaymPurchForm, setShowPaymPurchForm] = useState<boolean>(false);
+  const router = useRouter();
+  const { id } = router.query;
+
+  const toast = useAppSelector(toastSelectors.toast);
+
+  const { paymPurcFormVal } = useGetPurchaseById();
+
+  const { paymPurchReq, fetchPaymPurch, paymPurcTblBd } =
+    useGetPaymentPurchByPurchId();
 
   const payPurchHeader = useMemo(
     () => [
@@ -36,7 +53,15 @@ const PurchPaymSect: FC = () => {
         className: "text-left text-xs w-[6rem] p-0",
       },
       {
-        value: capitalizeStr(t("PurchasePage.paymentMethod")),
+        value: capitalizeStr(t("Index.description")),
+        className: "text-left text-xs w-[9rem] p-0",
+      },
+      {
+        value: "PPB / SPAA",
+        className: "text-left text-xs w-[9rem] p-0",
+      },
+      {
+        value: capitalizeStr(t("Sidebar.item")),
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
@@ -55,12 +80,45 @@ const PurchPaymSect: FC = () => {
     [payPurchHeader, paymPurcTblBd]
   );
 
-  const handlePaymPurchFormClose = async () => {
-    setShowPaymPurchForm(false);
-    await fetchPaymPurch();
+  const closeAlertModal = async () => {
+    await dispatch(
+      toastActs.callShowToast({
+        ...toast,
+        show: false,
+      })
+    );
   };
+
+  const onOkPaymPurchForm = () => {
+    fetchPaymPurch(paymPurchReq);
+    closeAlertModal();
+  };
+
+  const PaymPurchDialog = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col items-center pt-[1rem] capitalize">
+            <span className="mb-[2rem] text-center text-[1.5rem]">
+              {`${capitalizeStr(t("PurchasePage.payment"))}`}
+            </span>
+
+            <PaymentPurchaseForm
+              mode={FormMode.EDIT}
+              initialFormVals={paymPurcFormVal}
+              onclose={onOkPaymPurchForm}
+              onSubmitOk={onOkPaymPurchForm}
+            />
+          </div>
+        ),
+        type: "form",
+      })
+    );
+  };
+
   return (
-    <Card className="w-1/2 ">
+    <Card className="">
       <CardHeader className="bg-[#EAE2E1] p-2">
         <CardTitle>
           <div className="flex justify-between">
@@ -79,7 +137,7 @@ const PurchPaymSect: FC = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
                     onClick={() => {
-                      setShowPaymPurchForm(true);
+                      PaymPurchDialog(String(id));
                     }}
                   >
                     {`${capitalizeStr(t("Common.add"))} ${capitalizeStr(t("PurchasePage.purcPaymHistory"))} `}
@@ -91,14 +149,6 @@ const PurchPaymSect: FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {showPaymPurchForm && (
-          <div className="mt-[0.5rem] flex w-fit flex-row gap-x-4 rounded-[0.5rem] bg-[#E0EDF0] p-1">
-            <PaymentPurchaseForm
-              onclose={() => setShowPaymPurchForm(false)}
-              onSubmitOk={() => handlePaymPurchFormClose()}
-            />
-          </div>
-        )}
         <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
           <CustomTable key="paymPurchTbl" data={paymPurchTData} />
         </div>

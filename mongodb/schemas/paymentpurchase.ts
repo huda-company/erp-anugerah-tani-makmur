@@ -1,11 +1,12 @@
 import mongoose, { Schema } from "mongoose";
-import paginate from "mongoose-paginate-v2";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import { IPaymentPurchaseDocument } from "^/@types/models/paymentpurchase";
 import Purchase from "./purchase";
 import Paymentmode from "./paymentmode";
+import Item from "./item";
 
 type SchemaTypes = IPaymentPurchaseDocument &
-  mongoose.PaginateModel<IPaymentPurchaseDocument>;
+  mongoose.AggregatePaginateModel<IPaymentPurchaseDocument>;
 
 export const PaymentPurchaseSchema = new Schema<IPaymentPurchaseDocument>(
   {
@@ -23,6 +24,33 @@ export const PaymentPurchaseSchema = new Schema<IPaymentPurchaseDocument>(
       required: true,
       autopopulate: true,
     },
+    items: [
+      {
+        item: {
+          type: Schema.Types.ObjectId,
+          ref: Item,
+          required: true,
+          autopopulate: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        unit: {
+          type: String,
+          required: true,
+          default: "kg",
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        total: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     date: {
       type: Date,
       default: Date.now,
@@ -59,13 +87,14 @@ export const PaymentPurchaseSchema = new Schema<IPaymentPurchaseDocument>(
   }
 );
 
-PaymentPurchaseSchema.plugin(paginate);
+// PaymentPurchaseSchema.plugin(paginate);
+PaymentPurchaseSchema.plugin(aggregatePaginate);
 
 const Paymentpurchase =
   (mongoose.models?.Paymentpurchase as SchemaTypes) ??
   mongoose.model<
     IPaymentPurchaseDocument,
-    mongoose.PaginateModel<IPaymentPurchaseDocument>
+    mongoose.AggregatePaginateModel<IPaymentPurchaseDocument>
   >("Paymentpurchase", PaymentPurchaseSchema);
 
 export default Paymentpurchase;
