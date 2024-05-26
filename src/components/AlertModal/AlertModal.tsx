@@ -12,12 +12,24 @@ import {
 } from "../ui/dialog";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
+import clsxm from "^/utils/clsxm";
 
-const AlertModal: FC<AlertModalProps> = ({ open, title, content, onClose }) => {
+const AlertModal: FC<AlertModalProps> = ({
+  open,
+  title,
+  content,
+  className,
+  onClose,
+}) => {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="border-[0.5rem] border-primary bg-white sm:max-w-md">
+        <DialogContent
+          className={clsxm(
+            "min-w-fit border-[0.5rem] border-primary bg-white sm:max-w-md",
+            className
+          )}
+        >
           <DialogHeader>
             <DialogTitle>
               <u>{capitalizeStr(title)}</u>

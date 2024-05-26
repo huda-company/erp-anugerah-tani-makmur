@@ -54,9 +54,14 @@ export default function DashboardLayout({
       </Head>
       <AlertModal
         open={toast.show}
-        title={t(`Common.${toast.type}`)}
+        title={
+          toast.type && !["form"].includes(toast.type)
+            ? t(`Common.${toast.type}`)
+            : ""
+        }
         content={toast.msg}
         onClose={() => closeAlertModal()}
+        className={toast && toast.type == "form" && " min-w-[60%]"}
         // icon={toast.icon}
       />
       <Header />
