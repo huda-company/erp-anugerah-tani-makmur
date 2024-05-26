@@ -364,60 +364,6 @@ const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
           </Button>
         </div>
       </form>
-
-      {/* <form onSubmit={handleSubmitUpload}>
-        <div className="flex flex-row gap-x-2 rounded-[0.4rem]  p-1 py-[0.5rem]">
-          <div className=" flex flex-row gap-x-2">
-            <div>
-              <Select
-                onValueChange={handlePaymModeChange}
-                name="paymentMode"
-                defaultValue={"cash"}
-              >
-                <SelectTrigger>
-                  <SelectValue
-                    placeholder={capitalizeStr(t("PurchasePage.paymentMethod"))}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem key="cash" value="cash">
-                    cash
-                  </SelectItem>
-                  <SelectItem key="credit" value="credit">
-                    credit
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <Input type="file" onChange={handleFileChange} />
-
-          <Input
-            onChange={handleAmtChange}
-            type="number"
-            name="amount"
-            placeholder={capitalizeStr(t("PurchasePage.nominal"))}
-          />
-
-          <div className="p-0">
-            <button
-              type="submit"
-              className="flex h-full items-center rounded-[0.5rem] bg-none p-1"
-            >
-              <BsSendPlusFill className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-      </form>
-
-      <div className="items-end justify-end">
-        <AiFillCloseCircle
-          color="red"
-          className="h-5 w-5 cursor-pointer"
-          onClick={() => onclose()}
-        />
-      </div> */}
     </>
   );
 };
