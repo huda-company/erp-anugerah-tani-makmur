@@ -85,7 +85,7 @@ const Supplier = () => {
         accessorKey: "email",
         accessorFn: (row) => row.email,
         id: "email",
-        header: () => <CstmTstackHeaderCell str={t("Signup.email")} />,
+        header: () => <CstmTstackHeaderCell str={t("UserPage.email")} />,
         cell: (info: any) => info.getValue(),
         enableColumnFilter: false,
         meta: {

@@ -164,17 +164,10 @@ const useGetPaymentPurchByPurchId = () => {
               {t(capitalizeStr(t("Msg.areUSure")))}
             </h1>
             <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-              <Button
-                onClick={() => confirmDelOk(id)}
-                className="bg-destructive text-white"
-              >
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
                 {capitalizeStr(t("Common.delete"))}
               </Button>
-              <Button
-                className="text-white"
-                onClick={closeAlertModal}
-                type="reset"
-              >
+              <Button onClick={closeAlertModal} type="reset">
                 {capitalizeStr(t("Common.cancel"))}
               </Button>
             </div>
