@@ -1,6 +1,8 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { Options } from "^/@types/global";
+import { PaymentPurchaseResp } from "^/@types/models/paymentpurchase";
+import { PickupDocType } from "^/@types/models/pickupdoc";
 import { IPurchaseForm } from "^/@types/models/purchase";
 import { z } from "zod";
 
@@ -91,6 +93,21 @@ export const paymentMethOpts: Options[] = [
   },
 ];
 
+export const pickupDocTypehOpts: Options[] = [
+  {
+    text: PickupDocType.PPB,
+    value: PickupDocType.PPB,
+  },
+  {
+    text: PickupDocType.SPAA,
+    value: PickupDocType.SPAA,
+  },
+];
+
 export const calculateGrandTotal = (items: { total: number }[]): number => {
   return items.reduce((acc, item) => acc + item.total, 0);
+};
+
+export const calculatePaymPurchTotal = (prm: PaymentPurchaseResp[]): number => {
+  return prm.reduce((acc: any, doc: any) => acc + doc.amount, 0);
 };

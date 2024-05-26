@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 
-export const onPaymentPurchaseFilter = (query: Record<string, string>) => {
+export const onPickupDocFilter = (query: Record<string, string>) => {
   const filter: any = {
     removed: "",
   };
@@ -24,11 +24,11 @@ export const onPaymentPurchaseFilter = (query: Record<string, string>) => {
     };
   }
 
-  if (query["param[id]"]) filter["_id"] = query["param[id]"];
+  if (query["id"]) filter["_id"] = new ObjectId(query["id"]);
   if (query["purchaseid"])
     filter["purchase"] = new ObjectId(query["purchaseid"]);
-  if (query["param[purchaseid]"])
-    filter["purchase"] = new ObjectId(query["param[purchaseid]"]);
+  if (query["param[paymPurchId]"])
+    filter["paymentPurchase"] = new ObjectId(query["param[paymPurchId]"]);
   if (query["ownerId"]) filter["ownerId"] = new ObjectId(query["ownerId"]);
   if (query["param[id]"]) filter["_id"] = query["param[id]"];
   if (query["param[ownerId]"]) filter["ownerId"] = query["param[ownerId]"];

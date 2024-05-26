@@ -79,7 +79,7 @@ export const createPurchase = async (
       number: 1,
       supplier,
       soNumber,
-      poNo: poNoReq ?? poNo,
+      poNo: poNoReq || poNo,
       billingCode,
       year,
       expDate,

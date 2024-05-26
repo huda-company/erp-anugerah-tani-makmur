@@ -12,6 +12,11 @@ import moment from "moment";
 
 import { thsandSep } from "^/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
+import {
+  IPaymentPurchaseForm,
+  PaymPurchItem,
+} from "^/@types/models/paymentpurchase";
+import { initialPaymPurchaseForm } from "^/config/payment-purchase/config";
 
 const useGetPurchaseById = () => {
   const router = useRouter();
@@ -21,6 +26,9 @@ const useGetPurchaseById = () => {
 
   const { data: session } = useSession();
   const [formVal, setFormVal] = useState<IPurchaseForm>(initialPurchaseForm);
+  const [paymPurcFormVal, setPaymPurcFormVal] = useState<IPaymentPurchaseForm>(
+    initialPaymPurchaseForm
+  );
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
 
   const {
@@ -67,13 +75,15 @@ const useGetPurchaseById = () => {
             total: entry.total,
           }));
 
-          setFormVal({
+          const fVal: IPurchaseForm = {
             ...prchse,
             items: formattedItems,
             supplier: prchse.supplier.id,
             expDate: moment(prchse.expDate).format("YYYY-MM-DD"),
             date: moment(prchse.date).format("YYYY-MM-DD"),
-          });
+          };
+
+          setFormVal(fVal);
 
           fetched.current = true;
 
@@ -123,9 +133,35 @@ const useGetPurchaseById = () => {
     setTblBd(formattedBody);
   }, [purch]);
 
+  useEffect(() => {
+    if (purch && Array.isArray(purch.items)) {
+      const paymPurchFormat = {
+        amount: 0,
+        date: new Date(),
+        description: "",
+        purchase: purch.id,
+        paymentMode: purch.purchPaymentMethod,
+        ref: "",
+        items: purch.items.map((itm: any) => {
+          const paymPurchItm: PaymPurchItem = {
+            item: itm.item.id,
+            unit: itm.unit,
+            price: itm.price,
+            quantity: itm.quantity,
+            total: itm.total,
+          };
+          return paymPurchItm;
+        }),
+      };
+
+      setPaymPurcFormVal(paymPurchFormat);
+    }
+  }, [purch]);
+
   return {
     tblBd,
     formVal,
+    paymPurcFormVal,
 
     purch,
     purchErr,

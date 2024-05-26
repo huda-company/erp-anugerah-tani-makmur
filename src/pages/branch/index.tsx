@@ -57,7 +57,7 @@ const BranchPage = () => {
         accessorFn: (row) => row.address,
         id: "address",
         cell: (info: any) => info.getValue(),
-        header: () => <CstmTstackHeaderCell str={t("ParkingField.addres")} />,
+        header: () => <CstmTstackHeaderCell str={t("ParkingField.address")} />,
         enableColumnFilter: false,
       },
 

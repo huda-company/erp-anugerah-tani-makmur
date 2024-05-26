@@ -94,6 +94,7 @@
     "quantity": "quantity",
     "discount": "discount",
     "date": "creation date",
+    "payment": "payment",
     "paymentMethod": "payment method",
     "paymentDate": "payment date",
     "soNo": "so number",
@@ -105,6 +106,11 @@
     "purcPaymHistory": "Payment History",
     "purcPaymTotal": "purchase payment total",
     "purcPaymDiff": "purchase payment diff",
+    "pickupDoc": "pickup item document",
+    "vehicleType": "vehicle type",
+    "flatNo": "flat number",
+    "driverName": "driver name",
+    "docType": "document type",
     "noFileFound": "no file found"
   },
   "UserPage": {
@@ -153,7 +159,10 @@
       "UNIT_UPDATE": "unit updated successfully",
       "UNIT_DELETE": "unit deleted successfully",
       "PAYMENT_PURCHASE_CREATE": "payment created successfully",
-      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully"
+      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully",
+      "PICKUP_DOC_CREATE": "pickup document created successfully",
+      "PICKUP_DOC_UPDATE": "pickup document updated successfully",
+      "PICKUP_DOC_PURCHASE_DELETE": "pickup document deleted successfully"
     },
     "ERROR": {
       "UPLOAD_FILE": "upload file failed",
@@ -177,7 +186,10 @@
       "UNIT_UPDATE": "failed to update unit",
       "UNIT_DELETE": "failed to delete unit",
       "PAYMENT_PURCHASE_CREATE": "failed to create payment purchase",
-      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully"
+      "PAYMENT_PURCHASE_DELETE": "payment deleted successfully",
+      "PICKUP_DOC_CREATE": "failed to create pickup document",
+      "PICKUP_DOC_UPDATE": "failed to update pickup document",
+      "PICKUP_DOC_PURCHASE_DELETE": "failed to delete pickup document"
     }
   }
 }

@@ -17,6 +17,8 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
   editURL,
   rowId,
   confirmDel,
+  addPickupDoc,
+  doGenPdf,
 }) => {
   const t = useTranslations("");
 
@@ -45,6 +47,24 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
             onClick={() => router.push(viewURL ?? "#")}
           >
             {capitalizeStr(t("Common.view"))}
+          </DropdownMenuItem>
+        )}
+
+        {addPickupDoc && typeof addPickupDoc !== "undefined" && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => addPickupDoc(rowId)}
+          >
+            {`+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`}
+          </DropdownMenuItem>
+        )}
+
+        {doGenPdf && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => doGenPdf(rowId)}
+          >
+            {`${capitalizeStr(t("Common.create"))} PDF`}
           </DropdownMenuItem>
         )}
 
