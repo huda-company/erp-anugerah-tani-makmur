@@ -1,6 +1,6 @@
 import { createPaymentPurchaseAPI } from "^/services/payment-purchase";
 import { useSession } from "next-auth/react";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Select,
   SelectContent,
@@ -49,50 +49,8 @@ const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
   const { data: session } = useSession();
 
   // const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const { itemDataOpts } = useGetItem();
-  const { unitDataOpts } = useGetUnit();
-
-  // const handleSubmitUpload = async (event: FormEvent) => {
-  //   event.preventDefault();
-  //   const res = await createPaymentPurchaseAPI(session, {
-  //     id: String(id),
-  //     // file,
-  //     amount: Number(amount),
-  //     paymentMode,
-  //   });
-
-  //   if (res && res.data && res.status == 200) {
-  //     dispatch(
-  //       toastActs.callShowToast({
-  //         show: true,
-  //         msg: (
-  //           <div className="flex flex-col py-[1rem]">
-  //             <span>{t("API_MSG.SUCCESS.PAYMENT_PURCHASE_CREATE")}</span>
-  //           </div>
-  //         ),
-  //         type: "success",
-  //         timeout: 2000,
-  //       })
-  //     );
-
-  //     onSubmitOk();
-  //   } else {
-  //     dispatch(
-  //       toastActs.callShowToast({
-  //         show: true,
-  //         msg: (
-  //           <div className="flex flex-col py-[1rem]">
-  //             <span>{t("API_MSG.ERROR.PAYMENT_PURCHASE_CREATE")}</span>
-  //           </div>
-  //         ),
-  //         type: "success",
-  //         timeout: 2000,
-  //       })
-  //     );
-  //   }
-  // };
+  const { loading: itemLoading, itemDataOpts } = useGetItem();
+  const { loading: unitLoading, unitDataOpts } = useGetUnit();
 
   const onSubmit = async (data: IPaymentPurchaseForm) => {
     const prm: IPaymentPurchaseForm = {
@@ -397,9 +355,11 @@ const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
           <Button
             className="bg-primary text-white hover:bg-primary-foreground"
             type="submit"
-            disabled={loading}
+            disabled={unitLoading || itemLoading}
           >
-            {loading && <FaSpinner className="mr-2 h-4 w-4 animate-spin" />}
+            {(unitLoading || itemLoading) && (
+              <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
             {capitalizeStr("Submit")}
           </Button>
         </div>

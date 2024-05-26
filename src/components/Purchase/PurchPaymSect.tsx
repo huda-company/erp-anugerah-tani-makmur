@@ -94,7 +94,7 @@ const PurchPaymSect: FC = () => {
     closeAlertModal();
   };
 
-  const PaymPurchDialog = async (id: string) => {
+  const PaymPurchDialog = async () => {
     await dispatch(
       toastActs.callShowToast({
         show: true,
@@ -137,7 +137,7 @@ const PurchPaymSect: FC = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
                     onClick={() => {
-                      PaymPurchDialog(String(id));
+                      PaymPurchDialog();
                     }}
                   >
                     {`${capitalizeStr(t("Common.add"))} ${capitalizeStr(t("PurchasePage.purcPaymHistory"))} `}

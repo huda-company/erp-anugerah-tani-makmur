@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 
@@ -12,9 +12,7 @@ import useGetPickupDocByPurchId from "@/hooks/purchase/useGetPickupDocByPurchId"
 const PickupDocSect: FC = () => {
   const t = useTranslations("");
 
-  const { fetchPickupDoc, paymPurcTblBd } = useGetPickupDocByPurchId();
-
-  const [showPaymPurchForm, setShowPaymPurchForm] = useState<boolean>(false);
+  const { paymPurcTblBd } = useGetPickupDocByPurchId();
 
   const payPurchHeader = useMemo(
     () => [
@@ -51,10 +49,6 @@ const PickupDocSect: FC = () => {
     [payPurchHeader, paymPurcTblBd]
   );
 
-  const handlePaymPurchFormClose = async () => {
-    setShowPaymPurchForm(false);
-    await fetchPickupDoc();
-  };
   return (
     <Card>
       <CardHeader className="bg-[#EAE2E1] p-2">
@@ -87,14 +81,12 @@ const PickupDocSect: FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {showPaymPurchForm && (
-          <div className="mt-[0.5rem] flex w-fit flex-row gap-x-4 rounded-[0.5rem] bg-[#E0EDF0] p-1">
-            {/* <PaymentPurchaseForm
+        <div className="mt-[0.5rem] flex w-fit flex-row gap-x-4 rounded-[0.5rem] bg-[#E0EDF0] p-1">
+          {/* <PaymentPurchaseForm
               onclose={() => setShowPaymPurchForm(false)}
               onSubmitOk={() => handlePaymPurchFormClose()}
             /> */}
-          </div>
-        )}
+        </div>
         <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
           <CustomTable key="paymPurchTbl" data={paymPurchTData} />
         </div>
