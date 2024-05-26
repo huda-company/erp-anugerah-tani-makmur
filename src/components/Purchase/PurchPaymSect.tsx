@@ -22,7 +22,6 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "@/hooks/useAppSelector";
-import { useRouter } from "next/router";
 import { FormMode } from "^/@types/global";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
 
@@ -30,9 +29,6 @@ const PurchPaymSect: FC = () => {
   const t = useTranslations("");
 
   const dispatch = useAppDispatch();
-
-  const router = useRouter();
-  const { id } = router.query;
 
   const toast = useAppSelector(toastSelectors.toast);
 
