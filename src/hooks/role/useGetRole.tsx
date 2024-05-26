@@ -30,6 +30,7 @@ import { getRoleAPI } from "^/services/role";
 import { Options } from "^/@types/global";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetRole = () => {
   const t = useTranslations("");
@@ -39,6 +40,8 @@ const useGetRole = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const router = useRouter();
 
@@ -143,15 +146,6 @@ const useGetRole = () => {
     },
     [dispatch, fetch, session, t, toast]
   );
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDeletion = useCallback(
     async (id: string) => {

@@ -27,6 +27,7 @@ import {
 } from "^/@types/models/purchase";
 import { pageRowsArr } from "^/config/request/config";
 import { initSuppReqPrm } from "^/config/supplier/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetPurchase = () => {
   const t = useTranslations("");
@@ -36,6 +37,8 @@ const useGetPurchase = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { data: session } = useSession();
 
@@ -149,15 +152,6 @@ const useGetPurchase = () => {
     },
     [dispatch, fetch, session, t, toast]
   );
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDeletion = useCallback(
     async (id: string) => {

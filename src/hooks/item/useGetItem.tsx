@@ -28,6 +28,7 @@ import {
 } from "@/components/PaginationCustom/config";
 import { pageRowsArr } from "^/config/request/config";
 import { initSuppReqPrm } from "^/config/supplier/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetItem = () => {
   const t = useTranslations("");
@@ -37,6 +38,8 @@ const useGetItem = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { data: session } = useSession();
 
@@ -144,15 +147,6 @@ const useGetItem = () => {
     },
     [dispatch, fetch, session, t, toast]
   );
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDeletion = useCallback(
     async (id: string) => {

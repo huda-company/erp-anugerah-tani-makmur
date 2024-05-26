@@ -29,6 +29,7 @@ import { IUserFieldRequest } from "^/@types/models/user";
 import { formatDate } from "^/utils/dateFormatting";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetUser = () => {
   const t = useTranslations("");
@@ -38,6 +39,8 @@ const useGetUser = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const router = useRouter();
 
@@ -146,15 +149,6 @@ const useGetUser = () => {
     },
     [dispatch, fetch, session, t, toast]
   );
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDeletion = useCallback(
     async (id: string) => {

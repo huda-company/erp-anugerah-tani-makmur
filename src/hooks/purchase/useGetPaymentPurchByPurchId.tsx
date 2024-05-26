@@ -33,6 +33,7 @@ import { initialPickupDocForm } from "^/config/pickup-doc/config";
 import { FormMode } from "^/@types/global";
 import ItemCol from "@/components/PaymentPurchase/ItemCol";
 import { calculatePaymPurchTotal } from "^/config/purchase/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetPaymentPurchByPurchId = () => {
   const t = useTranslations("");
@@ -44,6 +45,8 @@ const useGetPaymentPurchByPurchId = () => {
   const { id } = router.query;
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { fetch } = useGetPurchaseById();
 
@@ -100,15 +103,6 @@ const useGetPaymentPurchByPurchId = () => {
       throw error;
     }
   };
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDelOk = useCallback(
     async (id: string) => {

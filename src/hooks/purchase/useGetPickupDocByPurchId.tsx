@@ -22,6 +22,7 @@ import { getPickupDocAPI } from "^/services/pickup-doc";
 import { formatDate } from "^/utils/dateFormatting";
 import { thsandSep } from "^/utils/helpers";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetPickupDocByPurchId = () => {
   const t = useTranslations("");
@@ -31,6 +32,8 @@ const useGetPickupDocByPurchId = () => {
   const { id } = router.query;
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { fetch } = useGetPurchaseById();
 
@@ -85,15 +88,6 @@ const useGetPickupDocByPurchId = () => {
       throw error;
     }
   };
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDelOk = useCallback(
     async (id: string) => {

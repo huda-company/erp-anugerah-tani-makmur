@@ -1,13 +1,9 @@
 import Head from "next/head";
 import { useTranslations } from "next-intl";
 
-import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 
-import {
-  actions as toastActs,
-  selectors as toastSelectors,
-} from "@/redux/toast";
+import { selectors as toastSelectors } from "@/redux/toast";
 
 import { PageLayoutProps } from "./types";
 import AlertModal from "../AlertModal";
@@ -16,21 +12,13 @@ import Topbar from "../Topbar/Topbar";
 
 import { APP_NAME } from "^/config/env";
 import { getStaticProps } from "^/utils/getStaticProps";
+import useCloseAlertModal from "@/hooks/useCloseAlertModal";
 
 export default function PageLayout({ children }: PageLayoutProps) {
   const t = useTranslations("");
-  const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
-
-  const closeAlertModal = async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  };
+  const { closeAlertModal } = useCloseAlertModal();
 
   return (
     <>
