@@ -4,6 +4,7 @@ import {
   ITEM_PAGE,
   PO_PAGE,
   SUPPLIER_PAGE,
+  SUPPLIER_STOCK_PAGE,
   UNIT_PAGE,
   USER_PAGE,
 } from "@/constants/pageURL";
@@ -39,6 +40,12 @@ export const navItems: NavItem[] = [
         href: SUPPLIER_PAGE.ROOT,
         icon: "user",
         label: "user",
+      },
+      {
+        title: "supplierStock",
+        href: SUPPLIER_STOCK_PAGE.ROOT,
+        icon: "stock",
+        label: "stock",
       },
       {
         title: "purchaseOrder",

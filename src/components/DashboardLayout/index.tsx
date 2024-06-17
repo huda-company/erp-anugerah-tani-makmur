@@ -3,15 +3,11 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
-import useAppDispatch from "@/hooks/useAppDispatch";
 import useAppSelector from "@/hooks/useAppSelector";
 
 import { AUTH_PAGE_URL } from "@/constants/pageURL";
 
-import {
-  actions as toastActs,
-  selectors as toastSelectors,
-} from "@/redux/toast";
+import { selectors as toastSelectors } from "@/redux/toast";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -19,6 +15,7 @@ import AlertModal from "../AlertModal";
 
 import { APP_NAME } from "^/config/env";
 import { getStaticProps } from "^/utils/getStaticProps";
+import useCloseAlertModal from "@/hooks/useCloseAlertModal";
 
 export default function DashboardLayout({
   children,
@@ -28,8 +25,8 @@ export default function DashboardLayout({
   const t = useTranslations("");
   const router = useRouter();
 
-  const dispatch = useAppDispatch();
   const toast = useAppSelector(toastSelectors.toast);
+  const { closeAlertModal } = useCloseAlertModal();
 
   useSession({
     required: true,
@@ -37,15 +34,6 @@ export default function DashboardLayout({
       router.push(AUTH_PAGE_URL.SIGNIN);
     },
   });
-
-  const closeAlertModal = async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  };
 
   return (
     <>
@@ -60,7 +48,7 @@ export default function DashboardLayout({
             : ""
         }
         content={toast.msg}
-        onClose={() => closeAlertModal()}
+        onClose={closeAlertModal}
         className={toast && toast.type == "form" && " min-w-[60%]"}
         // icon={toast.icon}
       />

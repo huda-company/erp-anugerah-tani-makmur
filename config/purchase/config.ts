@@ -3,7 +3,7 @@ import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { Options } from "^/@types/global";
 import { PaymentPurchaseResp } from "^/@types/models/paymentpurchase";
 import { PickupDocType } from "^/@types/models/pickupdoc";
-import { IPurchaseForm } from "^/@types/models/purchase";
+import { IPurchaseForm, PurchaseStatus } from "^/@types/models/purchase";
 import { z } from "zod";
 
 export const bcData: BreadcrumbItem[] = [
@@ -52,7 +52,7 @@ export const initialPurchaseForm: IPurchaseForm = {
   paymentStatus: "",
   pdfPath: "",
   recurring: "",
-  status: "draft",
+  status: PurchaseStatus.DRAFT,
   subTotal: 0,
   taxRate: 0,
 };

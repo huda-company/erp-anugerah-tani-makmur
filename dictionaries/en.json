@@ -40,6 +40,8 @@
     "empty": "empty",
     "upload": "upload",
     "submit": "submit",
+    "date": "date",
+    "amount": "amount",
     "detail": "detail"
   },
   "AboutUs": {
@@ -68,6 +70,9 @@
     "dashboard": "dashboard",
     "employee": "employee",
     "supplier": "supplier",
+    "stock": "stock",
+    "supplierStock": "supplier stock",
+    "supplierStockHist": "supplier stock history",
     "purchase": "purchase",
     "selling": "selling",
     "purchaseOrder": "Purchase Order",
@@ -113,6 +118,14 @@
     "docType": "document type",
     "noFileFound": "no file found"
   },
+  "SuppStock": {
+    "activity": "activity"
+  },
+  "SuppStockTypes": {
+    "APPROVED_PO": "po has been approved",
+    "PURCHASE_PAYMENT_ADD": "payment purchase added",
+    "PURCHASE_PAYMENT_DEL": "payment purchase deleted"
+  },
   "UserPage": {
     "email": "email",
     "isActive": "is Activ"
@@ -154,6 +167,7 @@
       "NEW_PURCHASE_CREATE": "new purchase created successfully",
       "PURCHASE_UPDATE": "purchase updated successfully",
       "PURCHASE_DELETE": "purchase deleted successfully",
+      "PURCHASE_APPROVED": "purchase approved successfully",
       "ROLE_DELETE": "role deleted successfully",
       "NEW_UNIT_CREATE": "new unit created successfully",
       "UNIT_UPDATE": "unit updated successfully",

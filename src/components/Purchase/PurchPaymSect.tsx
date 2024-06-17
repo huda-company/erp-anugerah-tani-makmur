@@ -17,20 +17,17 @@ import { getStaticPaths } from "^/utils/getStaticPaths";
 import { getStaticProps } from "^/utils/getStaticProps";
 import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
 import useAppDispatch from "@/hooks/useAppDispatch";
-import {
-  actions as toastActs,
-  selectors as toastSelectors,
-} from "@/redux/toast";
-import useAppSelector from "@/hooks/useAppSelector";
+import { actions as toastActs } from "@/redux/toast";
 import { FormMode } from "^/@types/global";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
+import useCloseAlertModal from "@/hooks/useCloseAlertModal";
 
 const PurchPaymSect: FC = () => {
   const t = useTranslations("");
 
   const dispatch = useAppDispatch();
 
-  const toast = useAppSelector(toastSelectors.toast);
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { paymPurcFormVal } = useGetPurchaseById();
 
@@ -75,15 +72,6 @@ const PurchPaymSect: FC = () => {
     }),
     [payPurchHeader, paymPurcTblBd]
   );
-
-  const closeAlertModal = async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  };
 
   const onOkPaymPurchForm = () => {
     fetchPaymPurch(paymPurchReq);

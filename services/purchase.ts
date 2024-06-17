@@ -1,6 +1,7 @@
 import { IPurchaseFieldRequest, IPurchaseForm } from "^/@types/models/purchase";
 import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
+import { handleAxiosError } from "^/utils/handleAxiosError";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
@@ -38,7 +39,7 @@ export const createPurchaseAPI = async (
   try {
     return await axios.create(reqHeader).post(reqURL, params);
   } catch (error: any) {
-    return error;
+    handleAxiosError(error);
   }
 };
 
@@ -55,7 +56,7 @@ export const editPurchaseAPI = async (
   try {
     return await axios.create(reqHeader).patch(reqURL, params);
   } catch (error: any) {
-    return error;
+    handleAxiosError(error);
   }
 };
 
@@ -70,5 +71,19 @@ export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
     return await axios.create(reqHeader).delete(reqURL);
   } catch (error: any) {
     return error;
+  }
+};
+
+export const apprPurchaseAPI = async (sess: Session | null, id: string) => {
+  if (!sess) return null;
+
+  const reqURL = `${BASE_PURCHASE_API_URL}/approve/${id}`;
+
+  const reqHeader = buildReqHeader(String(sess.accessToken));
+
+  try {
+    return await axios.create(reqHeader).post(reqURL);
+  } catch (error: any) {
+    handleAxiosError(error);
   }
 };

@@ -14,6 +14,7 @@ import { onBillDocFilter } from "./config/filter";
 import { ISortOptions } from "^/@types/models/billdoc";
 import { MONGODB } from "^/config/mongodb";
 import { pageRowsArr } from "^/config/request/config";
+import { PurchaseStatus } from "^/@types/models/purchase";
 
 const pathDist: string = path.join(process.cwd(), billDocDir);
 
@@ -72,11 +73,11 @@ export const addBillDoc = async (req: any, res: any) => {
         String(titlePrm).trim().toLowerCase()
       )
     ) {
-      newStat = "approved";
+      newStat = PurchaseStatus.APPROVED;
     } else if (
       ["file evidence"].includes(String(titlePrm).trim().toLowerCase())
     ) {
-      newStat = "released";
+      newStat = PurchaseStatus.RELEASED;
     }
 
     // perform update purchase order

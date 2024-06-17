@@ -15,6 +15,7 @@ export enum ErrorType {
   INCORRECT_PAYLOAD = "incorrect payload",
   INVALID_PO = "invalid po number or deleted",
   INVALID_PAYMENT_PURCH_ID = "invalid payment purchase id",
+  INVALID_SUPP_ID = "invalid supplier id",
 
   NEW_SUPPLIER_CREATE = "failed to add new parking field",
   SUPPLIER_UPDATE = "failed to update parking field",
@@ -29,6 +30,7 @@ export enum ErrorType {
 
   PICKUP_DOC_CREATE = "create pickup doc failed",
   PICKUP_DOC_DELETE = "delete pickup doc failed",
+  RELEASED_PURCHASE_CANT_APPTOVED = "released purchase can't be approved ",
 }
 
 export enum SuccessType {
@@ -58,6 +60,7 @@ export enum SuccessType {
   NEW_PURCHASE_CREATE = "new purchase created successfully",
   PURCHASE_UPDATE = "purchase updated successfully",
   PURCHASE_DELETE = "purchase deleted successfully",
+  PURCHASE_APPROVED = "purchase approved successfully",
 
   NEW_USER_CREATE = "new user created successfully",
   USER_UPDATE = "user updated successfully",

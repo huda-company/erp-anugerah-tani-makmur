@@ -1,4 +1,4 @@
-import { IPurchaseDocument } from "^/@types/models/purchase";
+import { IPurchaseDocument, PurchaseStatus } from "^/@types/models/purchase";
 import mongoose, { Schema } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import Supplier from "./supplier";
@@ -128,7 +128,7 @@ export const PurchaseSchema = new Schema<IPurchaseDocument>(
     },
     status: {
       type: String,
-      default: "draft",
+      default: PurchaseStatus.DRAFT,
     },
     pdfPath: {
       type: String,

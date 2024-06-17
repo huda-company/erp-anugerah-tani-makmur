@@ -29,6 +29,7 @@ import { IUserFieldRequest } from "^/@types/models/user";
 import { formatDate } from "^/utils/dateFormatting";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetUser = () => {
   const t = useTranslations("");
@@ -38,6 +39,8 @@ const useGetUser = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const router = useRouter();
 
@@ -147,15 +150,6 @@ const useGetUser = () => {
     [dispatch, fetch, session, t, toast]
   );
 
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
-
   const confirmDeletion = useCallback(
     async (id: string) => {
       await dispatch(
@@ -167,17 +161,10 @@ const useGetUser = () => {
                 {t(capitalizeStr(t("Msg.areUSure")))}
               </h1>
               <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button
-                  onClick={() => confirmDelOk(id)}
-                  className="bg-destructive text-white"
-                >
+                <Button onClick={() => confirmDelOk(id)} variant="destructive">
                   {capitalizeStr(t("Common.delete"))}
                 </Button>
-                <Button
-                  className="text-white"
-                  onClick={closeAlertModal}
-                  type="reset"
-                >
+                <Button onClick={closeAlertModal} type="reset">
                   {capitalizeStr(t("Common.cancel"))}
                 </Button>
               </div>

@@ -22,6 +22,7 @@ import { getPickupDocAPI } from "^/services/pickup-doc";
 import { formatDate } from "^/utils/dateFormatting";
 import { thsandSep } from "^/utils/helpers";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetPickupDocByPurchId = () => {
   const t = useTranslations("");
@@ -31,6 +32,8 @@ const useGetPickupDocByPurchId = () => {
   const { id } = router.query;
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { fetch } = useGetPurchaseById();
 
@@ -85,15 +88,6 @@ const useGetPickupDocByPurchId = () => {
       throw error;
     }
   };
-
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
 
   const confirmDelOk = useCallback(
     async (id: string) => {
@@ -155,17 +149,10 @@ const useGetPickupDocByPurchId = () => {
               {t(capitalizeStr(t("Msg.areUSure")))}
             </h1>
             <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-              <Button
-                onClick={() => confirmDelOk(id)}
-                className="bg-destructive text-white"
-              >
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
                 {capitalizeStr(t("Common.delete"))}
               </Button>
-              <Button
-                className="text-white"
-                onClick={closeAlertModal}
-                type="reset"
-              >
+              <Button onClick={closeAlertModal} type="reset">
                 {capitalizeStr(t("Common.cancel"))}
               </Button>
             </div>

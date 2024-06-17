@@ -21,6 +21,14 @@ export const SUPPLIER_PAGE = {
   VIEW: "/supplier/view",
 };
 
+export const SUPPLIER_STOCK_PAGE = {
+  ROOT: "/supplier-stock",
+};
+
+export const SUPPLIER_STOCK_HIST_PAGE = {
+  ROOT: "/supplier-stock/history",
+};
+
 export const PO_PAGE = {
   ROOT: "/purchase",
   ADD: "/purchase/add",

@@ -33,6 +33,7 @@ import { initialPickupDocForm } from "^/config/pickup-doc/config";
 import { FormMode } from "^/@types/global";
 import ItemCol from "@/components/PaymentPurchase/ItemCol";
 import { calculatePaymPurchTotal } from "^/config/purchase/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetPaymentPurchByPurchId = () => {
   const t = useTranslations("");
@@ -44,6 +45,8 @@ const useGetPaymentPurchByPurchId = () => {
   const { id } = router.query;
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { fetch } = useGetPurchaseById();
 
@@ -101,44 +104,56 @@ const useGetPaymentPurchByPurchId = () => {
     }
   };
 
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
-
   const confirmDelOk = useCallback(
     async (id: string) => {
       setLoading(true);
-      const resDelete = await deletePaymentPurchaseAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(
-                    t("API_MSG.SUCCESS.PAYMENT_PURCHASE_DELETE")
-                  )}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
+
+      try {
+        const resDelete = await deletePaymentPurchaseAPI(session, id);
+        if (resDelete.data.success) {
+          await fetch();
+          await dispatch(
+            toastActs.callShowToast({
+              ...toast,
+              show: false,
+            })
+          );
+          await dispatch(
+            toastActs.callShowToast({
+              show: true,
+              msg: (
+                <div className="flex flex-col py-[1rem]">
+                  <span>
+                    {" "}
+                    {capitalizeStr(
+                      t("API_MSG.SUCCESS.PAYMENT_PURCHASE_DELETE")
+                    )}{" "}
+                  </span>
+                </div>
+              ),
+              type: "success",
+            })
+          );
+        } else {
+          await dispatch(
+            toastActs.callShowToast({
+              ...toast,
+              show: true,
+              msg: (
+                <div className="flex flex-col py-[1rem] capitalize">
+                  <span>
+                    {t(
+                      capitalizeStr(t("API_MSG.ERROR.PAYMENT_PURCHASE_DELETE"))
+                    )}
+                  </span>
+                </div>
+              ),
+              timeout: 2000,
+              type: "error",
+            })
+          );
+        }
+      } catch (error) {
         await dispatch(
           toastActs.callShowToast({
             ...toast,
@@ -155,6 +170,7 @@ const useGetPaymentPurchByPurchId = () => {
           })
         );
       }
+
       setLoading(false);
     },
     [dispatch, fetch, session, t, toast]
@@ -170,17 +186,10 @@ const useGetPaymentPurchByPurchId = () => {
               {t(capitalizeStr(t("Msg.areUSure")))}
             </h1>
             <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-              <Button
-                onClick={() => confirmDelOk(id)}
-                className="bg-destructive text-white"
-              >
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
                 {capitalizeStr(t("Common.delete"))}
               </Button>
-              <Button
-                className="text-white"
-                onClick={closeAlertModal}
-                type="reset"
-              >
+              <Button onClick={closeAlertModal} type="reset">
                 {capitalizeStr(t("Common.cancel"))}
               </Button>
             </div>

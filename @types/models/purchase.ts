@@ -2,6 +2,12 @@ import { BaseFormProps, FormMode } from "../global";
 import { ItemResp } from "./item";
 import { SupplierResp } from "./supplier";
 
+export enum PurchaseStatus {
+  DRAFT = "DRAFT",
+  APPROVED = "APPROVED",
+  RELEASED = "RELEASED",
+}
+
 export type PurchItem = {
   item: string;
   unit: string;

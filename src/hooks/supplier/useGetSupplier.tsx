@@ -29,6 +29,7 @@ import {
 } from "@/components/PaginationCustom/config";
 import React from "react";
 import { pageRowsArr } from "^/config/request/config";
+import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
@@ -38,6 +39,8 @@ const useGetSupplier = () => {
   const dispatch = useAppDispatch();
 
   const toast = useAppSelector(toastSelectors.toast);
+
+  const { closeAlertModal } = useCloseAlertModal();
 
   const { data: session } = useSession();
 
@@ -152,15 +155,6 @@ const useGetSupplier = () => {
     [dispatch, fetch, session, t, toast]
   );
 
-  const closeAlertModal = useCallback(async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        ...toast,
-        show: false,
-      })
-    );
-  }, [dispatch, toast]);
-
   const confirmDeletion = useCallback(
     async (id: string) => {
       await dispatch(
@@ -172,17 +166,10 @@ const useGetSupplier = () => {
                 {t(capitalizeStr(t("Msg.areUSure")))}
               </h1>
               <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button
-                  onClick={() => confirmDelOk(id)}
-                  className="bg-destructive text-white"
-                >
+                <Button onClick={() => confirmDelOk(id)} variant="destructive">
                   {capitalizeStr(t("Common.delete"))}
                 </Button>
-                <Button
-                  className="text-white"
-                  onClick={closeAlertModal}
-                  type="reset"
-                >
+                <Button onClick={closeAlertModal} type="reset">
                   {capitalizeStr(t("Common.cancel"))}
                 </Button>
               </div>
