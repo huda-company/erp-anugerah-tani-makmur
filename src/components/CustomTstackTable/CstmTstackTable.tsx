@@ -12,6 +12,7 @@ import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import { CstmTstackTableProps } from "./types";
+import EmptyContent from "../EmptyContent/EmptyContent";
 
 const CstmTstackTable = <T,>({
   columns,
@@ -91,8 +92,15 @@ const CstmTstackTable = <T,>({
           ))}
         </thead>
         <tbody className="bg-[#ECF8DA]">
-          {table &&
-            table.getRowCount() > 0 &&
+          {table.getRowCount() === 0 ? (
+            <tr>
+              <td colSpan={columns.length} className="p-4 text-center">
+                <div className="flex w-full items-center justify-center">
+                  <EmptyContent />
+                </div>
+              </td>
+            </tr>
+          ) : (
             table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -101,7 +109,8 @@ const CstmTstackTable = <T,>({
                   </td>
                 ))}
               </tr>
-            ))}
+            ))
+          )}
         </tbody>
         <tfoot>
           {table.getFooterGroups().map((footerGroup) => (
