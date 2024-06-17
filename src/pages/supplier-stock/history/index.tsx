@@ -171,6 +171,7 @@ const SuppStockHistPage = () => {
       };
       setReqPrm(newReqPrm);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [suppStockId]);
 
   useEffect(() => {
@@ -178,6 +179,7 @@ const SuppStockHistPage = () => {
       ...reqPrm,
       "param[search]": debGlobFltr,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debGlobFltr]);
 
   return (
