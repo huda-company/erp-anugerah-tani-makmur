@@ -59,8 +59,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   );
 
   const { unitDataOpts, fetch: fetchUnit } = useGetUnit();
-  const { reqPrm, itemDataOpts, fetch: fetchItem } = useGetItem();
-  console.log(" itemDataOpts", itemDataOpts);
+  const { itemDataOpts, fetch: fetchItem } = useGetItem();
   const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
 
   const calculateSubtotal = (
