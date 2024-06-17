@@ -24,7 +24,10 @@ export const onItemFilter = (query: Record<string, string>) => {
     };
   }
 
-  if (query["id"]) filter["_id"] = new ObjectId(query["id"]);
+  if (query["id"]) {
+    const ids = query["id"].split(",").map((id) => new ObjectId(id.trim()));
+    filter["_id"] = { $in: ids };
+  }
   if (query["ownerId"]) filter["ownerId"] = new ObjectId(query["ownerId"]);
   if (query["param[id]"]) filter["_id"] = query["param[id]"];
   if (query["param[ownerId]"]) filter["ownerId"] = query["param[ownerId]"];

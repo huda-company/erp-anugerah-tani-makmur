@@ -13,6 +13,7 @@ import {
 import useAppSelector from "../useAppSelector";
 import {
   IItemFieldRequest,
+  IItemGetReq,
   ItemResp,
   ItemTanTblData,
 } from "^/@types/models/item";
@@ -27,8 +28,8 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { pageRowsArr } from "^/config/request/config";
-import { initSuppReqPrm } from "^/config/supplier/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { initItemReqPrm } from "^/config/item/config";
 
 const useGetItem = () => {
   const t = useTranslations("");
@@ -43,9 +44,10 @@ const useGetItem = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IItemFieldRequest["query"]>({
-    ...initSuppReqPrm,
-    limit: pageRowsArr[1],
+  const [reqPrm, setReqPrm] = useState<IItemGetReq>({
+    ...initItemReqPrm,
+    page: 0,
+    limit: pageRowsArr[4],
   });
   const [loading, setLoading] = useState(true);
   const [itemData, setItemData] = useState<any>(null);

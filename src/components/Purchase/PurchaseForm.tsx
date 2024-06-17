@@ -32,6 +32,16 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import useMount from "@/hooks/useMount";
 import useGetUnit from "@/hooks/unit/useGetUnit";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const t = useTranslations("");
@@ -49,7 +59,8 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   );
 
   const { unitDataOpts, fetch: fetchUnit } = useGetUnit();
-  const { itemDataOpts, fetch: fetchItem } = useGetItem();
+  const { reqPrm, itemDataOpts, fetch: fetchItem } = useGetItem();
+  console.log(" itemDataOpts", itemDataOpts);
   const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
 
   const calculateSubtotal = (
@@ -180,6 +191,8 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
   useMount(() => {
     fetchItem({
+      // ...reqPrm,
+      // id: mode == FormMode.EDIT ? initialFormVals.items.map(item => item.item).join(",") : "",
       limit: 50,
     });
     fetchSupp({
@@ -362,8 +375,70 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
               key={field.id}
             >
               <div className="w-[50%] flex-grow">
-                {index == 0 && "Item"}
+                {index == 0 && (
+                  <>
+                    Item <br />
+                  </>
+                )}
+
                 <Controller
+                  name={`items.${index}.item`}
+                  control={control}
+                  render={({ field }) => (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? itemDataOpts.find(
+                                (language) => language.value === field.value
+                              )?.text
+                            : "Select item"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className=" p-0">
+                        <Command>
+                          <CommandInput placeholder="Search item..." />
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandList>
+                            {itemDataOpts.map((language) => (
+                              <CommandItem
+                                value={language.text}
+                                key={language.value}
+                                // onSelect={field.onChange}
+                                onSelect={() => {
+                                  setValue(
+                                    `items.${index}.item`,
+                                    language.value
+                                  );
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    language.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {language.text}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                />
+
+                {/* <Controller
                   defaultValue={""}
                   name={`items.${index}.item`}
                   control={control}
@@ -379,9 +454,9 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                             mode == FormMode.ADD || isEditing
                               ? "Select Item"
                               : itemDataOpts.find(
-                                  (y) =>
-                                    y.value == initialFormVals.items[index].item
-                                )?.text
+                                (y) =>
+                                  y.value == initialFormVals.items[index].item
+                              )?.text
                           }
                         />
                       </SelectTrigger>
@@ -396,7 +471,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                       </SelectContent>
                     </Select>
                   )}
-                />
+                /> */}
               </div>
 
               <div className="w-[20%] flex-grow">
