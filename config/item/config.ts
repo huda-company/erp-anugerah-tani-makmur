@@ -1,7 +1,8 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { SUPPLIER_PAGE } from "@/constants/pageURL";
-import { IItemForm } from "^/@types/models/item";
+import { IItemForm, IItemGetReq } from "^/@types/models/item";
 import { z } from "zod";
+import { pageRowsArr } from "../request/config";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -38,3 +39,13 @@ export const ItemFormSchema = z.object({
   }),
   price: z.coerce.number(),
 });
+
+export const initItemReqPrm: IItemGetReq = {
+  name: "",
+  "param[search]": "",
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[4],
+  page: 0,
+};

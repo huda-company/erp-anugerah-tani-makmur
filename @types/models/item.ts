@@ -33,6 +33,8 @@ export interface IItemFieldRequest {
   };
 }
 
+export type IItemGetReq = IItemFieldRequest["query"];
+
 export interface ISortOptions {
   name?: string;
   // Add other sorting options as needed

@@ -22,7 +22,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import useDebounce from "@/hooks/useDebounce";
-import { IItemFieldRequest, ItemTanTblData } from "^/@types/models/item";
+import { IItemGetReq, ItemTanTblData } from "^/@types/models/item";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 
@@ -131,7 +131,7 @@ const Item = () => {
 
   useEffect(() => {
     if (debGlobFltr) {
-      const payload: IItemFieldRequest["query"] = {
+      const payload: IItemGetReq = {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
@@ -216,7 +216,7 @@ const Item = () => {
                   }}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: IItemFieldRequest["query"] = {
+                    const newReqPrm: IItemGetReq = {
                       ...reqPrm,
                       limit,
                     };
