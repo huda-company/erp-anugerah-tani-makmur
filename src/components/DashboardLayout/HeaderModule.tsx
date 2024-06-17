@@ -38,14 +38,16 @@ const HeaderModule: FC<HeaderModuleProps> = ({ title, bcumbs, addPageURL }) => {
             {capitalizeStr(title)}
           </Typography>
 
-          <CustomToolTip content={<p>{capitalizeStr(t("Common.add"))}</p>}>
-            <MdOutlineAddToPhotos
-              onClick={() => {
-                addPageURL ? router.push(addPageURL) : noop;
-              }}
-              className="h-6 w-6 cursor-pointer"
-            />
-          </CustomToolTip>
+          {addPageURL && (
+            <CustomToolTip content={<p>{capitalizeStr(t("Common.add"))}</p>}>
+              <MdOutlineAddToPhotos
+                onClick={() => {
+                  addPageURL ? router.push(addPageURL) : noop;
+                }}
+                className="h-6 w-6 cursor-pointer"
+              />
+            </CustomToolTip>
+          )}
         </div>
       </div>
 

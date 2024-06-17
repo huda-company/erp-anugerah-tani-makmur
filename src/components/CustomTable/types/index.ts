@@ -32,7 +32,7 @@ export type CustomTblOptMenuProps = {
   rowId: string;
   viewURL?: string;
   editURL?: string;
-  confirmDel: (x: string) => void;
+  confirmDel?: (x: string) => void;
   addPickupDoc?: (x: string) => void;
   doGenPdf?: (x: string) => void;
 };

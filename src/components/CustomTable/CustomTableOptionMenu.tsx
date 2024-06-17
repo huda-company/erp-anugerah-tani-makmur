@@ -68,12 +68,14 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
           </DropdownMenuItem>
         )}
 
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => confirmDel(rowId)}
-        >
-          {capitalizeStr(t("Common.delete"))}
-        </DropdownMenuItem>
+        {confirmDel && (
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => confirmDel(rowId)}
+          >
+            {capitalizeStr(t("Common.delete"))}
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
