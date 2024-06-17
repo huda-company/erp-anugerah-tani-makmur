@@ -122,44 +122,50 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const onSubmit = async (data: IPurchaseForm) => {
     setLoading(true);
 
-    const prm: IPurchaseForm = {
-      ...data,
-      id: String(id) ?? "",
-    };
+    try {
+      const prm: IPurchaseForm = {
+        ...data,
+        id: String(id) ?? "",
+      };
 
-    const res =
-      mode === FormMode.ADD
-        ? await createPurchaseAPI(session, prm)
-        : await editPurchaseAPI(session, prm);
+      const res =
+        mode === FormMode.ADD
+          ? await createPurchaseAPI(session, prm)
+          : await editPurchaseAPI(session, prm);
 
-    if (res && res.status == 200) {
+      if (res && res.status == 200) {
+        dispatch(
+          toastActs.callShowToast({
+            show: true,
+            msg: (
+              <div className="flex flex-col py-[1rem]">
+                <span>
+                  {mode === FormMode.ADD
+                    ? t("API_MSG.SUCCESS.NEW_PURCHASE_CREATE")
+                    : t("API_MSG.SUCCESS.PURCHASE_UPDATE")}
+                </span>
+              </div>
+            ),
+            type: "success",
+            timeout: 300,
+          })
+        );
+
+        setTimeout(() => {
+          if (mode == FormMode.ADD) {
+            router.push(`${PURCHASE_PAGE.VIEW}/${res.data.data.id}`);
+          }
+        }, 750);
+      }
+    } catch (error: any) {
       dispatch(
         toastActs.callShowToast({
           show: true,
-          msg: (
+          msg: error ? (
             <div className="flex flex-col py-[1rem]">
-              <span>
-                {mode === FormMode.ADD
-                  ? t("API_MSG.SUCCESS.NEW_PURCHASE_CREATE")
-                  : t("API_MSG.SUCCESS.PURCHASE_UPDATE")}
-              </span>
+              <span>{String(error)}</span>
             </div>
-          ),
-          type: "success",
-          timeout: 750,
-        })
-      );
-
-      setTimeout(() => {
-        if (mode == FormMode.ADD) {
-          router.push(`${PURCHASE_PAGE.VIEW}/${res.data.data.id}`);
-        }
-      }, 750);
-    } else {
-      dispatch(
-        toastActs.callShowToast({
-          show: true,
-          msg: (
+          ) : (
             <div className="flex flex-col py-[1rem]">
               <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
             </div>

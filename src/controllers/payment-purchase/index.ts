@@ -13,6 +13,9 @@ import Paymentmode from "^/mongodb/schemas/paymentmode";
 import moment from "moment";
 import { ObjectId } from "mongodb";
 import { MONGODB } from "^/config/mongodb";
+import { adjustSupplierStock } from "../purchase";
+import { SuppStockTypes } from "^/@types/models/supplierstockhist";
+import { SupplierResp } from "^/@types/models/supplier";
 
 const purchPaymPathDist: string = path.join(process.cwd(), purchPaymentDir);
 
@@ -102,7 +105,7 @@ export const addPaymentPurchase = async (req: any, res: any) => {
 
     const pMode = await Paymentmode.findOne({ name: String(paymMode) }).lean();
 
-    const addPurcPaym = Paymentpurchase.create({
+    const addPurcPaym = await Paymentpurchase.create({
       purchase: checkPurchase._id,
       date: dateCreated,
       amount: Number(amt),
@@ -116,9 +119,24 @@ export const addPaymentPurchase = async (req: any, res: any) => {
         .status(400)
         .json({ ...respBody.ERROR.PURCHASE_PAYMENT_CREATE });
 
+    //loop items for updating supplierstock and supplierstock hsitory
+    const supp = checkPurchase.supplier as unknown as SupplierResp;
+
+    await formattedItems.forEach(async (itm: any) => {
+      await adjustSupplierStock({
+        purchase: String(checkPurchase.id),
+        item: itm.item,
+        supplier: supp.id,
+        type: SuppStockTypes.PURCHASE_PAYMENT_ADD,
+        ref: JSON.stringify(addPurcPaym),
+        detail: "",
+        qty: itm.quantity,
+      });
+    });
+
     return res
       .status(200)
-      .json({ ...respBody.SUCCESS.UPLOAD_FILE_SUCCESS, data: addPurcPaym });
+      .json({ ...respBody.SUCCESS.PURCHASE_PAYMENT_CREATE, data: addPurcPaym });
   } catch (error: any) {
     res.status(500).json(error.message);
   }
@@ -251,6 +269,12 @@ export const deletePaymentPurch = async (
 
   await connectToDatabase();
 
+  const checkPaymPurchase = await Paymentpurchase.findById(id);
+
+  if (!checkPaymPurchase) {
+    return res.status(400).json({ ...respBody.ERROR.INVALID_PAYMENT_PURCH_ID });
+  }
+
   try {
     const newData = {
       removed: moment().utcOffset(+7).toString(),
@@ -262,9 +286,36 @@ export const deletePaymentPurch = async (
       { returnOriginal: false }
     );
 
+    const checkPurchase = await Purchase.findById(
+      checkPaymPurchase.purchase._id
+    );
+
+    if (!checkPurchase) {
+      return res.status(400).json({ ...respBody.ERROR.INVALID_PO });
+    }
+
+    //loop items for updating supplierstock and supplierstock hsitory
+    const supp = checkPurchase.supplier as unknown as SupplierResp;
+
+    await checkPaymPurchase.items.forEach(async (itm: any) => {
+      const paymPurchQty = checkPaymPurchase.items.find(
+        (x) => x.item.toString() == itm.item.toString()
+      );
+      if (paymPurchQty) {
+        await adjustSupplierStock({
+          purchase: String(checkPurchase.id),
+          item: itm.item,
+          supplier: supp.id,
+          type: SuppStockTypes.PURCHASE_PAYMENT_DEL,
+          ref: JSON.stringify(checkPaymPurchase),
+          qty: itm.quantity,
+        });
+      }
+    });
+
     return res
       .status(200)
-      .json({ ...respBody.SUCCESS.ITEM_CAT_DELETE, data: field });
+      .json({ ...respBody.SUCCESS.PURCHASE_PAYMENT_CREATE, data: field });
   } catch (error) {
     return res
       .status(500)

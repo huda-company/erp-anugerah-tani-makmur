@@ -1,21 +1,20 @@
-import { IPurchaseFieldRequest, IPurchaseForm } from "^/@types/models/purchase";
+import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
 import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
-import { handleAxiosError } from "^/utils/handleAxiosError";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
 
-const BASE_PURCHASE_API_URL = `${BASE_URL}/api/${API_VERSION}/purchase`;
+const BASE_SUPPLIER_STOCK_API_URL = `${BASE_URL}/api/${API_VERSION}/supplier-stock`;
 
-export const getPurchaseAPI = async (
+export const getSupplierStockAPI = async (
   sess: Session | null,
-  params: Omit<IPurchaseFieldRequest["query"], "name">
+  params: Omit<ISupplierFieldRequest["query"], "name">
 ) => {
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_PURCHASE_API_URL}?${qStr}`;
+  const reqURL = `${BASE_SUPPLIER_STOCK_API_URL}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -26,44 +25,44 @@ export const getPurchaseAPI = async (
   }
 };
 
-export const createPurchaseAPI = async (
+export const addSupplierAPI = async (
   sess: Session | null,
-  params: IPurchaseForm
+  params: ISupplierForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}`;
+  const reqURL = `${BASE_SUPPLIER_STOCK_API_URL}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
   try {
     return await axios.create(reqHeader).post(reqURL, params);
   } catch (error: any) {
-    handleAxiosError(error);
+    return error;
   }
 };
 
-export const editPurchaseAPI = async (
+export const editSupplierAPI = async (
   sess: Session | null,
-  params: IPurchaseForm
+  params: ISupplierForm
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}/update/${params.id}`;
+  const reqURL = `${BASE_SUPPLIER_STOCK_API_URL}/update/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
   try {
     return await axios.create(reqHeader).patch(reqURL, params);
   } catch (error: any) {
-    handleAxiosError(error);
+    return error;
   }
 };
 
-export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
+export const deleteSupplierAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}/delete/${id}`;
+  const reqURL = `${BASE_SUPPLIER_STOCK_API_URL}/delete/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -71,19 +70,5 @@ export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
     return await axios.create(reqHeader).delete(reqURL);
   } catch (error: any) {
     return error;
-  }
-};
-
-export const apprPurchaseAPI = async (sess: Session | null, id: string) => {
-  if (!sess) return null;
-
-  const reqURL = `${BASE_PURCHASE_API_URL}/approve/${id}`;
-
-  const reqHeader = buildReqHeader(String(sess.accessToken));
-
-  try {
-    return await axios.create(reqHeader).post(reqURL);
-  } catch (error: any) {
-    handleAxiosError(error);
   }
 };

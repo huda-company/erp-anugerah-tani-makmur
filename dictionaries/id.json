@@ -40,6 +40,8 @@
     "empty": "kosong",
     "upload": "upload",
     "submit": "submit",
+    "date": "tanggal",
+    "amount": "jumlah",
     "detail": "detail"
   },
   "AboutUs": {
@@ -68,6 +70,9 @@
     "dashboard": "dashboard",
     "employee": "pegawai",
     "supplier": "supplier",
+    "stock": "stok",
+    "supplierStock": "stok di supplier",
+    "supplierStockHist": "riwayat stok supplier",
     "purchase": "pembelian",
     "selling": "penjualan",
     "purchaseOrder": "Purchase Order",
@@ -113,6 +118,14 @@
     "docType": "jenis dokumen",
     "noFileFound": "tidak ada berkas file"
   },
+  "SuppStock": {
+    "activity": "aktivitas"
+  },
+  "SuppStockTypes": {
+    "APPROVED_PO": "po disetujui",
+    "PURCHASE_PAYMENT_ADD": "tambah data pembayaran po",
+    "PURCHASE_PAYMENT_DEL": "hapus data pembayaran po"
+  },
   "UserPage": {
     "email": "email",
     "isActive": "Status Aktif"
@@ -154,6 +167,7 @@
       "NEW_PURCHASE_CREATE": "berhasil membuat purchase",
       "PURCHASE_UPDATE": "berhasil mengubah data purchase",
       "PURCHASE_DELETE": "berhasil menghapus data purchase",
+      "PURCHASE_APPROVED": "berhasil menyetujui purchase",
       "ROLE_DELETE": "berhasil menghapus data role",
       "NEW_UNIT_CREATE": "berhasil menambah unit",
       "UNIT_UPDATE": "berhasil mengubah data unit",

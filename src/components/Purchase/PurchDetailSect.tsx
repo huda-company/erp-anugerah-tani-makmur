@@ -24,9 +24,18 @@ import { CustomTblData } from "../CustomTable/types";
 import Loading from "../Loading";
 import EmptyContent from "../EmptyContent/EmptyContent";
 import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
+import { PurchaseStatus } from "^/@types/models/purchase";
+import { apprPurchaseAPI } from "^/services/purchase";
+import { useSession } from "next-auth/react";
+import useAppDispatch from "@/hooks/useAppDispatch";
+import { actions as toastActs } from "@/redux/toast";
 
 const PurchDetailSect: FC = () => {
   const t = useTranslations("");
+
+  const { data: session } = useSession();
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
   const { id } = router.query;
@@ -73,6 +82,44 @@ const PurchDetailSect: FC = () => {
     [header, tblBd]
   );
 
+  const doApprPO = async () => {
+    try {
+      const res = await apprPurchaseAPI(session, String(id));
+      if (res?.statusText == "OK") {
+        dispatch(
+          toastActs.callShowToast({
+            show: true,
+            msg: (
+              <div className="flex flex-col py-[1rem]">
+                <span>{t("API_MSG.SUCCESS.PURCHASE_APPROVED")}</span>
+              </div>
+            ),
+            type: "success",
+            timeout: 300,
+          })
+        );
+
+        location.reload();
+      }
+    } catch (error) {
+      dispatch(
+        toastActs.callShowToast({
+          show: true,
+          msg: error ? (
+            <div className="flex flex-col py-[1rem]">
+              <span>{String(error)}</span>
+            </div>
+          ) : (
+            <div className="flex flex-col py-[1rem]">
+              <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
+            </div>
+          ),
+          type: "error",
+        })
+      );
+    }
+  };
+
   return (
     <>
       {purchLoading && <Loading />}
@@ -89,7 +136,7 @@ const PurchDetailSect: FC = () => {
                     variant="destructive"
                     className={clsxm(
                       "text-sm text-white ",
-                      purch.status == "draft" && "bg-green-400"
+                      purch.status == PurchaseStatus.DRAFT && "bg-green-400"
                     )}
                   >
                     {capitalizeStr(purch.status)}
@@ -132,6 +179,9 @@ const PurchDetailSect: FC = () => {
                         >
                           Generate Pdf
                         </a>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={doApprPO}>
+                        Approve PO
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

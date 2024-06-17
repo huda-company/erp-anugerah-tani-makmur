@@ -27,6 +27,7 @@ export const respBody = {
     GTOTAL_N_PAYMENT_EQUAL: cResp(false, ErrorType.GTOTAL_N_PAYMENT_EQUAL),
     INVALID_PO: cResp(false, ErrorType.INVALID_PO),
     INVALID_PAYMENT_PURCH_ID: cResp(false, ErrorType.INVALID_PAYMENT_PURCH_ID),
+    INVALID_SUPP_ID: cResp(false, ErrorType.INVALID_SUPP_ID),
     INCORRECT_PAYLOAD: cResp(false, ErrorType.INCORRECT_PAYLOAD),
     UPLOAD_ERROR: cResp(false, ErrorType.UPLOAD_ERROR),
     EXPIRED_INVALID_TOKEN: cResp(false, ErrorType.EXPIRED_INVALID_TOKEN),
@@ -37,8 +38,12 @@ export const respBody = {
     ),
     UNKNOWN_EMAIL: cResp(false, ErrorType.UNKNOWN_EMAIL),
     PURCHASE_UPDATE: cResp(false, ErrorType.PURCHASE_UPDATE),
-    PURCHASE_PAYMENT_CREATE: cResp(true, SuccessType.PURCHASE_PAYMENT_CREATE),
-    PICKUP_DOC_CREATE: cResp(true, SuccessType.PICKUP_DOC_CREATE),
+    PURCHASE_PAYMENT_CREATE: cResp(true, ErrorType.PURCHASE_PAYMENT_CREATE),
+    PICKUP_DOC_CREATE: cResp(true, ErrorType.PICKUP_DOC_CREATE),
+    PURCHASE_ALREADY_RELEASED: cResp(
+      true,
+      ErrorType.RELEASED_PURCHASE_CANT_APPTOVED
+    ),
   },
   SUCCESS: {
     RETRIEVED_DATA_SUCCESS: cResp(true, SuccessType.RETRIEVED_DATA_SUCCESS),
@@ -62,10 +67,12 @@ export const respBody = {
     NEW_PURCHASE_CREATE: cResp(true, SuccessType.NEW_PURCHASE_CREATE),
     PURCHASE_UPDATE: cResp(true, SuccessType.PURCHASE_UPDATE),
     PURCHASE_DELETE: cResp(true, SuccessType.PURCHASE_DELETE),
+    PURCHASE_APPROVED: cResp(true, SuccessType.PURCHASE_APPROVED),
     NEW_UNIT_CREATE: cResp(true, SuccessType.NEW_UNIT_CREATE),
     UNIT_UPDATE: cResp(true, SuccessType.UNIT_UPDATE),
     UNIT_DELETE: cResp(true, SuccessType.UNIT_DELETE),
     PURCHASE_PAYMENT_CREATE: cResp(true, SuccessType.PURCHASE_PAYMENT_CREATE),
+    PURCHASE_PAYMENT_DELETE: cResp(true, SuccessType.PURCHASE_PAYMENT_DELETE),
     PICKUP_DOC_CREATE: cResp(true, SuccessType.PICKUP_DOC_CREATE),
   },
 };

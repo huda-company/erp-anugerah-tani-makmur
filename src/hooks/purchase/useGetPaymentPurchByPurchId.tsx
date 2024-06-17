@@ -107,32 +107,53 @@ const useGetPaymentPurchByPurchId = () => {
   const confirmDelOk = useCallback(
     async (id: string) => {
       setLoading(true);
-      const resDelete = await deletePaymentPurchaseAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(
-                    t("API_MSG.SUCCESS.PAYMENT_PURCHASE_DELETE")
-                  )}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
+
+      try {
+        const resDelete = await deletePaymentPurchaseAPI(session, id);
+        if (resDelete.data.success) {
+          await fetch();
+          await dispatch(
+            toastActs.callShowToast({
+              ...toast,
+              show: false,
+            })
+          );
+          await dispatch(
+            toastActs.callShowToast({
+              show: true,
+              msg: (
+                <div className="flex flex-col py-[1rem]">
+                  <span>
+                    {" "}
+                    {capitalizeStr(
+                      t("API_MSG.SUCCESS.PAYMENT_PURCHASE_DELETE")
+                    )}{" "}
+                  </span>
+                </div>
+              ),
+              type: "success",
+            })
+          );
+        } else {
+          await dispatch(
+            toastActs.callShowToast({
+              ...toast,
+              show: true,
+              msg: (
+                <div className="flex flex-col py-[1rem] capitalize">
+                  <span>
+                    {t(
+                      capitalizeStr(t("API_MSG.ERROR.PAYMENT_PURCHASE_DELETE"))
+                    )}
+                  </span>
+                </div>
+              ),
+              timeout: 2000,
+              type: "error",
+            })
+          );
+        }
+      } catch (error) {
         await dispatch(
           toastActs.callShowToast({
             ...toast,
@@ -149,6 +170,7 @@ const useGetPaymentPurchByPurchId = () => {
           })
         );
       }
+
       setLoading(false);
     },
     [dispatch, fetch, session, t, toast]
