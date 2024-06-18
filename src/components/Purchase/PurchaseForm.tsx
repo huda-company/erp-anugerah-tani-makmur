@@ -252,32 +252,53 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
               name={`supplier`}
               control={control}
               render={({ field }) => (
-                <Select
-                  disabled={mode == FormMode.VIEW}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder={
-                        mode == FormMode.ADD
-                          ? "Select Supplier"
-                          : supplierOpts.find(
-                              (y) => y.value == initialFormVals.supplier
-                            )?.text
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {supplierOpts.map((x: Options) => {
-                      return (
-                        <SelectItem key={x.value} value={x.value}>
-                          {x.text}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? supplierOpts.find(
+                            (language) => language.value === field.value
+                          )?.text
+                        : "Select item"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className=" p-0">
+                    <Command>
+                      <CommandInput placeholder="Search item..." />
+                      <CommandEmpty>No data found.</CommandEmpty>
+                      <CommandList>
+                        {supplierOpts.map((language) => (
+                          <CommandItem
+                            value={language.text}
+                            key={language.value}
+                            // onSelect={field.onChange}
+                            onSelect={() => {
+                              setValue(`supplier`, language.value);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                language.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {language.text}
+                          </CommandItem>
+                        ))}
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               )}
             />
           </div>
@@ -405,7 +426,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                       <PopoverContent className=" p-0">
                         <Command>
                           <CommandInput placeholder="Search item..." />
-                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandEmpty>No data found.</CommandEmpty>
                           <CommandList>
                             {itemDataOpts.map((language) => (
                               <CommandItem

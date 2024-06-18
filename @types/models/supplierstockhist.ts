@@ -74,5 +74,6 @@ export type SuppStockHistTanTblData = Pick<
   date: string;
   poNo?: string;
   poId?: string;
+  unit?: string;
   suppStockId: SuppStockResp;
 };
