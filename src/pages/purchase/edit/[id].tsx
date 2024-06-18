@@ -13,10 +13,13 @@ import { bcData } from "^/config/purchase/config";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
 import Loading from "@/components/Loading";
+import { useSession } from "next-auth/react";
 
 const EditBranchPage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.edit")} ${t("Sidebar.purchaseOrder")}`;
+
+  const { status } = useSession();
 
   const { purchLoading: loading, formVal } = useGetPurchaseById();
 
@@ -30,10 +33,13 @@ const EditBranchPage: FC = () => {
             bcumbs={bcData}
           />
 
-          {loading && <Loading />}
+          {status == "loading" || (loading && <Loading />)}
 
           <div className="rounded-[1rem] border-2 border-primary p-2">
-            {!loading && formVal && formVal.poNo ? (
+            {status == "authenticated" &&
+            !loading &&
+            formVal &&
+            formVal.poNo ? (
               <PurchaseForm
                 doRefresh={noop}
                 initialFormVals={formVal}

@@ -13,12 +13,15 @@ import EmptyContent from "@/components/EmptyContent/EmptyContent";
 import PurchDetailSect from "@/components/Purchase/PurchDetailSect";
 import PurchPaymSect from "@/components/Purchase/PurchPaymSect";
 import PurchFileSect from "@/components/Purchase/PurchFileSect";
+import { useSession } from "next-auth/react";
 
 const ViewPurchasePage: FC = () => {
   const t = useTranslations("");
   const titlePage = `${t("Common.detail")} ${t("Sidebar.purchaseOrder")}`;
 
   const { purch, purchLoading } = useGetPurchaseById();
+
+  const { status } = useSession();
 
   return (
     <DashboardLayout>
@@ -30,9 +33,9 @@ const ViewPurchasePage: FC = () => {
             bcumbs={bcData}
           />
 
-          {purchLoading && <Loading />}
+          {status == "loading" && <Loading />}
 
-          {!purchLoading && purch ? (
+          {status == "authenticated" && !purchLoading && purch ? (
             <div className="flex flex-col gap-y-2 rounded-[1rem] border-2 border-primary p-4">
               <PurchDetailSect />
 
