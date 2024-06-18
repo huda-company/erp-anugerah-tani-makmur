@@ -33,11 +33,12 @@ import { useRouter } from "next/router";
 import Typography from "@/components/Typography";
 import { useSession } from "next-auth/react";
 import useGetSuppStockHistBySuppStockId from "@/hooks/supplier-stock-hist/useGetSuppStockHistBySuppStockId";
+import Loading from "@/components/Loading";
 
 const SuppStockHistPage = () => {
   const t = useTranslations("");
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const router = useRouter();
   const { suppStockId } = router.query;
@@ -193,16 +194,27 @@ const SuppStockHistPage = () => {
               bcumbs={bcDataSuppStockHist}
             />
 
-            <Typography className="text-xl font-bold text-black ">
-              {suppStockData ? suppStockData[0].supplier.company : "--"}
-              <br />
-              <br />
-              {suppStockData ? `${suppStockData[0].item.name}` : "--"} :{" "}
-              {suppStockData ? `${suppStockData[0].stock}` : "0"}
-            </Typography>
+            {status == "loading" && <Loading />}
 
-            {loading == false && (
+            {status == "authenticated" && loading == false && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
+                <div className="flex flex-row gap-x-4">
+                  <Typography className="text-xl text-black ">
+                    {suppStockData ? suppStockData[0].supplier.company : "--"}
+                  </Typography>
+
+                  <Typography className="text-xl text-black ">
+                    {suppStockData ? `${suppStockData[0].item.name}` : "--"}
+                  </Typography>
+
+                  <Typography className="text-xl font-bold text-black ">
+                    {suppStockData
+                      ? `${suppStockData[0].stock} ${data[0].unit}`
+                      : "0"}{" "}
+                    (stok saat ini)
+                  </Typography>
+                </div>
+
                 <CstmTstackTable
                   columns={columns}
                   data={data}

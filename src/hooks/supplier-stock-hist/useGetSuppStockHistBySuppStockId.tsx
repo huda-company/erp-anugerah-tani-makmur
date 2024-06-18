@@ -80,6 +80,11 @@ const useGetSuppStockHistBySuppStockId = () => {
 
         const tStackTblBd = suppData.map((x: SuppStockHistResp) => {
           const po = x.purchase as unknown as PurchaseResp;
+          const modifiedPo = po as any;
+          const findUnit =
+            modifiedPo.items.find(
+              (xx: any) => xx.item.id == x.suppStockId.item.id
+            ).unit || "pp";
           return {
             id: String(x.id),
             number: x.number,
@@ -88,6 +93,7 @@ const useGetSuppStockHistBySuppStockId = () => {
             ref: x.ref,
             poNo: po.poNo,
             poId: po.id,
+            unit: findUnit,
           } as SuppStockHistTanTblData;
         });
         setData(tStackTblBd);
