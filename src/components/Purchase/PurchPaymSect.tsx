@@ -1,14 +1,7 @@
 import { FC, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { capitalizeStr } from "^/utils/capitalizeStr";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { VscSettings } from "react-icons/vsc";
+
 import PaymentPurchaseForm from "../PaymentPurchase/PaymentPurchaseForm";
 import CustomTable from "../CustomTable/CustomTable";
 import { CustomTblData } from "../CustomTable/types";
@@ -103,35 +96,6 @@ const PurchPaymSect: FC = () => {
 
   return (
     <Card className="">
-      <CardHeader className="bg-[#EAE2E1] p-2">
-        <CardTitle>
-          <div className="flex justify-between">
-            <span>{capitalizeStr(t("PurchasePage.purcPaymHistory"))}</span>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className="bg-black hover:bg-black"
-                  asChild
-                >
-                  <Button variant="ghost" className="hover:none h-6 w-6 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <VscSettings className="h-4 w-4 text-white" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      PaymPurchDialog();
-                    }}
-                  >
-                    {`${capitalizeStr(t("Common.add"))} ${capitalizeStr(t("PurchasePage.purcPaymHistory"))} `}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </CardTitle>
-      </CardHeader>
       <CardContent>
         <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
           <CustomTable key="paymPurchTbl" data={paymPurchTData} />

@@ -91,7 +91,7 @@ const PurchFileSect: FC = () => {
   };
 
   return (
-    <Card className="w-1/2 ">
+    <Card className="w-full">
       <CardHeader className="bg-[#EAE2E1] p-2">
         <CardTitle>Files</CardTitle>
       </CardHeader>
