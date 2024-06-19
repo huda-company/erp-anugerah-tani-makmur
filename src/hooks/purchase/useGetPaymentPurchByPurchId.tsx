@@ -55,7 +55,7 @@ const useGetPaymentPurchByPurchId = () => {
   const [paymPurchReq, setPaymPurchReq] = useState<IPaymPurchGetReq>({
     page: 1,
     limit: 20,
-    purchaseid: String(id),
+    purchaseid: String(id) || "",
     "sort[key]": "name",
     "sort[direction]": "asc",
   });

@@ -61,6 +61,7 @@ const PickupDocForm: FC<PickupDocFormProps> = ({
     setLoading(true);
     const prm: IPickupDocForm = {
       type: values.type as PickupDocType,
+      code: values.code,
       driverName: values.driverName,
       vehicleType: values.vehicleType,
       flatNo: values.flatNo,
@@ -104,9 +105,6 @@ const PickupDocForm: FC<PickupDocFormProps> = ({
       );
     }
 
-    // if (mode == FormMode.ADD) handleReset();
-    // else doRefresh;
-
     setLoading(false);
 
     onSubmitOk();
@@ -146,6 +144,7 @@ const PickupDocForm: FC<PickupDocFormProps> = ({
 
   useEffect(() => {
     if (mode !== FormMode.ADD && initialFormVals.id === id) {
+      picupDocForm.setValue("type", initialFormVals.code);
       picupDocForm.setValue("type", initialFormVals.type);
       picupDocForm.setValue("description", initialFormVals.description);
       picupDocForm.setValue("note", initialFormVals.note);
@@ -162,6 +161,7 @@ const PickupDocForm: FC<PickupDocFormProps> = ({
     initialFormVals.id,
     initialFormVals.note,
     initialFormVals.type,
+    initialFormVals.code,
     initialFormVals.vehicleType,
     mode,
   ]);
@@ -171,8 +171,28 @@ const PickupDocForm: FC<PickupDocFormProps> = ({
       <form
         onReset={() => picupDocForm.reset}
         onSubmit={picupDocForm.handleSubmit(onFormSubmit)}
-        className="space-y-8"
+        className="space-y-3"
       >
+        <FormField
+          disabled={mode == FormMode.VIEW}
+          control={picupDocForm.control}
+          name="code"
+          render={({ field }) => (
+            <>
+              <FormItem>
+                <FormLabel>{capitalizeStr(t("Common.code"))}</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={capitalizeStr(t("Common.code"))}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </>
+          )}
+        />
+
         <div className="flex-1">
           <label>{capitalizeStr(t("PurchasePage.docType"))}</label>
           <Controller

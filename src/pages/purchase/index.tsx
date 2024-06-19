@@ -11,8 +11,18 @@ import Loading from "@/components/Loading";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { bcData } from "^/config/purchase/config";
 import useGetPurchase from "@/hooks/purchase/useGetPurchase";
-import { IPurchaseFieldRequest, PurchTanTblData } from "^/@types/models/purchase";
-import { ColumnDef, ColumnFiltersState, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  IPurchaseFieldRequest,
+  PurchTanTblData,
+} from "^/@types/models/purchase";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import useDebounce from "@/hooks/useDebounce";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
@@ -35,7 +45,7 @@ const PurchasePage = () => {
     handlePrevClck,
     handlePageInputChange,
     handlePageRowChange,
-    confirmDeletion
+    confirmDeletion,
   } = useGetPurchase();
 
   const columns = useMemo<ColumnDef<PurchTanTblData, any>[]>(
@@ -87,7 +97,7 @@ const PurchasePage = () => {
         cell: (info: any) => {
           const branchId = info.row.original.id;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={branchId}
                 editURL={`${PURCHASE_PAGE.EDIT}/${branchId}`}

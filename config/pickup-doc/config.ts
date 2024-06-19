@@ -2,6 +2,7 @@ import { IPickupDocForm, PickupDocType } from "^/@types/models/pickupdoc";
 import { z } from "zod";
 
 export const initialPickupDocForm: IPickupDocForm = {
+  code: "",
   note: "",
   description: "",
   driverName: "",
@@ -25,6 +26,7 @@ export const PickupDocFormSchema = z.object({
   vehicleType: z.string().min(3, {
     message: "invalid vehicleType",
   }),
+  code: z.string(),
   note: z.string(),
   description: z.string(),
 });

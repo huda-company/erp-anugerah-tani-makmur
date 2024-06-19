@@ -69,7 +69,7 @@ const ItemCategory = () => {
         cell: (info: any) => {
           const itemCatId = info.row.original.id;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={itemCatId}
                 editURL={`${ITEM_CAT_PAGE.EDIT}/${itemCatId}`}

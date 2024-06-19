@@ -195,6 +195,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
       limit: 50,
     });
     fetchSupp({
+      page: 1,
       limit: 50,
     });
     fetchUnit({
@@ -266,13 +267,13 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                         ? supplierOpts.find(
                             (language) => language.value === field.value
                           )?.text
-                        : "Select item"}
+                        : "Select Supplier"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className=" p-0">
                     <Command>
-                      <CommandInput placeholder="Search item..." />
+                      <CommandInput placeholder="Search Supplier..." />
                       <CommandEmpty>No data found.</CommandEmpty>
                       <CommandList>
                         {supplierOpts.map((language) => (
@@ -457,41 +458,6 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
                     </Popover>
                   )}
                 />
-
-                {/* <Controller
-                  defaultValue={""}
-                  name={`items.${index}.item`}
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      // disabled={mode == FormMode.VIEW}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={
-                            mode == FormMode.ADD || isEditing
-                              ? "Select Item"
-                              : itemDataOpts.find(
-                                (y) =>
-                                  y.value == initialFormVals.items[index].item
-                              )?.text
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {itemDataOpts.map((x: Options) => {
-                          return (
-                            <SelectItem key={x.value} value={x.value}>
-                              {x.text}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  )}
-                /> */}
               </div>
 
               <div className="w-[20%] flex-grow">

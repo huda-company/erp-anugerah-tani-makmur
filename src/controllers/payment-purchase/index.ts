@@ -16,6 +16,10 @@ import { MONGODB } from "^/config/mongodb";
 import { adjustSupplierStock } from "../purchase";
 import { SuppStockTypes } from "^/@types/models/supplierstockhist";
 import { SupplierResp } from "^/@types/models/supplier";
+import { adjustStock } from "../stock";
+import { StockActivityTypes } from "^/@types/models/stockhist";
+import { adjustCashflowBlnce } from "../cashflow";
+import { CashflowActTypes } from "^/@types/models/cashflowhist";
 
 const purchPaymPathDist: string = path.join(process.cwd(), purchPaymentDir);
 
@@ -132,6 +136,23 @@ export const addPaymentPurchase = async (req: any, res: any) => {
         detail: "",
         qty: itm.quantity,
       });
+
+      await adjustStock({
+        branch: "664e571da7147636b4525d0f",
+        item: itm.item,
+        purchase: String(checkPurchase.id),
+        type: StockActivityTypes.PURCHASE_PAYMENT_ADD,
+        ref: JSON.stringify(addPurcPaym),
+        qty: itm.quantity,
+      });
+    });
+
+    await adjustCashflowBlnce({
+      branch: "664e571da7147636b4525d0f",
+      purchase: String(checkPurchase.id),
+      type: CashflowActTypes.PURCHASE_PAYMENT_ADD,
+      ref: JSON.stringify(addPurcPaym),
+      amount: Number(amt),
     });
 
     return res
@@ -295,7 +316,7 @@ export const deletePaymentPurch = async (
     }
 
     //loop items for updating supplierstock and supplierstock hsitory
-    const supp = checkPurchase.supplier as unknown as SupplierResp;
+    const supp = (await checkPurchase.supplier) as unknown as SupplierResp;
 
     await checkPaymPurchase.items.forEach(async (itm: any) => {
       const paymPurchQty = checkPaymPurchase.items.find(
@@ -310,7 +331,24 @@ export const deletePaymentPurch = async (
           ref: JSON.stringify(checkPaymPurchase),
           qty: itm.quantity,
         });
+
+        await adjustStock({
+          branch: "664e571da7147636b4525d0f",
+          item: itm.item,
+          purchase: String(checkPurchase.id),
+          type: StockActivityTypes.PURCHASE_PAYMENT_DEL,
+          ref: JSON.stringify(checkPaymPurchase),
+          qty: itm.quantity,
+        });
       }
+    });
+
+    await adjustCashflowBlnce({
+      branch: "664e571da7147636b4525d0f",
+      purchase: String(checkPurchase.id),
+      type: CashflowActTypes.PURCHASE_PAYMENT_DEL,
+      ref: JSON.stringify(checkPaymPurchase),
+      amount: Number(checkPaymPurchase.amount),
     });
 
     return res

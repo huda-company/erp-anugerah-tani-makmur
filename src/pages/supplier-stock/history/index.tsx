@@ -100,7 +100,7 @@ const SuppStockHistPage = () => {
         cell: (info: any) => {
           const poId = info.row.original.poId;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={poId}
                 viewURL={`${PURCHASE_PAGE.VIEW}/${poId}`}
@@ -196,7 +196,7 @@ const SuppStockHistPage = () => {
 
             {status == "loading" && <Loading />}
 
-            {status == "authenticated" && loading == false && (
+            {status == "authenticated" && !loading && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <div className="flex flex-row gap-x-4">
                   <Typography className="text-xl text-black ">
@@ -208,7 +208,7 @@ const SuppStockHistPage = () => {
                   </Typography>
 
                   <Typography className="text-xl font-bold text-black ">
-                    {suppStockData
+                    {suppStockData && data.length > 0
                       ? `${suppStockData[0].stock} ${data[0].unit}`
                       : "0"}{" "}
                     (stok saat ini)

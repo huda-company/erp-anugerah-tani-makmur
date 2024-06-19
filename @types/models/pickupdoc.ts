@@ -1,5 +1,7 @@
 import { Types } from "mongoose";
 import { BaseFormProps, FormMode } from "../global";
+import { PurchaseResp } from "./purchase";
+import { PaymentPurchaseResp } from "./paymentpurchase";
 
 export enum PickupDocType {
   SPAA = "SPAA",
@@ -54,7 +56,13 @@ export interface ISortOptions {
 
 export type IPickupDocForm = Pick<
   IPickupDocDocument,
-  "type" | "driverName" | "vehicleType" | "note" | "flatNo" | "description"
+  | "code"
+  | "type"
+  | "driverName"
+  | "vehicleType"
+  | "note"
+  | "flatNo"
+  | "description"
 > & {
   id?: string;
   doTotal?: number;
@@ -67,3 +75,9 @@ export type PickupDocFormProps = {
   onclose: () => void;
   onSubmitOk: () => void;
 } & BaseFormProps;
+
+export type PickupDocResp = Omit<IPickupDocDocument, "items" | "supplier"> & {
+  id?: string;
+  purchase: PurchaseResp;
+  paymentPurchase: PaymentPurchaseResp;
+};

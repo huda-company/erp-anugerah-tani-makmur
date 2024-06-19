@@ -40,6 +40,7 @@ export const addPickupDoc = async (req: any, res: any) => {
     const { fields } = await readWoFile(req);
 
     const {
+      code: codeReq,
       type,
       vehicleType,
       flatNo,
@@ -55,8 +56,8 @@ export const addPickupDoc = async (req: any, res: any) => {
 
     const code = "test";
 
-    const addPickupDocData = Pickupdoc.create({
-      code,
+    const addPickupDocData = await Pickupdoc.create({
+      code: codeReq ? codeReq[0] : code,
       paymentPurchase: checkPaymPurch.id,
       purchase: new ObjectId(checkPaymPurch.purchase.id),
       type: type[0] ?? PickupDocType.SPAA,
@@ -77,7 +78,7 @@ export const addPickupDoc = async (req: any, res: any) => {
       .status(200)
       .json({ ...respBody.SUCCESS.PICKUP_DOC_CREATE, data: addPickupDocData });
   } catch (error: any) {
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 

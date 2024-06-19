@@ -137,7 +137,6 @@ const useGetSupplierStock = () => {
     data,
     reqPrm,
     setReqPrm,
-    fetch,
     fetchSuppStockData,
     handleNextClck,
     handlePrevClck,
