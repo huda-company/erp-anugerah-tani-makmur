@@ -82,7 +82,7 @@ const SupplierStock = () => {
         cell: (info: any) => {
           const suppStockId = info.row.original.id;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppStockId}
                 viewURL={`${SUPPLIER_STOCK_HIST_PAGE.ROOT}?suppStockId=${suppStockId}`}

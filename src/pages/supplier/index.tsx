@@ -97,7 +97,7 @@ const Supplier = () => {
         cell: (info: any) => {
           const suppId = info.row.original.id;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppId}
                 editURL={`${SUPPLIER_PAGE.EDIT}/${suppId}`}

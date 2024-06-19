@@ -75,7 +75,7 @@ const BranchPage = () => {
         cell: (info: any) => {
           const branchId = info.row.original.id;
           return (
-            <div className="align-center flex justify-center">
+            <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={branchId}
                 editURL={`${BRANCH_PAGE.EDIT}/${branchId}`}
