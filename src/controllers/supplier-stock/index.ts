@@ -54,13 +54,9 @@ export const getSupplierStock = async (
       .status(200)
       .json({ ...respBody.SUCCESS.RETRIEVED_DATA_SUCCESS, data: suppStocks });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        ...respBody.ERROR.UNEXPECTED_ERROR,
-        error: `getSupplierStock : ${error}`,
-      });
+    return res.status(500).json({
+      ...respBody.ERROR.UNEXPECTED_ERROR,
+      error: `getSupplierStock : ${error}`,
+    });
   }
-
-  await connectToDatabase();
 };

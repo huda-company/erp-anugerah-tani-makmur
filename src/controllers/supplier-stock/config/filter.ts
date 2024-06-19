@@ -5,7 +5,10 @@ export const onSupplierStockFilter = (query: Record<string, string>) => {
     removed: "",
   };
 
-  if (query["param[item]"].length > 0 || query["param[supplier]"].length > 0) {
+  if (
+    (query["param[item]"] && query["param[item]"].length > 0) ||
+    (query["param[supplier]"] && query["param[supplier]"].length > 0)
+  ) {
     filter.$or = [
       { item: query["param[item]"] },
       { supplier: query["param[supplier]"] },
