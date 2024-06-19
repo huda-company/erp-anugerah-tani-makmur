@@ -1,4 +1,3 @@
-import { ISupplierFieldRequest } from "^/@types/models/supplier";
 import { initSuppReqPrm } from "^/config/supplier/config";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
@@ -11,16 +10,17 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
-import {
-  ISupplierStockGetReq,
-  SuppStockResp,
-  SuppStockTanTblData,
-} from "^/@types/models/supplierstock";
-import { getSupplierStockAPI } from "^/services/supplier-stock";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import {
+  IStockGetReq,
+  StockResp,
+  StockTanTblData,
+} from "^/@types/models/stock";
+import { getStockAPI } from "^/services/stock";
 
-const useGetSupplierStock = () => {
+const useGetStock = () => {
   const router = useRouter();
   const { suppStockId } = router.query;
 
@@ -30,44 +30,46 @@ const useGetSupplierStock = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<ISupplierStockGetReq>({
+  const [reqPrm, setReqPrm] = useState<IStockGetReq>({
     ...initSuppReqPrm,
     id: suppStockId ? String(suppStockId) : "",
   });
+
   const [suppPgntn, setSuppTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
-  const [data, setData] = useState<SuppStockTanTblData[]>([]);
+
+  const [data, setData] = useState<StockTanTblData[]>([]);
 
   const {
-    data: suppStockData,
-    error: suppStockDataErr,
-    isLoading: suppStockDataLoading,
-  } = useQuery<SuppStockResp[], Error>({
-    queryKey: ["supp-stock"],
+    data: stockData,
+    error: stockDataErr,
+    isLoading: stockDataLoading,
+  } = useQuery<StockResp[], Error>({
+    queryKey: ["stock"],
     retry: 2,
     queryFn: async () => {
-      const suppStockData = await fetchSuppStockData(session, reqPrm);
+      const stockData = await fetchStockData(session, reqPrm);
 
-      return suppStockData;
+      return stockData;
     },
   });
 
   // Adjust the query function to match the expected type
-  const fetchSuppStockData = async (
+  const fetchStockData = async (
     session: any, // Replace with your session type
-    suppStockReq: ISupplierStockGetReq // Replace with your request payload type
-  ): Promise<SuppStockResp[]> => {
+    suppStockReq: IStockGetReq // Replace with your request payload type
+  ): Promise<StockResp[]> => {
     try {
       fetched.current = true;
 
-      const response = await getSupplierStockAPI(session, suppStockReq);
+      const response = await getStockAPI(session, suppStockReq);
 
       if (!response || (response && response.status !== 200)) {
         throw new Error("API Error");
       }
 
       const { data: resData } = response;
-      const suppData: SuppStockResp[] = resData.data.items;
+      const suppData: StockResp[] = resData.data.items;
 
       queryClient.setQueryData(["supp-stock"], suppData);
 
@@ -81,13 +83,13 @@ const useGetSupplierStock = () => {
 
       const tStackTblBd =
         suppData.length > 0
-          ? suppData.map((x: SuppStockResp) => {
+          ? suppData.map((x: StockResp) => {
               return {
                 id: String(x.id),
                 itemName: x.item.name,
-                suppName: x.supplier.company,
+                branchName: x.branch.name,
                 stock: x.stock,
-              } as SuppStockTanTblData;
+              } as StockTanTblData;
             })
           : [];
 
@@ -100,13 +102,13 @@ const useGetSupplierStock = () => {
   };
 
   const onPaginationChange = (prm: PaginationCustomPrms) => {
-    const pgntParam: Omit<ISupplierFieldRequest["query"], "name"> = {
+    const pgntParam: IStockGetReq = {
       ...reqPrm,
       page: prm.page,
       limit: prm.limit,
     };
 
-    fetchSuppStockData(session, pgntParam);
+    fetchStockData(session, pgntParam);
   };
 
   const handleNextClck = () => {
@@ -131,13 +133,13 @@ const useGetSupplierStock = () => {
 
   return {
     suppPgntn,
-    suppStockData,
-    suppStockDataErr,
-    suppStockDataLoading,
+    stockData,
+    stockDataErr,
+    stockDataLoading,
     data,
     reqPrm,
     setReqPrm,
-    fetchSuppStockData,
+    fetchStockData,
     handleNextClck,
     handlePrevClck,
     handlePageInputChange,
@@ -145,4 +147,4 @@ const useGetSupplierStock = () => {
   };
 };
 
-export default useGetSupplierStock;
+export default useGetStock;
