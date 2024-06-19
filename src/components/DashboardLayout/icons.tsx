@@ -40,6 +40,9 @@ import {
   ChevronDown,
   Handshake,
   FileDigit,
+  Wallet,
+  Warehouse,
+  Combine,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -82,6 +85,9 @@ export const Icons = {
   unit: Ruler,
   handshake: Handshake,
   stock: FileDigit,
+  warehouse: Warehouse,
+  combine: Combine,
+  wallet: Wallet,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

@@ -1,8 +1,10 @@
 import {
   BRANCH_PAGE,
+  CASHFLOW_PAGE,
   ITEM_CAT_PAGE,
   ITEM_PAGE,
   PO_PAGE,
+  STOCK_PAGE,
   SUPPLIER_PAGE,
   SUPPLIER_STOCK_PAGE,
   UNIT_PAGE,
@@ -42,12 +44,6 @@ export const navItems: NavItem[] = [
         label: "user",
       },
       {
-        title: "supplierStock",
-        href: SUPPLIER_STOCK_PAGE.ROOT,
-        icon: "stock",
-        label: "stock",
-      },
-      {
         title: "purchaseOrder",
         href: PO_PAGE.ROOT,
         icon: "shoppingCart",
@@ -68,6 +64,24 @@ export const navItems: NavItem[] = [
         label: "handshake",
       },
     ],
+  },
+  {
+    title: "supplierStock",
+    href: SUPPLIER_STOCK_PAGE.ROOT,
+    icon: "stock",
+    label: "stock",
+  },
+  {
+    title: "stock",
+    href: STOCK_PAGE.ROOT,
+    icon: "combine",
+    label: "stock",
+  },
+  {
+    title: "cashflow",
+    href: CASHFLOW_PAGE.ROOT,
+    icon: "wallet",
+    label: "cashflow",
   },
   {
     title: "unit",

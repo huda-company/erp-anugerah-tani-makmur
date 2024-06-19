@@ -57,6 +57,28 @@ export const UNIT_PAGE = {
   VIEW: "/unit/view",
 };
 
+export const STOCK_PAGE = {
+  ROOT: "/stock",
+  ADD: "/stock/add",
+  EDIT: "/stock/edit",
+  VIEW: "/stock/view",
+};
+
+export const STOCK_HIST_PAGE = {
+  ROOT: `${STOCK_PAGE.ROOT}/history`,
+};
+
+export const CASHFLOW_PAGE = {
+  ROOT: "/cashflow",
+  ADD: "/cashflow/add",
+  EDIT: "/cashflow/edit",
+  VIEW: "/cashflow/view",
+};
+
+export const CASHFLOW_HIST_PAGE = {
+  ROOT: `${CASHFLOW_PAGE.ROOT}/history`,
+};
+
 export const BRANCH_PAGE = {
   ROOT: "/branch",
   ADD: "/branch/add",
