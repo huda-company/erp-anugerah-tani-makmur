@@ -3,6 +3,7 @@ import { BaseFormProps, FormMode } from "../global";
 import { PurchItem } from "./purchase";
 import { IPickupDocDocument } from "./pickupdoc";
 import { IItemDocument } from "./item";
+import { IDelivNoteDocument } from "./deliverynote";
 
 export type PaymPurchItem = Omit<PurchItem, "discount">;
 
@@ -62,7 +63,9 @@ export type IPaymentPurchaseForm = Pick<
 export type PaymentPurchaseFormProps = {
   mode: FormMode;
   initialFormVals: IPaymentPurchaseForm;
-  doRefresh: () => void;
+  doRefresh?: () => void;
+  onclose: () => void;
+  onSubmitOk: () => void;
 } & BaseFormProps;
 
 export interface FormattedPaymentPurchForm {
@@ -82,6 +85,13 @@ export type PaymPurchItemResp = {
   item: PaymPurchItemObj;
 } & PaymPurchItem;
 
+type DelivNoteItm = Pick<
+  IDelivNoteDocument,
+  "code" | "branch" | "sellingTotal" | "purchaseTotal"
+> & {
+  _id?: string;
+};
+
 export type PaymentPurchaseResp = Omit<IPaymentPurchaseDocument, "items"> & {
   _id?: string;
   items: PaymPurchItemResp[];
@@ -91,4 +101,5 @@ export type PaymentPurchaseResp = Omit<IPaymentPurchaseDocument, "items"> & {
   > & {
     _id?: string;
   };
+  deliveryNotes: DelivNoteItm[];
 };

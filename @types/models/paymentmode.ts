@@ -47,3 +47,7 @@ export type PaymentModeFormProps = {
   initialFormVals: IPaymentModeForm;
   doRefresh: () => void;
 } & BaseFormProps;
+
+export type PaymentModeResp = {
+  id: string;
+} & IPaymentModeForm;
