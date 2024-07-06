@@ -194,6 +194,20 @@ export const getPaymentPurch = async (
       },
     },
     {
+      $lookup: {
+        from: "deliverynotes", // The name of the deliveryNotes collection
+        localField: "_id",
+        foreignField: "paymentPurchase",
+        as: "deliveryNotes",
+      },
+    },
+    {
+      $unwind: {
+        path: "$pickupDocs",
+        preserveNullAndEmptyArrays: true, // If you want to keep Paymentpurchases without Pickupdocs
+      },
+    },
+    {
       $unwind: {
         path: "$items",
         preserveNullAndEmptyArrays: true, // If you want to keep Paymentpurchases without items
@@ -232,11 +246,12 @@ export const getPaymentPurch = async (
         updatedAt: { $first: "$updatedAt" },
         createdAt: { $first: "$createdAt" },
         pickupDocs: { $first: "$pickupDocs" },
+        deliveryNotes: { $first: "$deliveryNotes" },
       },
     },
     {
       $sort: {
-        "pickupDocs.createdAt": -1, // Example sorting by pickupDocs' updatedAt field
+        createdAt: -1,
       },
     },
     {
@@ -261,6 +276,11 @@ export const getPaymentPurch = async (
         "pickupDocs.driverName": 1,
         "pickupDocs.updatedAt": 1,
         "pickupDocs.createdAt": 1,
+        "deliveryNotes._id": 1,
+        "deliveryNotes.code": 1,
+        "deliveryNotes.branch": 1,
+        "deliveryNotes.sellingTotal": 1,
+        "deliveryNotes.purchaseTotal": 1,
       },
     },
   ]);
