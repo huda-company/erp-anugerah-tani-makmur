@@ -97,7 +97,7 @@ const useGetItem = () => {
         return null;
       }
     },
-    [dispatch, session, t]
+    [dispatch, reqPrm, session, t]
   );
 
   const confirmDelOk = useCallback(
