@@ -5,6 +5,7 @@ import { CashflowResp } from "./cashflow";
 export enum CashflowActTypes {
   PURCHASE_PAYMENT_ADD = "PURCHASE_PAYMENT_ADD",
   PURCHASE_PAYMENT_DEL = "PURCHASE_PAYMENT_DEL",
+  DELIVNOTE_PAYMENT_ADD = "DELIVNOTE_PAYMENT_ADD",
 }
 
 export interface ICashflowHistDocument extends Document {

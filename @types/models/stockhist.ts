@@ -6,6 +6,8 @@ import { PickupDocResp } from "./pickupdoc";
 export enum StockActivityTypes {
   PURCHASE_PAYMENT_ADD = "PURCHASE_PAYMENT_ADD",
   PURCHASE_PAYMENT_DEL = "PURCHASE_PAYMENT_DEL",
+  DELIV_NOTE_CREATE_IN = "DELIV_NOTE_CREATE_IN",
+  DELIV_NOTE_CREATE_OUT = "DELIV_NOTE_CREATE_OUT",
 }
 
 export interface IStockHistDocument extends Document {
