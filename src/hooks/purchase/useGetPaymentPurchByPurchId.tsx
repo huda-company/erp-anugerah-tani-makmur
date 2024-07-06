@@ -34,6 +34,9 @@ import { FormMode } from "^/@types/global";
 import ItemCol from "@/components/PaymentPurchase/ItemCol";
 import { calculatePaymPurchTotal } from "^/config/purchase/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import DelivNoteForm from "@/components/DeliveryNote/DelivNoteForm";
+import { CostTypes, IDelivNoteForm } from "^/@types/models/deliverynote";
+import moment from "moment";
 
 const useGetPaymentPurchByPurchId = () => {
   const t = useTranslations("");
@@ -232,6 +235,62 @@ const useGetPaymentPurchByPurchId = () => {
     );
   };
 
+  const onOkDelivNoteForm = () => {
+    fetchPaymPurch(paymPurchReq);
+    closeAlertModal();
+  };
+
+  const crtDelivNoteDialog = async (id: string) => {
+    const selPaymPurch = paymPurchData.items.find((x: any) => x._id == id);
+
+    const formattedItems = selPaymPurch.items.map((entry: any) => ({
+      item: entry.item._id,
+      quantity: entry.quantity,
+      price: entry.price,
+      unit: entry.unit,
+      discount: entry.discount || 0,
+      note: "",
+      total: entry.total,
+    }));
+
+    const fVal: IDelivNoteForm = {
+      ...paymPurchData.items[0],
+      items: formattedItems,
+      costItems: [
+        { type: CostTypes.FUEL, amount: 0 },
+        { type: CostTypes.DRIVER_FEE, amount: 0 },
+        { type: CostTypes.SCALES, amount: 0 },
+        { type: CostTypes.TOLL, amount: 0 },
+      ],
+      date: moment(paymPurchData.items[0].date).format("YYYY-MM-DD"),
+    };
+
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col items-center pt-[1rem] capitalize">
+            <span className="mb-[2rem] text-center text-[1.5rem]">
+              {`${t(capitalizeStr(t("Sidebar.delivNote")))}`}
+            </span>
+
+            <div className="w-full">
+              <DelivNoteForm
+                key="delivNoteForm"
+                mode={FormMode.ADD}
+                initialFormVals={{ ...fVal, id: id }}
+                doRefresh={onOkDelivNoteForm}
+                onSubmitOk={onOkDelivNoteForm}
+                onclose={onOkDelivNoteForm}
+              />
+            </div>
+          </div>
+        ),
+        type: "form",
+      })
+    );
+  };
+
   let paymPurcTblBd: CustomTblBody[] = [];
   const paymPurchDataItems: PaymentPurchaseResp[] = paymPurchData
     ? paymPurchData.items
@@ -243,6 +302,8 @@ const useGetPaymentPurchByPurchId = () => {
     paymPurchDataItems.length > 0
   ) {
     paymPurcTblBd = paymPurchDataItems.map((x: PaymentPurchaseResp) => {
+      const hasDelivNote =
+        Array.isArray(x.deliveryNotes) && x.deliveryNotes.length > 0;
       return {
         items: [
           {
@@ -258,7 +319,11 @@ const useGetPaymentPurchByPurchId = () => {
             className: "text-left w-[6rem] pl-0",
           },
           {
-            value: x.pickupDocs ? x.pickupDocs.type : "-",
+            value: x.pickupDocs ? x.pickupDocs.code : "-",
+            className: "text-left w-[6rem] pl-0",
+          },
+          {
+            value: hasDelivNote ? x.deliveryNotes[0].code : "-",
             className: "text-left w-[6rem] pl-0",
           },
           {
@@ -273,6 +338,13 @@ const useGetPaymentPurchByPurchId = () => {
                   x.pickupDocs
                     ? undefined
                     : () => PickupDocDialog(String(x._id))
+                }
+                addDelivNote={
+                  hasDelivNote
+                    ? undefined
+                    : () => {
+                        crtDelivNoteDialog(String(x._id));
+                      }
                 }
                 confirmDel={confirmDeletion}
               />
