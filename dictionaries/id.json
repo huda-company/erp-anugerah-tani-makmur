@@ -42,6 +42,7 @@
     "submit": "submit",
     "date": "tanggal",
     "amount": "jumlah",
+    "destination": "tujuan",
     "detail": "detail"
   },
   "AboutUs": {
@@ -70,6 +71,7 @@
     "dashboard": "dashboard",
     "employee": "pegawai",
     "supplier": "supplier",
+    "delivNote": "nota pengiriman",
     "cashflow": "arus kas",
     "cashflowHist": "riwayat arus kas",
     "stock": "stok",
@@ -92,6 +94,16 @@
   },
   "SupplierPage": {
     "revenue": "pendapatan"
+  },
+  "DelivNote": {
+    "sellingPrice": "harga jual",
+    "purchasePrice": "harga beli",
+    "sellingTotal": "total penjualan",
+    "purchaseTotal": "total pembelian",
+    "FUEL": "bahan bakar",
+    "TOLL": "toll",
+    "DRIVER_FEE": "sopir dan bongkar",
+    "SCALES": "timbangan / krani"
   },
   "PurchasePage": {
     "poNo": "PO No",
@@ -118,6 +130,7 @@
     "vehicleType": "tipe kendaraan",
     "flatNo": "plat nomor",
     "driverName": "nama pengemudi",
+    "driverLicenseNo": "nomor sim",
     "docType": "jenis dokumen",
     "noFileFound": "tidak ada berkas file"
   },
@@ -202,6 +215,8 @@
       "NEW_UNIT_CREATE": "gagal menambah data unit",
       "UNIT_UPDATE": "gagal mengubah data unit",
       "UNIT_DELETE": "gagal menghapus data unit",
+      "CANT_ADD_PAYMENT": "tidak bisa menambah data pembayaran",
+      "NOMINAL_IS_EQUAL": "nominal sudah sama dengan total pembayaran",
       "PAYMENT_PURCHASE_CREATE": "gagal menambah pembayaran",
       "PAYMENT_PURCHASE_DELETE": "gagal menghapus pembayaran",
       "PICKUP_DOC_CREATE": "gagal membuat dokumen pengambilan barang",
