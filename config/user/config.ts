@@ -1,7 +1,8 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { USER } from "@/constants/pageURL";
-import { IUserForm } from "^/@types/models/user";
+import { IUserForm, IUserGetReq } from "^/@types/models/user";
 import { z } from "zod";
+import { pageRowsArr } from "../request/config";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -52,3 +53,11 @@ export const UserFormSchema = z.object({
     message: "invalid birthDate",
   }),
 });
+
+export const initUserReqPrm: IUserGetReq = {
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[0],
+  page: 0,
+};

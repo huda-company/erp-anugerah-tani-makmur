@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -24,15 +23,19 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { getUserAPI } from "^/services/user";
-import { IUserFieldRequest } from "^/@types/models/user";
+import { IUserGetReq, UserResp } from "^/@types/models/user";
 import { formatDate } from "^/utils/dateFormatting";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
 import { USER } from "@/constants/pageURL";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { initUserReqPrm } from "^/config/user/config";
+import { pageRowsArr } from "^/config/request/config";
 
 const useGetUser = () => {
   const t = useTranslations("");
+
+  const queryClient = useQueryClient();
 
   const fetched = useRef(false);
 
@@ -42,229 +45,199 @@ const useGetUser = () => {
 
   const { closeAlertModal } = useCloseAlertModal();
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<any>(null);
   const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
-  const [branchPgntn, setBranchTblPgntn] =
+  const [reqPrm, setReqPrm] = useState<IUserGetReq>({
+    ...initUserReqPrm,
+    limit: pageRowsArr[0],
+  });
+  const [userPgntn, setUserTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
 
-  const fetch = useCallback(
-    async (
-      payload: Omit<IUserFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[2],
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+  const {
+    data: userData,
+    error: userDataErr,
+    isLoading: userDataLoading,
+  } = useQuery<UserResp[], Error>({
+    queryKey: ["deliv-note"],
+    retry: 1,
+    queryFn: async () => {
+      const dNoteData = await fetchData(session, reqPrm);
+
+      return dNoteData;
+    },
+    enabled: !!session && !!reqPrm,
+  });
+
+  // Adjust the query function to match the expected type
+  const fetchData = async (
+    session: any, // Replace with your session type
+    suppStockReq: IUserGetReq // Replace with your request payload type
+  ): Promise<UserResp[]> => {
+    try {
       fetched.current = true;
-      setLoading(true);
+      console.log("ffff");
 
-      try {
-        const response = await getUserAPI(session, payload);
+      const response = await getUserAPI(session, suppStockReq);
 
-        if (!response || (response && response.status !== 200)) {
-          setLoading(false);
-          dispatch(
-            toastActs.callShowToast({
-              show: true,
-              msg: (
-                <div className="flex flex-col py-[1rem]">
-                  <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
-                </div>
-              ),
-              type: "error",
-            })
-          );
-        }
-
-        if (response.data) {
-          const { data: resData } = response;
-          setUsers(resData);
-          setBranchTblPgntn({
-            page: resData.data.page,
-            limit: resData.data.limit,
-            nextPage: resData.data.nextPage,
-            prevPage: resData.data.prevPage,
-            totalPages: resData.data.totalPages,
-          });
-          setLoading(false);
-        }
-      } catch (error) {
-        setLoading(false);
-        return null;
+      if (!response || (response && response.status !== 200)) {
+        throw new Error("API Error");
       }
-    },
-    [dispatch, session, t]
-  );
 
-  const confirmDelOk = useCallback(
-    async (id: string) => {
-      setLoading(true);
-      const resDelete = await deleteBranchAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem] capitalize">
-                <span>
-                  {t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}
-                </span>
-              </div>
-            ),
-            timeout: 2000,
-            type: "error",
-          })
-        );
+      const { data: resData } = response;
+      const suppData: UserResp[] = resData.data.items;
+
+      let formattedBody: CustomTblBody[] = [];
+      if (suppData && Array.isArray(suppData)) {
+        formattedBody = suppData.map((x: any) => {
+          return {
+            items: [
+              {
+                value: x.name,
+                className: "text-left w-[15rem]",
+              },
+              {
+                value: x.email,
+                className: "text-left w-[6rem] pl-0",
+              },
+              {
+                value: x.phone,
+                className: "text-left w-[6rem] pl-0",
+              },
+              {
+                value: formatDate(x.birthDate),
+                className: "text-left w-[6rem] pl-0",
+              },
+              {
+                value: x.enabled ? "active" : "inactive",
+                className: "text-left w-[6rem] pl-0",
+              },
+              {
+                value: (
+                  <CustomTableOptionMenu
+                    rowId={x.id}
+                    editURL={`${USER.PAGE.EDIT}/${x.id}`}
+                    viewURL={`${USER.PAGE.VIEW}/${x.id}`}
+                    confirmDel={confirmDeletion}
+                  />
+                ),
+                className: "",
+              },
+            ],
+          };
+        });
       }
-      setLoading(false);
-    },
-    [dispatch, fetch, session, t, toast]
-  );
+      setTblBd(formattedBody);
 
-  const confirmDeletion = useCallback(
-    async (id: string) => {
+      queryClient.setQueryData(["user"], suppData);
+
+      return suppData;
+    } catch (error) {
+      throw new Error("API Error");
+    }
+  };
+
+  const confirmDelOk = async (id: string) => {
+    const resDelete = await deleteBranchAPI(session, id);
+    if (resDelete.data.success) {
+      await fetchData(session, reqPrm);
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: false,
+        })
+      );
       await dispatch(
         toastActs.callShowToast({
           show: true,
           msg: (
-            <div className="flex flex-col pt-[1rem] capitalize">
-              <h1 className="text-[1.5rem]">
-                {t(capitalizeStr(t("Msg.areUSure")))}
-              </h1>
-              <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button onClick={() => confirmDelOk(id)} variant="destructive">
-                  {capitalizeStr(t("Common.delete"))}
-                </Button>
-                <Button onClick={closeAlertModal} type="reset">
-                  {capitalizeStr(t("Common.cancel"))}
-                </Button>
-              </div>
+            <div className="flex flex-col py-[1rem]">
+              <span> {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))} </span>
             </div>
           ),
-          type: "confirm",
+          type: "success",
         })
       );
-    },
-    [closeAlertModal, confirmDelOk, dispatch, t]
-  );
+    } else {
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: true,
+          msg: (
+            <div className="flex flex-col py-[1rem] capitalize">
+              <span>{t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}</span>
+            </div>
+          ),
+          timeout: 2000,
+          type: "error",
+        })
+      );
+    }
+  };
 
-  const onPaginationChange = useCallback(
-    (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
-        page: prm.page,
-        limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      };
+  const confirmDeletion = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col pt-[1rem] capitalize">
+            <h1 className="text-[1.5rem]">
+              {t(capitalizeStr(t("Msg.areUSure")))}
+            </h1>
+            <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
+                {capitalizeStr(t("Common.delete"))}
+              </Button>
+              <Button onClick={closeAlertModal} type="reset">
+                {capitalizeStr(t("Common.cancel"))}
+              </Button>
+            </div>
+          </div>
+        ),
+        type: "confirm",
+      })
+    );
+  };
 
-      fetch(pgntParam);
-    },
-    [fetch]
-  );
+  const onPaginationChange = (prm: PaginationCustomPrms) => {
+    const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
+      page: prm.page,
+      limit: prm.limit,
+      "sort[key]": "name",
+      "sort[direction]": "asc",
+    };
+
+    fetchData(session, pgntParam);
+  };
 
   const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(branchPgntn);
+    const newPrms = handlePrmChangeNextBtn(userPgntn);
     onPaginationChange(newPrms);
   };
 
   const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(branchPgntn);
+    const newPrms = handlePrmChangePrevBtn(userPgntn);
     onPaginationChange(newPrms);
   };
 
   const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(branchPgntn, prm);
+    const newPrms = handlePrmChangeInputPage(userPgntn, prm);
     onPaginationChange(newPrms);
   };
 
   const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(branchPgntn, prm);
+    const newPrms = handlePrmChangeRowPage(userPgntn, prm);
     onPaginationChange(newPrms);
   };
 
-  useEffect(() => {
-    if (!fetched.current && session && session?.accessToken) fetch();
-  }, [fetch, session]);
-
-  useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (users && Array.isArray(users.data.items)) {
-      formattedBody = users.data.items.map((x: any) => {
-        return {
-          items: [
-            {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.email,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.phone,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: formatDate(x.birthDate),
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.enabled ? "active" : "inactive",
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${USER.PAGE.EDIT}/${x.id}`}
-                  viewURL={`${USER.PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
-      });
-    }
-    setTblBd(formattedBody);
-  }, [confirmDeletion, router, t, users]);
-
   return {
-    loading,
+    userData,
+    userDataErr,
+    userDataLoading,
     fetch,
-    users,
     tblBd,
-    branchPgntn,
+    userPgntn,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,

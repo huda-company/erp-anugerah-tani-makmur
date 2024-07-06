@@ -44,7 +44,7 @@ const useGetCashflow = () => {
     error: stockDataErr,
     isLoading: stockDataLoading,
   } = useQuery<CashflowResp[], Error>({
-    queryKey: ["stock"],
+    queryKey: ["cashflow"],
     retry: 2,
     queryFn: async () => {
       const stockData = await fetchCashflowData(session, reqPrm);

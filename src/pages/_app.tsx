@@ -10,6 +10,7 @@ import "@/styles/globals.css";
 import { store } from "@/redux/store";
 import TanstackProvider from "^/providers/TanstackProvider";
 import React from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -21,13 +22,15 @@ export default function App({ Component, pageProps }: AppProps) {
         timeZone="Asia/Jakarta"
         messages={pageProps.messages}
       >
-        <TanstackProvider>
-          <SessionProvider session={pageProps.session}>
-            <Provider store={store}>
-              <Component {...pageProps} />
-            </Provider>
-          </SessionProvider>
-        </TanstackProvider>
+        <ErrorBoundary>
+          <TanstackProvider>
+            <SessionProvider session={pageProps.session}>
+              <Provider store={store}>
+                <Component {...pageProps} />
+              </Provider>
+            </SessionProvider>
+          </TanstackProvider>
+        </ErrorBoundary>
       </NextIntlClientProvider>
     </ThemeProvider>
   );

@@ -14,16 +14,28 @@ import { capitalizeStr } from "^/utils/capitalizeStr";
 import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 import useGetUser from "@/hooks/user/useGetUser";
 import { bcData } from "^/config/user/config";
-import { BRANCH } from "@/constants/pageURL";
+import { AUTH_PAGE_URL, USER } from "@/constants/pageURL";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const UserPage = () => {
+  const router = useRouter();
+  useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push(AUTH_PAGE_URL.SIGNIN);
+    },
+  });
+
+  const { status } = useSession();
+
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.user")}`;
 
   const {
-    loading,
+    userDataLoading: loading,
     tblBd,
-    branchPgntn,
+    userPgntn,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
@@ -71,45 +83,47 @@ const UserPage = () => {
 
   return (
     <>
-      <DashboardLayout>
-        <ScrollArea className="h-full">
-          <div className="flex-1 space-y-4 md:p-8">
-            <HeaderModule
-              addPageURL={BRANCH.PAGE.ADD}
-              title={titlePage}
-              bcumbs={bcData}
-            />
+      {status == "loading" || (loading && <Loading />)}
 
-            {loading && <Loading />}
+      {status == "authenticated" && !loading && (
+        <DashboardLayout>
+          <ScrollArea className="h-full">
+            <div className="flex-1 space-y-4 md:p-8">
+              <HeaderModule
+                addPageURL={USER.PAGE.ADD}
+                title={titlePage}
+                bcumbs={bcData}
+              />
 
-            {loading == false && (
-              <div className="rounded-[1rem] bg-[#CAF4AB]">
-                <CustomTable data={tblData} />
+              {loading == false && (
+                <div className="rounded-[1rem] bg-[#CAF4AB]">
+                  <CustomTable data={tblData} />
 
-                <PaginationCustom
-                  key="branchTbl"
-                  page={branchPgntn.page}
-                  nextPage={branchPgntn.nextPage}
-                  prevPage={branchPgntn.prevPage}
-                  row={branchPgntn.limit}
-                  totalPages={branchPgntn.totalPages}
-                  onNextClick={handleNextClck}
-                  onPrevClick={handlePrevClck}
-                  onPageNumberClick={(pageNo: number) =>
-                    handlePageInputChange(pageNo)
-                  }
-                  onPageRowChange={(limitNo: number) =>
-                    handlePageRowChange(limitNo)
-                  }
-                  onPageInputChange={(pageNo: number) =>
-                    handlePageInputChange(pageNo)
-                  }
-                />
-              </div>
-            )}
-          </div>
-        </ScrollArea>
-      </DashboardLayout>
+                  <PaginationCustom
+                    key="userTbl"
+                    page={userPgntn.page}
+                    nextPage={userPgntn.nextPage}
+                    prevPage={userPgntn.prevPage}
+                    row={userPgntn.limit}
+                    totalPages={userPgntn.totalPages}
+                    onNextClick={handleNextClck}
+                    onPrevClick={handlePrevClck}
+                    onPageNumberClick={(pageNo: number) =>
+                      handlePageInputChange(pageNo)
+                    }
+                    onPageRowChange={(limitNo: number) =>
+                      handlePageRowChange(limitNo)
+                    }
+                    onPageInputChange={(pageNo: number) =>
+                      handlePageInputChange(pageNo)
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </DashboardLayout>
+      )}
     </>
   );
 };

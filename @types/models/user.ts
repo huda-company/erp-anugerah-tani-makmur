@@ -61,3 +61,9 @@ export type UserFormProps = {
   initialFormVals: IUserForm;
   doRefresh: () => void;
 } & BaseFormProps;
+
+export type IUserGetReq = Omit<IUserFieldRequest["query"], "name">;
+
+export type UserResp = {
+  id?: string;
+} & IUserDocument;
