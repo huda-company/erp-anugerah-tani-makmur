@@ -1,5 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { USER_PAGE } from "@/constants/pageURL";
+import { USER } from "@/constants/pageURL";
 import { IUserForm } from "^/@types/models/user";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "user",
     name: "user",
-    url: USER_PAGE.ROOT,
+    url: USER.PAGE.ROOT,
   },
 ];
 

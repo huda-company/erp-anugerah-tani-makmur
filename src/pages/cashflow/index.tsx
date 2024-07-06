@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { CASHFLOW_HIST_PAGE } from "@/constants/pageURL";
+import { CASHFLOW_HIST } from "@/constants/pageURL";
 
 import {
   ColumnDef,
@@ -77,7 +77,7 @@ const CashflowPage = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppStockId}
-                viewURL={`${CASHFLOW_HIST_PAGE.ROOT}?stockId=${suppStockId}`}
+                viewURL={`${CASHFLOW_HIST.PAGE.ROOT}?stockId=${suppStockId}`}
               />
             </div>
           );

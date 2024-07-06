@@ -15,7 +15,6 @@ import {
 import useAppSelector from "../useAppSelector";
 import { deleteBranchAPI } from "^/services/branch";
 import { IBranchFieldRequest } from "^/@types/models/branch";
-import { ROLE_PAGE } from "@/constants/pageURL";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
@@ -31,6 +30,7 @@ import { Options } from "^/@types/global";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { ROLE } from "@/constants/pageURL";
 
 const useGetRole = () => {
   const t = useTranslations("");
@@ -242,8 +242,8 @@ const useGetRole = () => {
               value: (
                 <CustomTableOptionMenu
                   rowId={x.id}
-                  editURL={`${ROLE_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${ROLE_PAGE.VIEW}/${x.id}`}
+                  editURL={`${ROLE.PAGE.EDIT}/${x.id}`}
+                  viewURL={`${ROLE.PAGE.VIEW}/${x.id}`}
                   confirmDel={confirmDeletion}
                 />
               ),

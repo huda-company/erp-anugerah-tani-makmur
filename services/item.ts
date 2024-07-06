@@ -1,11 +1,9 @@
+import { ITEM } from "@/constants/pageURL";
 import { IItemFieldRequest, IItemForm } from "^/@types/models/item";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_ITEM_API_URL = `${BASE_URL}/api/${API_VERSION}/item`;
 
 export const getItemAPI = async (
   sess: Session | null,
@@ -14,7 +12,7 @@ export const getItemAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_ITEM_API_URL}?${qStr}`;
+  const reqURL = `${ITEM.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -28,7 +26,7 @@ export const getItemAPI = async (
 export const addItemAPI = async (sess: Session | null, params: IItemForm) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_API_URL}`;
+  const reqURL = `${ITEM.API.ROOT}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -42,7 +40,7 @@ export const addItemAPI = async (sess: Session | null, params: IItemForm) => {
 export const editItemAPI = async (sess: Session | null, params: IItemForm) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_API_URL}/update/${params.id}`;
+  const reqURL = `${ITEM.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -56,7 +54,7 @@ export const editItemAPI = async (sess: Session | null, params: IItemForm) => {
 export const deleteItemAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_ITEM_API_URL}/delete/${id}`;
+  const reqURL = `${ITEM.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

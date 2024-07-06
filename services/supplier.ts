@@ -1,11 +1,9 @@
+import { SUPPLIER } from "@/constants/pageURL";
 import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_SUPPLIER_API_URL = `${BASE_URL}/api/${API_VERSION}/supplier`;
 
 export const getSupplierAPI = async (
   sess: Session | null,
@@ -14,7 +12,7 @@ export const getSupplierAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_SUPPLIER_API_URL}?${qStr}`;
+  const reqURL = `${SUPPLIER.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -31,7 +29,7 @@ export const addSupplierAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_SUPPLIER_API_URL}`;
+  const reqURL = `${SUPPLIER.API.ROOT}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -48,7 +46,7 @@ export const editSupplierAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_SUPPLIER_API_URL}/update/${params.id}`;
+  const reqURL = `${SUPPLIER.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -62,7 +60,7 @@ export const editSupplierAPI = async (
 export const deleteSupplierAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_SUPPLIER_API_URL}/delete/${id}`;
+  const reqURL = `${SUPPLIER.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

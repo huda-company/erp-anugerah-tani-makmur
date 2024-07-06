@@ -1,4 +1,4 @@
-import { DELIV_NOTE_PAGE } from "@/constants/pageURL";
+import { DELIV_NOTE } from "@/constants/pageURL";
 import { IDelivNoteForm, IDelivNoteGetReq } from "^/@types/models/deliverynote";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
@@ -12,7 +12,7 @@ export const getDelivNoteAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${DELIV_NOTE_PAGE.API.ROOT}?${qStr}`;
+  const reqURL = `${DELIV_NOTE.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -29,7 +29,7 @@ export const createDelivNoteAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${DELIV_NOTE_PAGE.API.ROOT}`;
+  const reqURL = `${DELIV_NOTE.API.ROOT}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -46,7 +46,7 @@ export const editDelivNoteAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${DELIV_NOTE_PAGE.API.EDIT}/${params.id}`;
+  const reqURL = `${DELIV_NOTE.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -60,7 +60,7 @@ export const editDelivNoteAPI = async (
 export const deleteSupplierAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${DELIV_NOTE_PAGE.API.DELETE}/${id}`;
+  const reqURL = `${DELIV_NOTE.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

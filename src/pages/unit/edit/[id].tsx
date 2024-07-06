@@ -5,13 +5,13 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { UNIT_PAGE } from "@/constants/pageURL";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
 import useGetUnitById from "@/hooks/unit/useGetUnitById";
 import UnitForm from "@/components/Unit/UnitForm";
 import { bcData } from "^/config/unit/config";
+import { UNIT } from "@/constants/pageURL";
 
 const EditUnitPage: FC = () => {
   const t = useTranslations("");
@@ -24,7 +24,7 @@ const EditUnitPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={UNIT_PAGE.ADD}
+            addPageURL={UNIT.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

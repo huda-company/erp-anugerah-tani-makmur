@@ -9,7 +9,6 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { bcData, initItemCatReqPrm } from "^/config/itemcategory/config";
 import Loading from "@/components/Loading";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import useGetItemCat from "@/hooks/itemCategory/useGetItemCat";
 import useDebounce from "@/hooks/useDebounce";
 import {
@@ -29,6 +28,7 @@ import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { ITEM_CAT } from "@/constants/pageURL";
 
 const ItemCategory = () => {
   const t = useTranslations("");
@@ -72,8 +72,8 @@ const ItemCategory = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={itemCatId}
-                editURL={`${ITEM_CAT_PAGE.EDIT}/${itemCatId}`}
-                viewURL={`${ITEM_CAT_PAGE.VIEW}/${itemCatId}`}
+                editURL={`${ITEM_CAT.PAGE.EDIT}/${itemCatId}`}
+                viewURL={`${ITEM_CAT.PAGE.VIEW}/${itemCatId}`}
                 confirmDel={confirmDeletion}
               />
             </div>
@@ -162,7 +162,7 @@ const ItemCategory = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={ITEM_CAT_PAGE.ADD}
+              addPageURL={ITEM_CAT.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

@@ -1,11 +1,11 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import {
   IItemCatFieldRequest,
   IItemCatForm,
 } from "^/@types/models/itemcategory";
 import { z } from "zod";
 import { pageRowsArr } from "../request/config";
+import { SUPPLIER } from "@/constants/pageURL";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -18,7 +18,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "itemcategory",
     name: "item category",
-    url: SUPPLIER_PAGE.ROOT,
+    url: SUPPLIER.PAGE.ROOT,
   },
 ];
 

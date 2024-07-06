@@ -10,11 +10,11 @@ import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import CustomTable from "@/components/CustomTable/CustomTable";
 import { CustomTblData } from "@/components/CustomTable/types";
 import Loading from "@/components/Loading";
-import { BRANCH_PAGE } from "@/constants/pageURL";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import PaginationCustom from "@/components/PaginationCustom/PaginationCustom";
 import useGetUser from "@/hooks/user/useGetUser";
 import { bcData } from "^/config/user/config";
+import { BRANCH } from "@/constants/pageURL";
 
 const UserPage = () => {
   const t = useTranslations("");
@@ -75,7 +75,7 @@ const UserPage = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={BRANCH_PAGE.ADD}
+              addPageURL={BRANCH.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

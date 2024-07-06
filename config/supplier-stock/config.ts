@@ -1,8 +1,8 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { SUPPLIER_PAGE, SUPPLIER_STOCK_HIST_PAGE } from "@/constants/pageURL";
 import { pageRowsArr } from "../request/config";
 import { ISupplierStockHistGetReq } from "^/@types/models/supplierstockhist";
 import { ISupplierStockGetReq } from "^/@types/models/supplierstock";
+import { SUPP_STOCK_HIST, SUPPLIER } from "@/constants/pageURL";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -15,7 +15,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "supplierStock",
     name: "supplier Stock",
-    url: SUPPLIER_PAGE.ROOT,
+    url: SUPPLIER.PAGE.ROOT,
   },
 ];
 
@@ -30,7 +30,7 @@ export const bcDataSuppStockHist: BreadcrumbItem[] = [
     isActive: true,
     key: "supplierStockHist",
     name: "supplier Stock History",
-    url: SUPPLIER_STOCK_HIST_PAGE.ROOT,
+    url: SUPP_STOCK_HIST.PAGE.ROOT,
   },
 ];
 

@@ -1,11 +1,9 @@
+import { CASHFLOW_HIST } from "@/constants/pageURL";
 import { IStockGetReq } from "^/@types/models/stock";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_CASHFLOW_HIST_API_URL = `${BASE_URL}/api/${API_VERSION}/cashflow-hist`;
 
 export const getCashflowHistAPI = async (
   sess: Session | null,
@@ -14,7 +12,7 @@ export const getCashflowHistAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_CASHFLOW_HIST_API_URL}?${qStr}`;
+  const reqURL = `${CASHFLOW_HIST.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

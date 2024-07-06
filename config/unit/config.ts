@@ -1,5 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { UNIT_PAGE } from "@/constants/pageURL";
+import { UNIT } from "@/constants/pageURL";
 import { IUnitForm } from "^/@types/models/unit";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "unit",
     name: "unit",
-    url: UNIT_PAGE.ROOT,
+    url: UNIT.PAGE.ROOT,
   },
 ];
 

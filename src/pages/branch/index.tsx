@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { BRANCH_PAGE } from "@/constants/pageURL";
 import useGetBranch from "@/hooks/branch/useGetBranch";
 import { bcData } from "^/config/branch/config";
 import {
@@ -25,6 +24,7 @@ import { BranchResp, IBranchFieldRequest } from "^/@types/models/branch";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { BRANCH } from "@/constants/pageURL";
 
 const BranchPage = () => {
   const t = useTranslations("");
@@ -78,8 +78,8 @@ const BranchPage = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={branchId}
-                editURL={`${BRANCH_PAGE.EDIT}/${branchId}`}
-                viewURL={`${BRANCH_PAGE.VIEW}/${branchId}`}
+                editURL={`${BRANCH.PAGE.EDIT}/${branchId}`}
+                viewURL={`${BRANCH.PAGE.VIEW}/${branchId}`}
                 confirmDel={confirmDeletion}
               />
             </div>
@@ -168,7 +168,7 @@ const BranchPage = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={BRANCH_PAGE.ADD}
+              addPageURL={BRANCH.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

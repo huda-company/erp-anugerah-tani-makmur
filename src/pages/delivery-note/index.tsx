@@ -9,7 +9,6 @@ import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { bcData, initSuppReqPrm } from "^/config/supplier/config";
 import Loading from "@/components/Loading";
-import { DELIV_NOTE_PAGE, SUPPLIER_PAGE } from "@/constants/pageURL";
 
 import {
   ColumnDef,
@@ -35,6 +34,7 @@ import {
 import { useSession } from "next-auth/react";
 import { thsandSep } from "^/utils/helpers";
 import { formatDate } from "^/utils/dateFormatting";
+import { DELIV_NOTE, SUPPLIER } from "@/constants/pageURL";
 
 const DeliveryNotePage = () => {
   const t = useTranslations("");
@@ -117,8 +117,8 @@ const DeliveryNotePage = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppId}
-                editURL={`${DELIV_NOTE_PAGE.PAGE.EDIT}/${suppId}`}
-                viewURL={`${DELIV_NOTE_PAGE.PAGE.VIEW}/${suppId}`}
+                editURL={`${DELIV_NOTE.PAGE.EDIT}/${suppId}`}
+                viewURL={`${DELIV_NOTE.PAGE.VIEW}/${suppId}`}
                 confirmDel={noop}
               />
             </div>
@@ -207,7 +207,7 @@ const DeliveryNotePage = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={SUPPLIER_PAGE.ADD}
+              addPageURL={SUPPLIER.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

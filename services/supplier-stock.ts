@@ -1,11 +1,9 @@
+import { SUPPLIER_STOCK } from "@/constants/pageURL";
 import { ISupplierFieldRequest } from "^/@types/models/supplier";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_SUPPLIER_STOCK_API_URL = `${BASE_URL}/api/${API_VERSION}/supplier-stock`;
 
 export const getSupplierStockAPI = async (
   sess: Session | null,
@@ -14,7 +12,7 @@ export const getSupplierStockAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_SUPPLIER_STOCK_API_URL}?${qStr}`;
+  const reqURL = `${SUPPLIER_STOCK.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

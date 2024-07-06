@@ -6,12 +6,12 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { BRANCH_PAGE } from "@/constants/pageURL";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import BranchForm from "@/components/Branch/BranchForm";
 import useGetBranchById from "@/hooks/branch/useGetBranchById";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { BRANCH } from "@/constants/pageURL";
 
 const EditBranchPage: FC = () => {
   const t = useTranslations("");
@@ -24,7 +24,7 @@ const EditBranchPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={BRANCH_PAGE.ADD}
+            addPageURL={BRANCH.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

@@ -6,7 +6,6 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { DELIV_NOTE_PAGE } from "@/constants/pageURL";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/Loading";
@@ -28,6 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DelivNoteDetailSect from "@/components/DeliveryNote/DelivNoteDetailSect";
 import DelivNotePaymentSect from "@/components/DeliveryNote/DelivNotePaymentSect";
 import useGetDelivNotePaymByDnoteId from "@/hooks/delivery-note/useGetDelivNotePaymByDnoteId";
+import { DELIV_NOTE } from "@/constants/pageURL";
 
 const ViewDelivNotePage: FC = () => {
   const t = useTranslations("");
@@ -46,7 +46,7 @@ const ViewDelivNotePage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={DELIV_NOTE_PAGE.PAGE.ADD}
+            addPageURL={DELIV_NOTE.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />
@@ -79,9 +79,7 @@ const ViewDelivNotePage: FC = () => {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
                               onClick={() =>
-                                router.push(
-                                  `${DELIV_NOTE_PAGE.PAGE.EDIT}/${id}`
-                                )
+                                router.push(`${DELIV_NOTE.PAGE.EDIT}/${id}`)
                               }
                             >
                               {capitalizeStr(t("Common.edit"))}
@@ -89,7 +87,7 @@ const ViewDelivNotePage: FC = () => {
                             <DropdownMenuItem
                               onClick={() =>
                                 router.push(
-                                  `${DELIV_NOTE_PAGE.PAGE.VIEW}/${String(id)}`
+                                  `${DELIV_NOTE.PAGE.VIEW}/${String(id)}`
                                 )
                               }
                             >
@@ -97,7 +95,7 @@ const ViewDelivNotePage: FC = () => {
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <a
-                                href={`${DELIV_NOTE_PAGE.PAGE.PDF}/${String(id)}`}
+                                href={`${DELIV_NOTE.PAGE.PDF}/${String(id)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
