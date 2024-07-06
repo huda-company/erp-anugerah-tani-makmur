@@ -1,4 +1,6 @@
-import { BASE_URL } from "^/config/env";
+import { API_VERSION, BASE_URL } from "^/config/env";
+
+export const BASE_API_URL = `${BASE_URL}/api/${API_VERSION}`;
 
 export const AUTH_PAGE_URL = {
   SIGNIN: `${BASE_URL}/auth/signin`,
@@ -92,6 +94,36 @@ export const PURCHASE_PAGE = {
   EDIT: "/purchase/edit",
   VIEW: "/purchase/view",
   PDF: "/purchase/pdf",
+};
+
+export const PURCHASE_PAYMENT = {
+  PAGE: {
+    ROOT: "/purchase",
+    ADD: "/purchase/add",
+    EDIT: "/purchase/edit",
+    VIEW: "/purchase/view",
+    PDF: "/purchase/pdf",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/payment-purchase`,
+    EDIT: `${BASE_API_URL}/payment-purchase/update`,
+    DELETE: `${BASE_API_URL}/payment-purchase/delete`,
+  },
+};
+
+export const DELIV_NOTE_PAGE = {
+  PAGE: {
+    ROOT: "/delivery-note",
+    ADD: "/delivery-note/add",
+    EDIT: "/delivery-note/edit",
+    VIEW: "/delivery-note/view",
+    PDF: "/delivery-note/pdf",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/delivery-note`,
+    EDIT: `${BASE_API_URL}/delivery-note/update`,
+    DELETE: `${BASE_API_URL}/delivery-note/delete`,
+  },
 };
 
 export const BILL_DOC_PAGE = {
