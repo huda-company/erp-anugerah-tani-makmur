@@ -111,7 +111,7 @@ const useGetPurchaseById = () => {
               className: "text-left w-[6rem] pl-0",
             },
             {
-              value: x.quantity,
+              value: thsandSep(x.quantity),
               className: "text-left w-[6rem] pl-0",
             },
             {

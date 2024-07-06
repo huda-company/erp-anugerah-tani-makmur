@@ -41,7 +41,7 @@ export const formatNumberToNDigits = (num: number, n: number) => {
 };
 
 export const thsandSep = (num: number) => {
-  return Number(num).toLocaleString().replace(/,/g, ".");
+  return num.toLocaleString("de-DE");
 };
 
 export function formNumLeadZeros(num: number, length: number = 3): string {

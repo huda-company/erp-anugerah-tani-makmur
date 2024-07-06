@@ -50,7 +50,7 @@ export const addBranch = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res
       .status(200)
-      .json({ ...respBody.SUCCESS.NEW_ITEM_CAT_CREATE, data: field });
+      .json({ ...respBody.SUCCESS.NEW_BRANCH_CREATE, data: field });
   } catch (error) {
     return res
       .status(500)

@@ -1,6 +1,7 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { Options } from "^/@types/global";
+import { PaymentDelivnoteResp } from "^/@types/models/paymentdelivnote";
 import { PaymentPurchaseResp } from "^/@types/models/paymentpurchase";
 import { PickupDocType } from "^/@types/models/pickupdoc";
 import { IPurchaseForm, PurchaseStatus } from "^/@types/models/purchase";
@@ -109,5 +110,11 @@ export const calculateGrandTotal = (items: { total: number }[]): number => {
 };
 
 export const calculatePaymPurchTotal = (prm: PaymentPurchaseResp[]): number => {
+  return prm.reduce((acc: any, doc: any) => acc + doc.amount, 0);
+};
+
+export const calculatePaymDelivNoteTotal = (
+  prm: PaymentDelivnoteResp[]
+): number => {
   return prm.reduce((acc: any, doc: any) => acc + doc.amount, 0);
 };

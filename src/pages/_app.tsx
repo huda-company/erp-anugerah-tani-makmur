@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import "@/styles/globals.css";
 
 import { store } from "@/redux/store";
-import TanstakProvider from "^/providers/TanstackProvider";
+import TanstackProvider from "^/providers/TanstackProvider";
+import React from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -20,13 +21,13 @@ export default function App({ Component, pageProps }: AppProps) {
         timeZone="Asia/Jakarta"
         messages={pageProps.messages}
       >
-        <TanstakProvider>
+        <TanstackProvider>
           <SessionProvider session={pageProps.session}>
             <Provider store={store}>
               <Component {...pageProps} />
             </Provider>
           </SessionProvider>
-        </TanstakProvider>
+        </TanstackProvider>
       </NextIntlClientProvider>
     </ThemeProvider>
   );

@@ -26,6 +26,7 @@ export const respBody = {
     UNEXPECTED_ERROR: cResp(false, ErrorType.UNEXPECTED_ERROR),
     GTOTAL_N_PAYMENT_EQUAL: cResp(false, ErrorType.GTOTAL_N_PAYMENT_EQUAL),
     INVALID_PO: cResp(false, ErrorType.INVALID_PO),
+    INVALID_DELIVNOTE_ID: cResp(false, ErrorType.INVALID_DELIVNOTE_ID),
     INVALID_PAYMENT_PURCH_ID: cResp(false, ErrorType.INVALID_PAYMENT_PURCH_ID),
     INVALID_SUPP_ID: cResp(false, ErrorType.INVALID_SUPP_ID),
     INCORRECT_PAYLOAD: cResp(false, ErrorType.INCORRECT_PAYLOAD),
@@ -39,6 +40,7 @@ export const respBody = {
     UNKNOWN_EMAIL: cResp(false, ErrorType.UNKNOWN_EMAIL),
     PURCHASE_UPDATE: cResp(false, ErrorType.PURCHASE_UPDATE),
     PURCHASE_PAYMENT_CREATE: cResp(true, ErrorType.PURCHASE_PAYMENT_CREATE),
+    DELIVNOTE_PAYMENT_CREATE: cResp(true, ErrorType.DELIVNOTE_PAYMENT_CREATE),
     PICKUP_DOC_CREATE: cResp(true, ErrorType.PICKUP_DOC_CREATE),
     PURCHASE_ALREADY_RELEASED: cResp(
       true,
@@ -57,6 +59,7 @@ export const respBody = {
     USER_UPDATE: cResp(true, SuccessType.USER_UPDATE),
     USER_DELETE: cResp(true, SuccessType.USER_DELETE),
     NEW_ITEM_CAT_CREATE: cResp(true, SuccessType.NEW_ITEM_CAT_CREATE),
+    NEW_BRANCH_CREATE: cResp(true, SuccessType.NEW_BRANCH_CREATE),
     BRANCH_UPDATE: cResp(true, SuccessType.BRANCH_UPDATE),
     BRANCH_DELETE: cResp(true, SuccessType.BRANCH_DELETE),
     ITEM_CAT_UPDATE: cResp(true, SuccessType.ITEM_CAT_UPDATE),
@@ -74,5 +77,7 @@ export const respBody = {
     PURCHASE_PAYMENT_CREATE: cResp(true, SuccessType.PURCHASE_PAYMENT_CREATE),
     PURCHASE_PAYMENT_DELETE: cResp(true, SuccessType.PURCHASE_PAYMENT_DELETE),
     PICKUP_DOC_CREATE: cResp(true, SuccessType.PICKUP_DOC_CREATE),
+    DELIV_NOTE_CREATE: cResp(true, SuccessType.DELIV_NOTE_CREATE),
+    DELIVNOTE_PAYMENT_CREATE: cResp(true, SuccessType.DELIVNOTE_PAYMENT_CREATE),
   },
 };

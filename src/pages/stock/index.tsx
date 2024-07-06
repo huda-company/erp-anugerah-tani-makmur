@@ -35,7 +35,7 @@ const StockPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.stock")}`;
 
-  const { data: session } = useSession();
+  const { status, data: session } = useSession();
 
   const {
     data: data,
@@ -178,9 +178,9 @@ const StockPage = () => {
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule addPageURL="" title={titlePage} bcumbs={bcData} />
 
-            {loading && <Loading />}
+            {status == "loading" || (loading && <Loading />)}
 
-            {loading == false && (
+            {status == "authenticated" && !loading && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}

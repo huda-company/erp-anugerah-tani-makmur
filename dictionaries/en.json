@@ -42,6 +42,7 @@
     "submit": "submit",
     "date": "date",
     "amount": "amount",
+    "destination": "destination",
     "detail": "detail"
   },
   "AboutUs": {
@@ -70,6 +71,7 @@
     "dashboard": "dashboard",
     "employee": "employee",
     "supplier": "supplier",
+    "delivNote": "delivery note",
     "cashflow": "cash flow",
     "cashflowHist": "cash flow history",
     "stock": "stock",
@@ -92,6 +94,16 @@
   },
   "SupplierPage": {
     "revenue": "revenue"
+  },
+  "DelivNote": {
+    "sellingPrice": "selling price",
+    "purchasePrice": "purchase price",
+    "sellingTotal": "selling total",
+    "purchaseTotal": "purchase total",
+    "FUEL": "FUEL",
+    "TOLL": "TOLL",
+    "DRIVER_FEE": "driver fee",
+    "SCALES": "cost for scales"
   },
   "PurchasePage": {
     "poNo": "PO No",
@@ -118,6 +130,7 @@
     "vehicleType": "vehicle type",
     "flatNo": "flat number",
     "driverName": "driver name",
+    "driverLicenseNo": "license number",
     "docType": "document type",
     "noFileFound": "no file found"
   },
@@ -202,6 +215,8 @@
       "NEW_UNIT_CREATE": "failed to create new unit",
       "UNIT_UPDATE": "failed to update unit",
       "UNIT_DELETE": "failed to delete unit",
+      "CANT_ADD_PAYMENT": "can not add new payment data",
+      "NOMINAL_IS_EQUAL": "nominal is equal to payment total",
       "PAYMENT_PURCHASE_CREATE": "failed to create payment purchase",
       "PAYMENT_PURCHASE_DELETE": "payment deleted successfully",
       "PICKUP_DOC_CREATE": "failed to create pickup document",

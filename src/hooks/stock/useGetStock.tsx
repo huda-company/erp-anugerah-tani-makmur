@@ -1,6 +1,6 @@
 import { initSuppReqPrm } from "^/config/supplier/config";
 import { useSession } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
@@ -22,9 +22,7 @@ import { getStockAPI } from "^/services/stock";
 
 const useGetStock = () => {
   const router = useRouter();
-  const { suppStockId } = router.query;
-
-  const fetched = useRef(false);
+  const { id: suppStockId } = router.query;
 
   const queryClient = useQueryClient();
 
@@ -38,15 +36,13 @@ const useGetStock = () => {
   const [suppPgntn, setSuppTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
 
-  const [data, setData] = useState<StockTanTblData[]>([]);
-
   const {
     data: stockData,
     error: stockDataErr,
     isLoading: stockDataLoading,
   } = useQuery<StockResp[], Error>({
     queryKey: ["stock"],
-    retry: 2,
+    enabled: !!initSuppReqPrm,
     queryFn: async () => {
       const stockData = await fetchStockData(session, reqPrm);
 
@@ -60,8 +56,6 @@ const useGetStock = () => {
     suppStockReq: IStockGetReq // Replace with your request payload type
   ): Promise<StockResp[]> => {
     try {
-      fetched.current = true;
-
       const response = await getStockAPI(session, suppStockReq);
 
       if (!response || (response && response.status !== 200)) {
@@ -71,7 +65,7 @@ const useGetStock = () => {
       const { data: resData } = response;
       const suppData: StockResp[] = resData.data.items;
 
-      queryClient.setQueryData(["supp-stock"], suppData);
+      queryClient.setQueryData(["stock"], suppData);
 
       setSuppTblPgntn({
         page: resData.data.page,
@@ -81,25 +75,26 @@ const useGetStock = () => {
         totalPages: resData.data.totalPages,
       });
 
-      const tStackTblBd =
-        suppData.length > 0
-          ? suppData.map((x: StockResp) => {
-              return {
-                id: String(x.id),
-                itemName: x.item.name,
-                branchName: x.branch.name,
-                stock: x.stock,
-              } as StockTanTblData;
-            })
-          : [];
-
-      setData(tStackTblBd);
-
       return suppData;
     } catch (error) {
       throw new Error("API Error");
     }
   };
+
+  let data: StockTanTblData[] = queryClient.getQueryData(["stock"]) || [];
+  const tStackTblBd =
+    stockData && stockData.length > 0
+      ? stockData.map((x: StockResp) => {
+          return {
+            id: String(x.id),
+            itemName: x.item.name,
+            branchName: x.branch.name,
+            stock: x.stock,
+          } as StockTanTblData;
+        })
+      : [];
+
+  data = tStackTblBd;
 
   const onPaginationChange = (prm: PaginationCustomPrms) => {
     const pgntParam: IStockGetReq = {

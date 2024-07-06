@@ -21,6 +21,8 @@ import { actions as toastActs } from "@/redux/toast";
 import { FormMode } from "^/@types/global";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
 import useCloseAlertModal from "@/hooks/useCloseAlertModal";
+import Loading from "../Loading";
+import { noop } from "^/utils/helpers";
 
 const PurchPaymSect: FC = () => {
   const t = useTranslations("");
@@ -29,10 +31,15 @@ const PurchPaymSect: FC = () => {
 
   const { closeAlertModal } = useCloseAlertModal();
 
-  const { paymPurcFormVal } = useGetPurchaseById();
+  const { paymPurcFormVal, purch } = useGetPurchaseById();
 
-  const { paymPurchReq, fetchPaymPurch, paymPurcTblBd } =
-    useGetPaymentPurchByPurchId();
+  const {
+    paymPurchDataLoading: loading,
+    paymPurchReq,
+    fetchPaymPurch,
+    paymPurcTblBd,
+    paymPurchTotal,
+  } = useGetPaymentPurchByPurchId();
 
   const payPurchHeader = useMemo(
     () => [
@@ -51,6 +58,10 @@ const PurchPaymSect: FC = () => {
       },
       {
         value: "PPB / SPAA",
+        className: "text-left text-xs w-[9rem] p-0",
+      },
+      {
+        value: "Nota Pengiriman",
         className: "text-left text-xs w-[9rem] p-0",
       },
       {
@@ -79,65 +90,90 @@ const PurchPaymSect: FC = () => {
   };
 
   const PaymPurchDialog = async () => {
-    await dispatch(
-      toastActs.callShowToast({
-        show: true,
-        msg: (
-          <div className="flex flex-col items-center pt-[1rem] capitalize">
-            <span className="mb-[2rem] text-center text-[1.5rem]">
-              {`${capitalizeStr(t("PurchasePage.payment"))}`}
-            </span>
+    if (paymPurchTotal < Number(purch.grandTotal)) {
+      dispatch(
+        toastActs.callShowToast({
+          show: true,
+          msg: (
+            <div className="flex flex-col items-center pt-[1rem] capitalize">
+              <span className="mb-[2rem] text-center text-[1.5rem]">
+                {`${capitalizeStr(t("PurchasePage.payment"))}`}
+              </span>
 
-            <PaymentPurchaseForm
-              mode={FormMode.EDIT}
-              initialFormVals={paymPurcFormVal}
-              onclose={onOkPaymPurchForm}
-              onSubmitOk={onOkPaymPurchForm}
-            />
-          </div>
-        ),
-        type: "form",
-      })
-    );
+              <PaymentPurchaseForm
+                mode={FormMode.EDIT}
+                initialFormVals={paymPurcFormVal}
+                onclose={onOkPaymPurchForm}
+                onSubmitOk={onOkPaymPurchForm}
+                doRefresh={noop}
+              />
+            </div>
+          ),
+          type: "form",
+        })
+      );
+    } else {
+      dispatch(
+        toastActs.callShowToast({
+          show: true,
+          msg: (
+            <div className="flex flex-col py-[1rem]">
+              <span>{capitalizeStr(t("API_MSG.ERROR.CANT_ADD_PAYMENT"))}</span>
+              <span>{capitalizeStr(t("API_MSG.ERROR.NOMINAL_IS_EQUAL"))}</span>
+            </div>
+          ),
+          type: "error",
+        })
+      );
+    }
   };
 
   return (
-    <Card className="">
-      <CardHeader className="bg-[#EAE2E1] p-2">
-        <CardTitle>
-          <div className="flex justify-between">
-            <span>{capitalizeStr(t("PurchasePage.purcPaymHistory"))}</span>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className="bg-black hover:bg-black"
-                  asChild
-                >
-                  <Button variant="ghost" className="hover:none h-6 w-6 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <VscSettings className="h-4 w-4 text-white" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      PaymPurchDialog();
-                    }}
-                  >
-                    {`${capitalizeStr(t("Common.add"))} ${capitalizeStr(t("PurchasePage.purcPaymHistory"))} `}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+    <>
+      {loading && <Loading height="20px" />}
+
+      {!loading && (
+        <Card className="">
+          <CardHeader className="bg-[#EAE2E1] p-2">
+            <CardTitle>
+              <div className="flex justify-between">
+                <span>{capitalizeStr(t("PurchasePage.purcPaymHistory"))}</span>
+                <div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className="bg-black hover:bg-black"
+                      asChild
+                    >
+                      <Button
+                        variant="ghost"
+                        className="hover:none h-6 w-6 p-0"
+                      >
+                        <span className="sr-only">Open menu</span>
+                        <VscSettings className="h-4 w-4 text-white" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          PaymPurchDialog();
+                        }}
+                      >
+                        {`${capitalizeStr(t("Common.add"))} ${capitalizeStr(t("PurchasePage.purcPaymHistory"))} `}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
+              <CustomTable key="paymPurchTbl" data={paymPurchTData} />
             </div>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="mt-[1rem] rounded-[1rem] bg-[#E2E7E8]">
-          <CustomTable key="paymPurchTbl" data={paymPurchTData} />
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 };
 

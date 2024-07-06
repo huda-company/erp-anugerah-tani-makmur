@@ -39,8 +39,6 @@ const useGetCashflow = () => {
   const [suppPgntn, setSuppTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
 
-  const [data, setData] = useState<CashflowTanTblData[]>([]);
-
   const {
     data: stockData,
     error: stockDataErr,
@@ -82,19 +80,6 @@ const useGetCashflow = () => {
         totalPages: resData.data.totalPages,
       });
 
-      const tStackTblBd =
-        suppData.length > 0
-          ? suppData.map((x: CashflowResp) => {
-              return {
-                id: String(x.id),
-                branchName: x.branch.name,
-                balance: x.balance,
-              } as CashflowTanTblData;
-            })
-          : [];
-
-      setData(tStackTblBd);
-
       return suppData;
     } catch (error) {
       throw new Error("API Error");
@@ -130,6 +115,17 @@ const useGetCashflow = () => {
     const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
     onPaginationChange(newPrms);
   };
+
+  const data =
+    stockData && stockData.length > 0
+      ? stockData.map((x: CashflowResp) => {
+          return {
+            id: String(x.id),
+            branchName: x.branch.name,
+            balance: x.balance,
+          } as CashflowTanTblData;
+        })
+      : [];
 
   return {
     suppPgntn,
