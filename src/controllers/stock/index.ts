@@ -65,7 +65,13 @@ export const determineMinusOrPlusStockAmt = (
   qty: number
 ) => {
   let res = qty;
-  if (type == StockActivityTypes.PURCHASE_PAYMENT_DEL) res = -qty;
+  if (
+    [
+      StockActivityTypes.PURCHASE_PAYMENT_DEL,
+      StockActivityTypes.DELIV_NOTE_CREATE_OUT,
+    ].includes(type)
+  )
+    res = -qty;
   return res;
 };
 

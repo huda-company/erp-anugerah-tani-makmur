@@ -14,7 +14,10 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { useRouter } from "next/router";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
-import { IPaymentPurchaseForm } from "^/@types/models/paymentpurchase";
+import {
+  IPaymentPurchaseForm,
+  PaymentPurchaseFormProps,
+} from "^/@types/models/paymentpurchase";
 import { FormMode, Options } from "^/@types/global";
 import { initialPaymPurchaseForm } from "^/config/payment-purchase/config";
 import { Textarea } from "../ui/textarea";
@@ -26,13 +29,6 @@ import { FaSpinner } from "react-icons/fa";
 import { Button } from "../ui/button";
 import useAppDispatch from "@/hooks/useAppDispatch";
 import { actions as toastActs } from "@/redux/toast";
-
-export interface PaymentPurchaseFormProps {
-  mode: FormMode;
-  initialFormVals: IPaymentPurchaseForm;
-  onclose: () => void;
-  onSubmitOk: () => void;
-}
 
 const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
   mode,

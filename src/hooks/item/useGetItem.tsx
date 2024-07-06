@@ -57,14 +57,7 @@ const useGetItem = () => {
   const [data, setData] = useState<ItemTanTblData[]>([]);
 
   const fetch = useCallback(
-    async (
-      payload: Omit<IItemFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[0],
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+    async (payload: Omit<IItemFieldRequest["query"], "name"> = reqPrm) => {
       fetched.current = true;
       setLoading(true);
 
