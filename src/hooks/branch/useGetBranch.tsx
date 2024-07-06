@@ -24,6 +24,7 @@ import {
 } from "@/components/PaginationCustom/config";
 import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { Options } from "^/@types/global";
 
 const useGetBranch = () => {
   const t = useTranslations("");
@@ -44,6 +45,7 @@ const useGetBranch = () => {
   });
   const [loading, setLoading] = useState(true);
   const [branches, setBranches] = useState<BranchResp[]>([]);
+  const [branchOpts, setBranchOpts] = useState<Options[]>([]);
   const [branchPgntn, setBranchTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
   const [data, setData] = useState<BranchResp[]>([]);
@@ -226,6 +228,18 @@ const useGetBranch = () => {
         } as BranchResp;
       });
       setData(tStackTblBd);
+
+      // build opts
+      const opts =
+        branches && Array.isArray(branches) && branches.length > 0
+          ? branches.map((x: any) => {
+              return {
+                value: x.id,
+                text: x.name,
+              };
+            })
+          : [];
+      setBranchOpts(opts);
     }
   }, [branches]);
 
@@ -233,6 +247,7 @@ const useGetBranch = () => {
     loading,
     fetch,
     branches,
+    branchOpts,
     branchPgntn,
     data,
     reqPrm,
