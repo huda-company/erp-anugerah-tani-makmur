@@ -93,3 +93,7 @@
     height: 100dvh;
   }
 }
+
+label {
+  @apply font-bold;
+}
