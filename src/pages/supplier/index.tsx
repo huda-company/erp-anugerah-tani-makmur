@@ -10,7 +10,6 @@ import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import { bcData, initSuppReqPrm } from "^/config/supplier/config";
 import useGetSupplier from "@/hooks/supplier/useGetSupplier";
 import Loading from "@/components/Loading";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
 
 import {
   ColumnDef,
@@ -30,6 +29,7 @@ import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { SUPPLIER } from "@/constants/pageURL";
 
 const Supplier = () => {
   const t = useTranslations("");
@@ -100,8 +100,8 @@ const Supplier = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppId}
-                editURL={`${SUPPLIER_PAGE.EDIT}/${suppId}`}
-                viewURL={`${SUPPLIER_PAGE.VIEW}/${suppId}`}
+                editURL={`${SUPPLIER.PAGE.EDIT}/${suppId}`}
+                viewURL={`${SUPPLIER.PAGE.VIEW}/${suppId}`}
                 confirmDel={confirmDeletion}
               />
             </div>
@@ -190,7 +190,7 @@ const Supplier = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={SUPPLIER_PAGE.ADD}
+              addPageURL={SUPPLIER.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

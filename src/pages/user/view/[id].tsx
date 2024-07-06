@@ -5,13 +5,13 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { BRANCH_PAGE } from "@/constants/pageURL";
 import { FormMode } from "^/@types/global";
 import { bcData } from "^/config/itemcategory/config";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
 import UserForm from "@/components/User/UserForm";
 import useGetUserById from "@/hooks/user/useGetUserById";
 import Loading from "@/components/Loading";
+import { BRANCH } from "@/constants/pageURL";
 
 const ViewUserPage: FC = () => {
   const t = useTranslations("");
@@ -28,7 +28,7 @@ const ViewUserPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={BRANCH_PAGE.ADD}
+            addPageURL={BRANCH.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

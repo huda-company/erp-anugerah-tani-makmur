@@ -1,12 +1,10 @@
+import { PO } from "@/constants/pageURL";
 import { IPurchaseFieldRequest, IPurchaseForm } from "^/@types/models/purchase";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { handleAxiosError } from "^/utils/handleAxiosError";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_PURCHASE_API_URL = `${BASE_URL}/api/${API_VERSION}/purchase`;
 
 export const getPurchaseAPI = async (
   sess: Session | null,
@@ -15,7 +13,7 @@ export const getPurchaseAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_PURCHASE_API_URL}?${qStr}`;
+  const reqURL = `${PO.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -32,7 +30,7 @@ export const createPurchaseAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}`;
+  const reqURL = `${PO.API.ROOT}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -49,7 +47,7 @@ export const editPurchaseAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}/update/${params.id}`;
+  const reqURL = `${PO.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -63,7 +61,7 @@ export const editPurchaseAPI = async (
 export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}/delete/${id}`;
+  const reqURL = `${PO.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -77,7 +75,7 @@ export const deletePurchaseAPI = async (sess: Session | null, id: string) => {
 export const apprPurchaseAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PURCHASE_API_URL}/approve/${id}`;
+  const reqURL = `${PO.API.APPROVE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

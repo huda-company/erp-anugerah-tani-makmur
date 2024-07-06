@@ -1,11 +1,9 @@
+import { UNIT } from "@/constants/pageURL";
 import { IUnitFieldRequest, IUnitForm } from "^/@types/models/unit";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_UNIT_API_URL = `${BASE_URL}/api/${API_VERSION}/unit`;
 
 export const getUnitAPI = async (
   sess: Session | null,
@@ -14,7 +12,7 @@ export const getUnitAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_UNIT_API_URL}?${qStr}`;
+  const reqURL = `${UNIT.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -28,7 +26,7 @@ export const getUnitAPI = async (
 export const addUnitAPI = async (sess: Session | null, params: IUnitForm) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_UNIT_API_URL}`;
+  const reqURL = `${UNIT.API.ROOT}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -42,7 +40,7 @@ export const addUnitAPI = async (sess: Session | null, params: IUnitForm) => {
 export const editUnitAPI = async (sess: Session | null, params: IUnitForm) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_UNIT_API_URL}/update/${params.id}`;
+  const reqURL = `${UNIT.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -56,7 +54,7 @@ export const editUnitAPI = async (sess: Session | null, params: IUnitForm) => {
 export const deleteUnitAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_UNIT_API_URL}/delete/${id}`;
+  const reqURL = `${UNIT.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

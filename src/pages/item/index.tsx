@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { ITEM_PAGE } from "@/constants/pageURL";
 import useGetItem from "@/hooks/item/useGetItem";
 import { bcData } from "^/config/item/config";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
@@ -25,6 +24,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { IItemGetReq, ItemTanTblData } from "^/@types/models/item";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { ITEM } from "@/constants/pageURL";
 
 const Item = () => {
   const t = useTranslations("");
@@ -78,8 +78,8 @@ const Item = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={itemId}
-                editURL={`${ITEM_PAGE.EDIT}/${itemId}`}
-                viewURL={`${ITEM_PAGE.VIEW}/${itemId}`}
+                editURL={`${ITEM.PAGE.EDIT}/${itemId}`}
+                viewURL={`${ITEM.PAGE.VIEW}/${itemId}`}
                 confirmDel={confirmDeletion}
               />
             </div>
@@ -168,7 +168,7 @@ const Item = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={ITEM_PAGE.ADD}
+              addPageURL={ITEM.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

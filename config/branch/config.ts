@@ -1,5 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { BRANCH_PAGE } from "@/constants/pageURL";
+import { BRANCH } from "@/constants/pageURL";
 import { IBranchForm } from "^/@types/models/branch";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "branch",
     name: "branch",
-    url: BRANCH_PAGE.ROOT,
+    url: BRANCH.PAGE.ROOT,
   },
 ];
 

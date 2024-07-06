@@ -16,76 +16,135 @@ export const AUTH_PAGE_URL = {
   FIRST_TIME_SIGN_IN_SUCCESS: "/auth/first-time-sign-in/success",
 };
 
-export const SUPPLIER_PAGE = {
-  ROOT: "/supplier",
-  ADD: "/supplier/add",
-  EDIT: "/supplier/edit",
-  VIEW: "/supplier/view",
+export const SUPPLIER = {
+  PAGE: {
+    ROOT: "/supplier",
+    ADD: "/supplier/add",
+    EDIT: "/supplier/edit",
+    VIEW: "/supplier/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/supplier`,
+    EDIT: `${BASE_API_URL}/supplier/edit`,
+    DELETE: `${BASE_API_URL}/supplier/delete`,
+  },
 };
 
-export const SUPPLIER_STOCK_PAGE = {
-  ROOT: "/supplier-stock",
+export const SUPPLIER_STOCK = {
+  PAGE: {
+    ROOT: "/supplier-stock",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/supplier-stock`,
+  },
 };
 
-export const SUPPLIER_STOCK_HIST_PAGE = {
-  ROOT: "/supplier-stock/history",
+export const PO = {
+  PAGE: {
+    ROOT: "/purchase",
+    ADD: "/purchase/add",
+    EDIT: "/purchase/edit",
+    VIEW: "/purchase/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/purchase`,
+    EDIT: `${BASE_API_URL}/purchase/update`,
+    DELETE: `${BASE_API_URL}/purchase/delete`,
+    APPROVE: `${BASE_API_URL}/purchase/approve`,
+  },
 };
 
-export const PO_PAGE = {
-  ROOT: "/purchase",
-  ADD: "/purchase/add",
-  EDIT: "/purchase/edit",
-  VIEW: "/purchase/view",
+export const ITEM_CAT = {
+  PAGE: {
+    ROOT: "/itemcategory",
+    ADD: "/itemcategory/add",
+    EDIT: "/itemcategory/edit",
+    VIEW: "/itemcategory/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/itemcategory`,
+    EDIT: `${BASE_API_URL}/itemcategory/update`,
+    DELETE: `${BASE_API_URL}/itemcategory/delete`,
+  },
 };
 
-export const ITEM_CAT_PAGE = {
-  ROOT: "/itemcategory",
-  ADD: "/itemcategory/add",
-  EDIT: "/itemcategory/edit",
-  VIEW: "/itemcategory/view",
+export const ITEM = {
+  PAGE: {
+    ROOT: "/item",
+    ADD: "/item/add",
+    EDIT: "/item/edit",
+    VIEW: "/item/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/item`,
+    EDIT: `${BASE_API_URL}/item/update`,
+    DELETE: `${BASE_API_URL}/item/delete`,
+  },
 };
 
-export const ITEM_PAGE = {
-  ROOT: "/item",
-  ADD: "/item/add",
-  EDIT: "/item/edit",
-  VIEW: "/item/view",
+export const UNIT = {
+  PAGE: {
+    ROOT: "/unit",
+    ADD: "/unit/add",
+    EDIT: "/unit/edit",
+    VIEW: "/unit/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/unit`,
+    EDIT: `${BASE_API_URL}/unit/update`,
+    DELETE: `${BASE_API_URL}/unit/delete`,
+  },
 };
 
-export const UNIT_PAGE = {
-  ROOT: "/unit",
-  ADD: "/unit/add",
-  EDIT: "/unit/edit",
-  VIEW: "/unit/view",
-};
-
-export const STOCK_PAGE = {
-  ROOT: "/stock",
-  ADD: "/stock/add",
-  EDIT: "/stock/edit",
-  VIEW: "/stock/view",
+export const STOCK = {
+  PAGE: {
+    ROOT: "/stock",
+    ADD: "/stock/add",
+    EDIT: "/stock/edit",
+    VIEW: "/stock/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/stock`,
+  },
 };
 
 export const STOCK_HIST_PAGE = {
-  ROOT: `${STOCK_PAGE.ROOT}/history`,
+  ROOT: `${STOCK.PAGE.ROOT}/history`,
 };
 
-export const CASHFLOW_PAGE = {
-  ROOT: "/cashflow",
-  ADD: "/cashflow/add",
-  EDIT: "/cashflow/edit",
-  VIEW: "/cashflow/view",
+export const CASHFLOW = {
+  PAGE: {
+    ROOT: "/cashflow",
+    ADD: "/cashflow/add",
+    EDIT: "/cashflow/edit",
+    VIEW: "/cashflow/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/cashflow`,
+  },
 };
 
-export const CASHFLOW_HIST_PAGE = {
-  ROOT: `${CASHFLOW_PAGE.ROOT}/history`,
+export const CASHFLOW_HIST = {
+  PAGE: {
+    ROOT: `${CASHFLOW.PAGE.ROOT}/history`,
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/cashflow-hist`,
+  },
 };
 
-export const BRANCH_PAGE = {
-  ROOT: "/branch",
-  ADD: "/branch/add",
-  EDIT: "/branch/edit",
-  VIEW: "/branch/view",
+export const BRANCH = {
+  PAGE: {
+    ROOT: "/branch",
+    ADD: "/branch/add",
+    EDIT: "/branch/edit",
+    VIEW: "/branch/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/branch`,
+    EDIT: `${BASE_API_URL}/branch/update`,
+    DELETE: `${BASE_API_URL}/branch/delete`,
+  },
 };
 
 export const PURCHASE_PAGE = {
@@ -111,7 +170,7 @@ export const PURCHASE_PAYMENT = {
   },
 };
 
-export const DELIV_NOTE_PAGE = {
+export const DELIV_NOTE = {
   PAGE: {
     ROOT: "/delivery-note",
     ADD: "/delivery-note/add",
@@ -126,23 +185,98 @@ export const DELIV_NOTE_PAGE = {
   },
 };
 
-export const BILL_DOC_PAGE = {
-  ROOT: "/billdoc",
-  ADD: "/billdoc/add",
-  EDIT: "/billdoc/edit",
-  VIEW: "/billdoc/view",
+export const DELIV_NOTE_PAYMENT = {
+  PAGE: {
+    ROOT: "/payment-deliverynote",
+    ADD: "/payment-deliverynote/add",
+    EDIT: "/payment-deliverynote/edit",
+    VIEW: "/payment-deliverynote/view",
+    PDF: "/payment-deliverynote/pdf",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/payment-deliverynote`,
+    EDIT: `${BASE_API_URL}/payment-deliverynote/update`,
+    DELETE: `${BASE_API_URL}/payment-deliverynote/delete`,
+  },
 };
 
-export const USER_PAGE = {
-  ROOT: "/user",
-  ADD: "/user/add",
-  EDIT: "/user/edit",
-  VIEW: "/user/view",
+export const BILL_DOC = {
+  PAGE: {
+    ROOT: "/billdoc",
+    ADD: "/billdoc/add",
+    EDIT: "/billdoc/edit",
+    VIEW: "/billdoc/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/billdoc`,
+    EDIT: `${BASE_API_URL}/billdoc/update`,
+    DELETE: `${BASE_API_URL}/billdoc/delete`,
+  },
 };
 
-export const ROLE_PAGE = {
-  ROOT: "/role",
-  ADD: "/role/add",
-  EDIT: "/role/edit",
-  VIEW: "/role/view",
+export const PICKUP_DOC = {
+  PAGE: {
+    ROOT: "/pickup-doc",
+    ADD: "/pickup-doc/add",
+    EDIT: "/pickup-doc/edit",
+    VIEW: "/pickup-doc/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/pickup-doc`,
+    EDIT: `${BASE_API_URL}/pickup-doc/update`,
+    DELETE: `${BASE_API_URL}/pickup-doc/delete`,
+  },
+};
+
+export const USER = {
+  PAGE: {
+    ROOT: "/user",
+    ADD: "/user/add",
+    EDIT: "/user/edit",
+    VIEW: "/user/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/user`,
+    EDIT: `${BASE_API_URL}/user/update`,
+    DELETE: `${BASE_API_URL}/user/delete`,
+  },
+};
+
+export const ROLE = {
+  PAGE: {
+    ROOT: "/role",
+    ADD: "/role/add",
+    EDIT: "/role/edit",
+    VIEW: "/role/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/role`,
+    EDIT: `${BASE_API_URL}/role/update`,
+    DELETE: `${BASE_API_URL}/role/delete`,
+  },
+};
+
+export const STOCK_HIST = {
+  PAGE: {
+    ROOT: "/stock-hist",
+    ADD: "/stock-hist/add",
+    EDIT: "/stock-hist/edit",
+    VIEW: "/stock-hist/view",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/stock-hist`,
+    EDIT: `${BASE_API_URL}/stock-hist/update`,
+    DELETE: `${BASE_API_URL}/stock-hist/delete`,
+  },
+};
+
+export const SUPP_STOCK_HIST = {
+  PAGE: {
+    ROOT: "/supplier-stock/history",
+  },
+  API: {
+    ROOT: `${BASE_API_URL}/supplier-stock-hist`,
+    EDIT: `${BASE_API_URL}/supplier-stock-hist/update`,
+    DELETE: `${BASE_API_URL}/supplier-stock-hist/delete`,
+  },
 };

@@ -5,12 +5,12 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { BRANCH_PAGE } from "@/constants/pageURL";
 import { FormMode } from "^/@types/global";
 import { bcData } from "^/config/itemcategory/config";
 import BranchForm from "@/components/Branch/BranchForm";
 import useGetBranchById from "@/hooks/branch/useGetBranchById";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { BRANCH } from "@/constants/pageURL";
 
 const ViewBranchPage: FC = () => {
   const t = useTranslations("");
@@ -27,7 +27,7 @@ const ViewBranchPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={BRANCH_PAGE.ADD}
+            addPageURL={BRANCH.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

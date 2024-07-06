@@ -15,7 +15,6 @@ import {
 import useAppSelector from "../useAppSelector";
 import { deleteBranchAPI } from "^/services/branch";
 import { IBranchFieldRequest } from "^/@types/models/branch";
-import { USER_PAGE } from "@/constants/pageURL";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
@@ -30,6 +29,7 @@ import { formatDate } from "^/utils/dateFormatting";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { USER } from "@/constants/pageURL";
 
 const useGetUser = () => {
   const t = useTranslations("");
@@ -245,8 +245,8 @@ const useGetUser = () => {
               value: (
                 <CustomTableOptionMenu
                   rowId={x.id}
-                  editURL={`${USER_PAGE.EDIT}/${x.id}`}
-                  viewURL={`${USER_PAGE.VIEW}/${x.id}`}
+                  editURL={`${USER.PAGE.EDIT}/${x.id}`}
+                  viewURL={`${USER.PAGE.VIEW}/${x.id}`}
                   confirmDel={confirmDeletion}
                 />
               ),

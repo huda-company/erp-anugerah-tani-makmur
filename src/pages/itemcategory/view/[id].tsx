@@ -5,12 +5,12 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { ITEM_CAT_PAGE } from "@/constants/pageURL";
 import { FormMode } from "^/@types/global";
 import useGetItemCatById from "@/hooks/itemCategory/useGetItemCatById";
 import { bcData } from "^/config/itemcategory/config";
 import ItemCategoryForm from "@/components/ItemCategory/ItemCategoryForm";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { ITEM_CAT } from "@/constants/pageURL";
 
 const ViewItemCatPage: FC = () => {
   const t = useTranslations("");
@@ -27,7 +27,7 @@ const ViewItemCatPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={ITEM_CAT_PAGE.ADD}
+            addPageURL={ITEM_CAT.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

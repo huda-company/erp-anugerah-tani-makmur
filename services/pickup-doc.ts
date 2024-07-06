@@ -1,12 +1,10 @@
+import { PICKUP_DOC } from "@/constants/pageURL";
 import { IPaymentPurchaseFieldRequest } from "^/@types/models/paymentpurchase";
 import { IPickupDocForm } from "^/@types/models/pickupdoc";
-import { API_VERSION, BASE_URL } from "^/config/env";
 import { buildReqHeader, buildReqHeaderFData } from "^/config/service";
 import { objToQueryURL } from "^/utils/helpers";
 import axios from "axios";
 import { Session } from "next-auth";
-
-const BASE_PICKUP_DOC_API_URL = `${BASE_URL}/api/${API_VERSION}/pickup-doc`;
 
 export const getPickupDocAPI = async (
   sess: Session | null,
@@ -15,7 +13,7 @@ export const getPickupDocAPI = async (
   if (!sess) return null;
 
   const qStr = objToQueryURL(params);
-  const reqURL = `${BASE_PICKUP_DOC_API_URL}?${qStr}`;
+  const reqURL = `${PICKUP_DOC.API.ROOT}?${qStr}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -32,7 +30,7 @@ export const createPickupDocAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PICKUP_DOC_API_URL}/${params.id}`;
+  const reqURL = `${PICKUP_DOC.API.ROOT}/${params.id}`;
 
   const reqHeader = buildReqHeaderFData(String(sess.accessToken));
 
@@ -57,7 +55,7 @@ export const editPickupDocAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PICKUP_DOC_API_URL}/update/${params.id}`;
+  const reqURL = `${PICKUP_DOC.API.EDIT}/${params.id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 
@@ -74,7 +72,7 @@ export const deletePaymentPurchaseAPI = async (
 ) => {
   if (!sess) return null;
 
-  const reqURL = `${BASE_PICKUP_DOC_API_URL}/delete/${id}`;
+  const reqURL = `${PICKUP_DOC.API.DELETE}/${id}`;
 
   const reqHeader = buildReqHeader(String(sess.accessToken));
 

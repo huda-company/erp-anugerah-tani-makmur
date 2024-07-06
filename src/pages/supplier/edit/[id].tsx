@@ -6,12 +6,12 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { SUPPLIER_PAGE } from "@/constants/pageURL";
 import SupplierForm from "../../../components/Supplier/SupplierForm";
 import useGetSupplierById from "@/hooks/supplier/useGetSupplierById";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { SUPPLIER } from "@/constants/pageURL";
 
 const EditSupplierPage: FC = () => {
   const t = useTranslations("");
@@ -24,7 +24,7 @@ const EditSupplierPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={SUPPLIER_PAGE.ADD}
+            addPageURL={SUPPLIER.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

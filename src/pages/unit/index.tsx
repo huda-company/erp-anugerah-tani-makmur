@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { UNIT_PAGE } from "@/constants/pageURL";
 import useGetUnit from "@/hooks/unit/useGetUnit";
 import { bcData } from "^/config/unit/config";
 import {
@@ -26,6 +25,7 @@ import useDebounce from "@/hooks/useDebounce";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { IUnitForm } from "^/@types/models/unit";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { UNIT } from "@/constants/pageURL";
 
 const UnitPage = () => {
   const t = useTranslations("");
@@ -71,8 +71,8 @@ const UnitPage = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={branchId}
-                editURL={`${UNIT_PAGE.EDIT}/${branchId}`}
-                viewURL={`${UNIT_PAGE.VIEW}/${branchId}`}
+                editURL={`${UNIT.PAGE.EDIT}/${branchId}`}
+                viewURL={`${UNIT.PAGE.VIEW}/${branchId}`}
                 confirmDel={confirmDeletion}
               />
             </div>
@@ -160,7 +160,7 @@ const UnitPage = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={UNIT_PAGE.ADD}
+              addPageURL={UNIT.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

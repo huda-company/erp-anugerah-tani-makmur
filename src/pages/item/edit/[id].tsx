@@ -5,13 +5,13 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { ITEM_PAGE } from "@/constants/pageURL";
 import { noop } from "^/utils/helpers";
 import { FormMode } from "^/@types/global";
 import ItemForm from "@/components/Item/ItemForm";
 import useGetItemById from "@/hooks/item/useGetItemById";
 import { bcData } from "^/config/item/config";
 import EmptyContent from "@/components/EmptyContent/EmptyContent";
+import { ITEM } from "@/constants/pageURL";
 
 const EditItemPage: FC = () => {
   const t = useTranslations("");
@@ -24,7 +24,7 @@ const EditItemPage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={ITEM_PAGE.ADD}
+            addPageURL={ITEM.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />

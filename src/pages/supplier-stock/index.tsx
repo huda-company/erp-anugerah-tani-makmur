@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { SUPPLIER_STOCK_HIST_PAGE } from "@/constants/pageURL";
 
 import {
   ColumnDef,
@@ -32,6 +31,7 @@ import {
 } from "^/@types/models/supplierstock";
 import useGetSupplierStock from "@/hooks/supplier-stock/useGetSupplierStock";
 import { useSession } from "next-auth/react";
+import { SUPP_STOCK_HIST } from "@/constants/pageURL";
 
 const SupplierStock = () => {
   const t = useTranslations("");
@@ -85,7 +85,7 @@ const SupplierStock = () => {
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={suppStockId}
-                viewURL={`${SUPPLIER_STOCK_HIST_PAGE.ROOT}?suppStockId=${suppStockId}`}
+                viewURL={`${SUPP_STOCK_HIST.PAGE.ROOT}?suppStockId=${suppStockId}`}
               />
             </div>
           );
