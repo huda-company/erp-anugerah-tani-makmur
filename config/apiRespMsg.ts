@@ -14,6 +14,7 @@ export enum ErrorType {
   METHOD_NOT_ALLOWED = "request method not allowed",
   INCORRECT_PAYLOAD = "incorrect payload",
   INVALID_PO = "invalid po number or deleted",
+  INVALID_DELIVNOTE_ID = "invalid delivery note id or deleted",
   INVALID_PAYMENT_PURCH_ID = "invalid payment purchase id",
   INVALID_SUPP_ID = "invalid supplier id",
 
@@ -26,6 +27,7 @@ export enum ErrorType {
 
   GTOTAL_N_PAYMENT_EQUAL = "grand total and payment is equal or amount is greater",
   PURCHASE_PAYMENT_CREATE = "create purchase payment failed",
+  DELIVNOTE_PAYMENT_CREATE = "create delivery note payment failed",
   PURCHASE_PAYMENT_DELETE = "delete purchase failed",
 
   PICKUP_DOC_CREATE = "create pickup doc failed",
@@ -76,4 +78,7 @@ export enum SuccessType {
 
   PICKUP_DOC_CREATE = "pickup doc created successfully",
   PICKUP_DOC_DELETE = "pickup doc deleted successfully",
+
+  DELIV_NOTE_CREATE = "delivery note created successfully",
+  DELIVNOTE_PAYMENT_CREATE = "delivery note payment created successfully",
 }

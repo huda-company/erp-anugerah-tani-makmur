@@ -1,6 +1,7 @@
 import {
   BRANCH_PAGE,
   CASHFLOW_PAGE,
+  DELIV_NOTE_PAGE,
   ITEM_CAT_PAGE,
   ITEM_PAGE,
   PO_PAGE,
@@ -62,6 +63,12 @@ export const navItems: NavItem[] = [
         href: "#",
         icon: "handshake",
         label: "handshake",
+      },
+      {
+        title: "delivNote",
+        href: DELIV_NOTE_PAGE.PAGE.ROOT,
+        icon: "delivNote",
+        label: "delivNote",
       },
     ],
   },

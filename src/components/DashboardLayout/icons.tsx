@@ -43,6 +43,8 @@ import {
   Wallet,
   Warehouse,
   Combine,
+  HandIcon,
+  NotebookPen,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -88,6 +90,8 @@ export const Icons = {
   warehouse: Warehouse,
   combine: Combine,
   wallet: Wallet,
+  handIcon: HandIcon,
+  delivNote: NotebookPen,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

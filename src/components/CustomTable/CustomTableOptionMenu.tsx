@@ -18,11 +18,90 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
   rowId,
   confirmDel,
   addPickupDoc,
+  addDelivNote,
   doGenPdf,
 }) => {
   const t = useTranslations("");
 
   const router = useRouter();
+
+  const addDelivNoteDrpDownItem = () => {
+    if (addDelivNote) {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => addDelivNote(rowId)}
+        >
+          {`+ ${capitalizeStr(t("Common.create"))} ${capitalizeStr(t("Sidebar.delivNote"))}`}
+        </DropdownMenuItem>
+      );
+    }
+  };
+
+  const addPickupDocDrpDownItem = () => {
+    if (addPickupDoc && typeof addPickupDoc !== "undefined") {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => addPickupDoc(rowId)}
+        >
+          {`+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`}
+        </DropdownMenuItem>
+      );
+    }
+  };
+
+  const genPDFDrpDownItem = () => {
+    if (doGenPdf) {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => doGenPdf(rowId)}
+        >
+          {`${capitalizeStr(t("Common.create"))} PDF`}
+        </DropdownMenuItem>
+      );
+    }
+  };
+
+  const viewDrpDownItem = () => {
+    if (viewURL) {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push(viewURL ?? "#")}
+        >
+          {capitalizeStr(t("Common.view"))}
+        </DropdownMenuItem>
+      );
+    }
+  };
+
+  const editDrpDownItem = () => {
+    if (editURL) {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push(editURL ?? "#")}
+        >
+          {capitalizeStr(t("Common.edit"))}
+        </DropdownMenuItem>
+      );
+    }
+  };
+
+  const deleteDrpDownItem = () => {
+    if (confirmDel) {
+      return (
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => confirmDel(rowId)}
+        >
+          {capitalizeStr(t("Common.delete"))}
+        </DropdownMenuItem>
+      );
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -32,50 +111,12 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {editURL && (
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => router.push(editURL ?? "#")}
-          >
-            {capitalizeStr(t("Common.edit"))}
-          </DropdownMenuItem>
-        )}
-
-        {viewURL && (
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => router.push(viewURL ?? "#")}
-          >
-            {capitalizeStr(t("Common.view"))}
-          </DropdownMenuItem>
-        )}
-
-        {addPickupDoc && typeof addPickupDoc !== "undefined" && (
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => addPickupDoc(rowId)}
-          >
-            {`+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`}
-          </DropdownMenuItem>
-        )}
-
-        {doGenPdf && (
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => doGenPdf(rowId)}
-          >
-            {`${capitalizeStr(t("Common.create"))} PDF`}
-          </DropdownMenuItem>
-        )}
-
-        {confirmDel && (
-          <DropdownMenuItem
-            className="cursor-pointer"
-            onClick={() => confirmDel(rowId)}
-          >
-            {capitalizeStr(t("Common.delete"))}
-          </DropdownMenuItem>
-        )}
+        {editDrpDownItem()}
+        {viewDrpDownItem()}
+        {addPickupDocDrpDownItem()}
+        {addDelivNoteDrpDownItem()}
+        {genPDFDrpDownItem()}
+        {deleteDrpDownItem()}
       </DropdownMenuContent>
     </DropdownMenu>
   );
