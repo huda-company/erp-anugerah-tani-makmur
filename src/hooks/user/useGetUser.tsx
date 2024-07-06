@@ -77,7 +77,6 @@ const useGetUser = () => {
   ): Promise<UserResp[]> => {
     try {
       fetched.current = true;
-      console.log("ffff");
 
       const response = await getUserAPI(session, suppStockReq);
 
