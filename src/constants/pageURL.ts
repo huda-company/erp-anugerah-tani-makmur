@@ -62,9 +62,9 @@ export const ITEM_CAT = {
     VIEW: "/itemcategory/view",
   },
   API: {
-    ROOT: `${BASE_API_URL}/itemcategory`,
-    EDIT: `${BASE_API_URL}/itemcategory/update`,
-    DELETE: `${BASE_API_URL}/itemcategory/delete`,
+    ROOT: `${BASE_API_URL}/item-category`,
+    EDIT: `${BASE_API_URL}/item-category/update`,
+    DELETE: `${BASE_API_URL}/item-category/delete`,
   },
 };
 
