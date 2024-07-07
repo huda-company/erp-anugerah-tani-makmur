@@ -1,9 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -13,24 +12,21 @@ import {
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
 import { deleteBranchAPI } from "^/services/branch";
-import { IBranchFieldRequest } from "^/@types/models/branch";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
   handlePrmChangeNextBtn,
   handlePrmChangePrevBtn,
   handlePrmChangeRowPage,
-  initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { getUserAPI } from "^/services/user";
-import { IUserGetReq, UserResp } from "^/@types/models/user";
-import { formatDate } from "^/utils/dateFormatting";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
+import { IUserGetReq } from "^/@types/models/user";
 import useCloseAlertModal from "../useCloseAlertModal";
-import { USER } from "@/constants/pageURL";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { initUserReqPrm } from "^/config/user/config";
-import { pageRowsArr } from "^/config/request/config";
+import {
+  convGetReqToPgntCustomProps,
+  initUserReqPrm,
+} from "^/config/user/config";
 
 const useGetUser = () => {
   const t = useTranslations("");
@@ -47,91 +43,58 @@ const useGetUser = () => {
 
   const { data: session } = useSession();
 
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
-  const [reqPrm, setReqPrm] = useState<IUserGetReq>({
-    ...initUserReqPrm,
-    limit: pageRowsArr[0],
+  const {
+    data: reqPrm,
+    error: reqPrmErr,
+    isLoading: reqPrmLoading,
+  } = useQuery<IUserGetReq, Error>({
+    queryKey: ["reqPrm"],
+    initialData: initUserReqPrm,
   });
-  const [userPgntn, setUserTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
 
   const {
     data: userData,
     error: userDataErr,
     isLoading: userDataLoading,
-  } = useQuery<UserResp[], Error>({
-    queryKey: ["deliv-note"],
-    retry: 1,
+  } = useQuery<any, Error>({
+    queryKey: ["user", reqPrm],
     queryFn: async () => {
-      const dNoteData = await fetchData(session, reqPrm);
-
-      return dNoteData;
+      return await fetchData(session, reqPrm);
     },
-    enabled: !!session && !!reqPrm,
   });
 
   // Adjust the query function to match the expected type
   const fetchData = async (
     session: any, // Replace with your session type
-    suppStockReq: IUserGetReq // Replace with your request payload type
-  ): Promise<UserResp[]> => {
+    usrReq: IUserGetReq // Replace with your request payload type
+  ): Promise<any> => {
     try {
       fetched.current = true;
 
-      const response = await getUserAPI(session, suppStockReq);
+      const response = await getUserAPI(session, usrReq);
 
       if (!response || (response && response.status !== 200)) {
         throw new Error("API Error");
       }
 
       const { data: resData } = response;
-      const suppData: UserResp[] = resData.data.items;
 
-      let formattedBody: CustomTblBody[] = [];
-      if (suppData && Array.isArray(suppData)) {
-        formattedBody = suppData.map((x: any) => {
-          return {
-            items: [
-              {
-                value: x.name,
-                className: "text-left w-[15rem]",
-              },
-              {
-                value: x.email,
-                className: "text-left w-[6rem] pl-0",
-              },
-              {
-                value: x.phone,
-                className: "text-left w-[6rem] pl-0",
-              },
-              {
-                value: formatDate(x.birthDate),
-                className: "text-left w-[6rem] pl-0",
-              },
-              {
-                value: x.enabled ? "active" : "inactive",
-                className: "text-left w-[6rem] pl-0",
-              },
-              {
-                value: (
-                  <CustomTableOptionMenu
-                    rowId={x.id}
-                    editURL={`${USER.PAGE.EDIT}/${x.id}`}
-                    viewURL={`${USER.PAGE.VIEW}/${x.id}`}
-                    confirmDel={confirmDeletion}
-                  />
-                ),
-                className: "",
-              },
-            ],
-          };
-        });
-      }
-      setTblBd(formattedBody);
+      await queryClient.setQueryData(["user"], resData.data);
 
-      queryClient.setQueryData(["user"], suppData);
+      const newReqPrm = {
+        ...reqPrm,
+        limit: resData.data.limit,
+        totalPages: resData.data.totalPages,
+        page: resData.data.page,
+        prevPage: resData.data.prevPage,
+        nextPage: resData.data.nextPage,
+      };
 
-      return suppData;
+      await queryClient.setQueryData(["reqPrm"], newReqPrm);
+      // await queryClient.invalidateQueries({ queryKey: ['reqPrm'] })
+      // await queryClient.invalidateQueries({ queryKey: ['user'] })
+
+      return resData.data;
     } catch (error) {
       throw new Error("API Error");
     }
@@ -199,44 +162,52 @@ const useGetUser = () => {
     );
   };
 
-  const onPaginationChange = (prm: PaginationCustomPrms) => {
-    const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
+  const onPaginationChange = async (prm: PaginationCustomPrms) => {
+    const pgntParam: IUserGetReq = {
+      ...reqPrm,
       page: prm.page,
       limit: prm.limit,
-      "sort[key]": "name",
-      "sort[direction]": "asc",
     };
 
-    fetchData(session, pgntParam);
+    // await queryClient.setQueryData(["reqPrm"], pgntParam);
+    await fetchData(session, pgntParam);
   };
 
   const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(userPgntn);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeNextBtn(pgReq);
     onPaginationChange(newPrms);
   };
 
   const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(userPgntn);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangePrevBtn(pgReq);
     onPaginationChange(newPrms);
   };
 
   const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(userPgntn, prm);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeInputPage(pgReq, prm);
     onPaginationChange(newPrms);
   };
 
   const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(userPgntn, prm);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeRowPage(pgReq, prm);
     onPaginationChange(newPrms);
+  };
+
+  const handleSetReqPrm = (prm: IUserGetReq) => {
+    queryClient.setQueryData(["reqPrm"], prm);
   };
 
   return {
     userData,
     userDataErr,
     userDataLoading,
-    fetch,
-    tblBd,
-    userPgntn,
+    fetchData,
+    reqPrm,
+    handleSetReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
