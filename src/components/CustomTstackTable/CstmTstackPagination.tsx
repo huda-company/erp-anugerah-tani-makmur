@@ -5,6 +5,7 @@ import { GrLinkNext } from "react-icons/gr";
 import { GrChapterNext } from "react-icons/gr";
 import { CstmTstackPaginationProps } from "./types";
 import { pageRowsArr } from "^/config/request/config";
+import { handleFocusSelectAll } from "^/utils/helpers";
 
 const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
   table,
@@ -77,6 +78,7 @@ const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
             max={table.getState().pagination.pageSize - 1}
             type="number"
             defaultValue={table.getState().pagination.pageIndex + 1}
+            onFocus={handleFocusSelectAll}
             onChange={(e) => {
               const page =
                 table.getPageCount() === 0 ? 0 : Number(e.target.value);
