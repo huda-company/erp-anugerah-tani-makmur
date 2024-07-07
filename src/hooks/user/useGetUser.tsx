@@ -11,7 +11,6 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { deleteBranchAPI } from "^/services/branch";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
@@ -19,7 +18,7 @@ import {
   handlePrmChangePrevBtn,
   handlePrmChangeRowPage,
 } from "@/components/PaginationCustom/config";
-import { getUserAPI } from "^/services/user";
+import { deleteUserAPI, getUserAPI } from "^/services/user";
 import { IUserGetReq } from "^/@types/models/user";
 import useCloseAlertModal from "../useCloseAlertModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -101,8 +100,8 @@ const useGetUser = () => {
   };
 
   const confirmDelOk = async (id: string) => {
-    const resDelete = await deleteBranchAPI(session, id);
-    if (resDelete.data.success) {
+    const resDelete = await deleteUserAPI(session, id);
+    if (resDelete && resDelete.data.success) {
       await fetchData(session, reqPrm);
       await dispatch(
         toastActs.callShowToast({
@@ -115,7 +114,7 @@ const useGetUser = () => {
           show: true,
           msg: (
             <div className="flex flex-col py-[1rem]">
-              <span> {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))} </span>
+              <span> {capitalizeStr(t("API_MSG.SUCCESS.USER_DELETE"))} </span>
             </div>
           ),
           type: "success",
@@ -128,7 +127,7 @@ const useGetUser = () => {
           show: true,
           msg: (
             <div className="flex flex-col py-[1rem] capitalize">
-              <span>{t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}</span>
+              <span>{t(capitalizeStr(t("API_MSG.ERROR.USER_DELETE")))}</span>
             </div>
           ),
           timeout: 2000,
@@ -207,11 +206,14 @@ const useGetUser = () => {
     userDataLoading,
     fetchData,
     reqPrm,
+    reqPrmErr,
+    reqPrmLoading,
     handleSetReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
+    confirmDeletion,
   };
 };
 

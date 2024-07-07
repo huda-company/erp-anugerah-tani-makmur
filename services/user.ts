@@ -52,7 +52,7 @@ export const editUserAPI = async (sess: Session | null, params: IUserForm) => {
   }
 };
 
-export const deleteBranchAPI = async (sess: Session | null, id: string) => {
+export const deleteUserAPI = async (sess: Session | null, id: string) => {
   if (!sess) return null;
 
   const reqURL = `${USER.API.DELETE}/${id}`;

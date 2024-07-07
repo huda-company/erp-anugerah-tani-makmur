@@ -26,7 +26,6 @@ import {
 import { IUserGetReq, UserResp } from "^/@types/models/user";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { noop } from "lodash";
 import useDebounce from "@/hooks/useDebounce";
 import { pageRowsArr } from "^/config/request/config";
 
@@ -55,6 +54,7 @@ const UserPage = () => {
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
+    confirmDeletion,
   } = useGetUser();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -76,26 +76,9 @@ const UserPage = () => {
         enableColumnFilter: false,
       },
       {
-        accessorFn: (row) => row.email,
-        id: "address",
-        cell: (info: any) => info.getValue(),
-        header: () => <CstmTstackHeaderCell str={t("ParkingField.address")} />,
-        enableColumnFilter: false,
-      },
-
-      {
-        accessorFn: (row) => `${row.phone}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
-        enableColumnFilter: false,
-        meta: {
-          filterVariant: "text",
-        },
-      },
-      {
-        accessorFn: (row) => `${row.birthDate}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
+        accessorFn: (row) => `${row.email}`,
+        accessorKey: "email",
+        header: () => <CstmTstackHeaderCell str={t("UserPage.email")} />,
         enableColumnFilter: false,
         meta: {
           filterVariant: "text",
@@ -103,9 +86,10 @@ const UserPage = () => {
       },
       {
         accessorFn: (row) => `${row.enabled}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
+        accessorKey: "active",
+        header: () => <CstmTstackHeaderCell str={t("UserPage.isActive")} />,
         enableColumnFilter: false,
+        cell: (info) => (info.getValue() ? "active" : "inactive"),
         meta: {
           filterVariant: "text",
         },
@@ -113,14 +97,14 @@ const UserPage = () => {
       {
         accessorKey: "action",
         cell: (info: any) => {
-          const branchId = info.row.original.id;
+          const usrId = info.row.original.id;
           return (
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
-                rowId={branchId}
-                editURL={`${USER.PAGE.EDIT}/${branchId}`}
-                viewURL={`${USER.PAGE.VIEW}/${branchId}`}
-                confirmDel={noop}
+                rowId={usrId}
+                editURL={`${USER.PAGE.EDIT}/${usrId}`}
+                viewURL={`${USER.PAGE.VIEW}/${usrId}`}
+                confirmDel={() => confirmDeletion(usrId)}
               />
             </div>
           );
@@ -129,7 +113,7 @@ const UserPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [confirmDeletion, t]
   );
 
   const data = userData ? userData.items : [];
