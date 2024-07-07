@@ -1,10 +1,8 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -13,26 +11,26 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { deleteBranchAPI } from "^/services/branch";
-import { IBranchFieldRequest } from "^/@types/models/branch";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
   handlePrmChangeNextBtn,
   handlePrmChangePrevBtn,
   handlePrmChangeRowPage,
-  initPgPrms,
 } from "@/components/PaginationCustom/config";
-import { getUserAPI } from "^/services/user";
-import { IUserFieldRequest } from "^/@types/models/user";
-import { formatDate } from "^/utils/dateFormatting";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { pageRowsArr } from "^/config/request/config";
+import { deleteUserAPI, getUserAPI } from "^/services/user";
+import { IUserGetReq } from "^/@types/models/user";
 import useCloseAlertModal from "../useCloseAlertModal";
-import { USER } from "@/constants/pageURL";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  convGetReqToPgntCustomProps,
+  initUserReqPrm,
+} from "^/config/user/config";
 
 const useGetUser = () => {
   const t = useTranslations("");
+
+  const queryClient = useQueryClient();
 
   const fetched = useRef(false);
 
@@ -42,233 +40,180 @@ const useGetUser = () => {
 
   const { closeAlertModal } = useCloseAlertModal();
 
-  const router = useRouter();
-
   const { data: session } = useSession();
 
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<any>(null);
-  const [tblBd, setTblBd] = useState<CustomTblBody[]>([]);
-  const [branchPgntn, setBranchTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
+  const {
+    data: reqPrm,
+    error: reqPrmErr,
+    isLoading: reqPrmLoading,
+  } = useQuery<IUserGetReq, Error>({
+    queryKey: ["reqPrm"],
+    initialData: initUserReqPrm,
+  });
 
-  const fetch = useCallback(
-    async (
-      payload: Omit<IUserFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[2],
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+  const {
+    data: userData,
+    error: userDataErr,
+    isLoading: userDataLoading,
+  } = useQuery<any, Error>({
+    queryKey: ["user", reqPrm],
+    queryFn: async () => {
+      return await fetchData(session, reqPrm);
+    },
+  });
+
+  // Adjust the query function to match the expected type
+  const fetchData = async (
+    session: any, // Replace with your session type
+    usrReq: IUserGetReq // Replace with your request payload type
+  ): Promise<any> => {
+    try {
       fetched.current = true;
-      setLoading(true);
 
-      try {
-        const response = await getUserAPI(session, payload);
+      const response = await getUserAPI(session, usrReq);
 
-        if (!response || (response && response.status !== 200)) {
-          setLoading(false);
-          dispatch(
-            toastActs.callShowToast({
-              show: true,
-              msg: (
-                <div className="flex flex-col py-[1rem]">
-                  <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
-                </div>
-              ),
-              type: "error",
-            })
-          );
-        }
-
-        if (response.data) {
-          const { data: resData } = response;
-          setUsers(resData);
-          setBranchTblPgntn({
-            page: resData.data.page,
-            limit: resData.data.limit,
-            nextPage: resData.data.nextPage,
-            prevPage: resData.data.prevPage,
-            totalPages: resData.data.totalPages,
-          });
-          setLoading(false);
-        }
-      } catch (error) {
-        setLoading(false);
-        return null;
+      if (!response || (response && response.status !== 200)) {
+        throw new Error("API Error");
       }
-    },
-    [dispatch, session, t]
-  );
 
-  const confirmDelOk = useCallback(
-    async (id: string) => {
-      setLoading(true);
-      const resDelete = await deleteBranchAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.BRANCH_DELETE"))}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem] capitalize">
-                <span>
-                  {t(capitalizeStr(t("API_MSG.ERROR.BRANCH_DELETE")))}
-                </span>
-              </div>
-            ),
-            timeout: 2000,
-            type: "error",
-          })
-        );
-      }
-      setLoading(false);
-    },
-    [dispatch, fetch, session, t, toast]
-  );
+      const { data: resData } = response;
 
-  const confirmDeletion = useCallback(
-    async (id: string) => {
+      await queryClient.setQueryData(["user"], resData.data);
+
+      const newReqPrm = {
+        ...reqPrm,
+        limit: resData.data.limit,
+        totalPages: resData.data.totalPages,
+        page: resData.data.page,
+        prevPage: resData.data.prevPage,
+        nextPage: resData.data.nextPage,
+      };
+
+      await queryClient.setQueryData(["reqPrm"], newReqPrm);
+      // await queryClient.invalidateQueries({ queryKey: ['reqPrm'] })
+      // await queryClient.invalidateQueries({ queryKey: ['user'] })
+
+      return resData.data;
+    } catch (error) {
+      throw new Error("API Error");
+    }
+  };
+
+  const confirmDelOk = async (id: string) => {
+    const resDelete = await deleteUserAPI(session, id);
+    if (resDelete && resDelete.data.success) {
+      await fetchData(session, reqPrm);
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: false,
+        })
+      );
       await dispatch(
         toastActs.callShowToast({
           show: true,
           msg: (
-            <div className="flex flex-col pt-[1rem] capitalize">
-              <h1 className="text-[1.5rem]">
-                {t(capitalizeStr(t("Msg.areUSure")))}
-              </h1>
-              <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button onClick={() => confirmDelOk(id)} variant="destructive">
-                  {capitalizeStr(t("Common.delete"))}
-                </Button>
-                <Button onClick={closeAlertModal} type="reset">
-                  {capitalizeStr(t("Common.cancel"))}
-                </Button>
-              </div>
+            <div className="flex flex-col py-[1rem]">
+              <span> {capitalizeStr(t("API_MSG.SUCCESS.USER_DELETE"))} </span>
             </div>
           ),
-          type: "confirm",
+          type: "success",
         })
       );
-    },
-    [closeAlertModal, confirmDelOk, dispatch, t]
-  );
+    } else {
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: true,
+          msg: (
+            <div className="flex flex-col py-[1rem] capitalize">
+              <span>{t(capitalizeStr(t("API_MSG.ERROR.USER_DELETE")))}</span>
+            </div>
+          ),
+          timeout: 2000,
+          type: "error",
+        })
+      );
+    }
+  };
 
-  const onPaginationChange = useCallback(
-    (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
-        page: prm.page,
-        limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      };
+  const confirmDeletion = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col pt-[1rem] capitalize">
+            <h1 className="text-[1.5rem]">
+              {t(capitalizeStr(t("Msg.areUSure")))}
+            </h1>
+            <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
+                {capitalizeStr(t("Common.delete"))}
+              </Button>
+              <Button onClick={closeAlertModal} type="reset">
+                {capitalizeStr(t("Common.cancel"))}
+              </Button>
+            </div>
+          </div>
+        ),
+        type: "confirm",
+      })
+    );
+  };
 
-      fetch(pgntParam);
-    },
-    [fetch]
-  );
+  const onPaginationChange = async (prm: PaginationCustomPrms) => {
+    const pgntParam: IUserGetReq = {
+      ...reqPrm,
+      page: prm.page,
+      limit: prm.limit,
+    };
+
+    // await queryClient.setQueryData(["reqPrm"], pgntParam);
+    await fetchData(session, pgntParam);
+  };
 
   const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(branchPgntn);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeNextBtn(pgReq);
     onPaginationChange(newPrms);
   };
 
   const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(branchPgntn);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangePrevBtn(pgReq);
     onPaginationChange(newPrms);
   };
 
   const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(branchPgntn, prm);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeInputPage(pgReq, prm);
     onPaginationChange(newPrms);
   };
 
   const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(branchPgntn, prm);
+    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
+    const newPrms = handlePrmChangeRowPage(pgReq, prm);
     onPaginationChange(newPrms);
   };
 
-  useEffect(() => {
-    if (!fetched.current && session && session?.accessToken) fetch();
-  }, [fetch, session]);
-
-  useEffect(() => {
-    let formattedBody: CustomTblBody[] = [];
-    if (users && Array.isArray(users.data.items)) {
-      formattedBody = users.data.items.map((x: any) => {
-        return {
-          items: [
-            {
-              value: x.name,
-              className: "text-left w-[15rem]",
-            },
-            {
-              value: x.email,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.phone,
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: formatDate(x.birthDate),
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: x.enabled ? "active" : "inactive",
-              className: "text-left w-[6rem] pl-0",
-            },
-            {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${USER.PAGE.EDIT}/${x.id}`}
-                  viewURL={`${USER.PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
-              className: "",
-            },
-          ],
-        };
-      });
-    }
-    setTblBd(formattedBody);
-  }, [confirmDeletion, router, t, users]);
+  const handleSetReqPrm = (prm: IUserGetReq) => {
+    queryClient.setQueryData(["reqPrm"], prm);
+  };
 
   return {
-    loading,
-    fetch,
-    users,
-    tblBd,
-    branchPgntn,
+    userData,
+    userDataErr,
+    userDataLoading,
+    fetchData,
+    reqPrm,
+    reqPrmErr,
+    reqPrmLoading,
+    handleSetReqPrm,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
+    confirmDeletion,
   };
 };
 

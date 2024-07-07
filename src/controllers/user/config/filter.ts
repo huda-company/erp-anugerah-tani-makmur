@@ -9,7 +9,7 @@ export const onUserFilter = (query: Record<string, string>) => {
     filter.$or = [
       { name: { $regex: query["param[search]"], $options: "i" } },
       {
-        "createdBy.first_name": {
+        "createdBy.name": {
           $regex: query["param[search]"],
           $options: "i",
         },

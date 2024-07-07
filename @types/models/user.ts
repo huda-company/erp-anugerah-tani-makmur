@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps, FormMode } from "../global";
 
 export enum Gender {
@@ -35,6 +36,7 @@ export interface IUserFieldRequest {
     keyword?: string;
     startDate?: Date;
     endDate?: Date;
+    "param[search]"?: string;
     "sort[key]"?: IUserFieldRequest["sort"]["key"];
     "sort[direction]"?: IUserFieldRequest["sort"]["direction"];
   };
@@ -61,3 +63,10 @@ export type UserFormProps = {
   initialFormVals: IUserForm;
   doRefresh: () => void;
 } & BaseFormProps;
+
+export type IUserGetReq = Omit<IUserFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
+
+export type UserResp = {
+  id?: string;
+} & IUserDocument;

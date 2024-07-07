@@ -87,7 +87,7 @@ const useGetStock = () => {
       ? stockData.map((x: StockResp) => {
           return {
             id: String(x.id),
-            itemName: x.item.name,
+            itemName: x.item ? x.item.name : "-",
             branchName: x.branch.name,
             stock: x.stock,
           } as StockTanTblData;

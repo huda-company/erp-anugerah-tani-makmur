@@ -1,6 +1,7 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
+import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import { USER } from "@/constants/pageURL";
-import { IUserForm } from "^/@types/models/user";
+import { IUserForm, IUserGetReq } from "^/@types/models/user";
 import { z } from "zod";
 
 export const bcData: BreadcrumbItem[] = [
@@ -52,3 +53,26 @@ export const UserFormSchema = z.object({
     message: "invalid birthDate",
   }),
 });
+
+export const initUserReqPrm: IUserGetReq = {
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: 2,
+  page: 0,
+  nextPage: null,
+  prevPage: null,
+  totalPages: 0,
+};
+
+export const convGetReqToPgntCustomProps = (prm: any): PaginationCustomPrms => {
+  const pgReq: PaginationCustomPrms = {
+    limit: Number(prm.limit),
+    page: Number(prm.page),
+    nextPage: prm.nextPage,
+    prevPage: prm.prevPage,
+    totalPages: prm.totalPages,
+  };
+
+  return pgReq;
+};
