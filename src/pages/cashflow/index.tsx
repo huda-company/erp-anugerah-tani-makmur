@@ -31,10 +31,15 @@ import { useSession } from "next-auth/react";
 import useGetCashflow from "@/hooks/cashflow/useGetCashflow";
 import { CashflowTanTblData, ICashflowGetReq } from "^/@types/models/cashflow";
 import { thsandSep } from "^/utils/helpers";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { useRouter } from "next/router";
+import { OptMenuItem } from "@/components/CustomTable/types";
 
 const CashflowPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.cashflow")}`;
+
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -73,12 +78,18 @@ const CashflowPage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const suppStockId = info.row.original.id;
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${CASHFLOW_HIST.PAGE.ROOT}/${suppStockId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${CASHFLOW_HIST.PAGE.ROOT}/${suppStockId}` ?? "#"),
+            },
+          ];
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={suppStockId}
-                viewURL={`${CASHFLOW_HIST.PAGE.ROOT}?stockId=${suppStockId}`}
-              />
+              <CustomTableOptionMenu rowId={suppStockId} item={optItem} />
             </div>
           );
         },
@@ -86,7 +97,7 @@ const CashflowPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
+import { PO } from "@/constants/pageURL";
 import { bcData } from "^/config/purchase/config";
 import useGetPurchase from "@/hooks/purchase/useGetPurchase";
 import {
@@ -29,10 +29,15 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import { formatDate } from "^/utils/dateFormatting";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { useRouter } from "next/router";
 
 const PurchasePage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.purchaseOrder")}`;
+
+  const router = useRouter();
 
   const {
     loading,
@@ -95,15 +100,30 @@ const PurchasePage = () => {
       {
         accessorKey: "action",
         cell: (info: any) => {
-          const branchId = info.row.original.id;
+          const poId = info.row.original.id;
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${PO.PAGE.VIEW}/${poId}`,
+              show: true,
+              doAction: () => router.push(`${PO.PAGE.VIEW}/${poId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${PO.PAGE.EDIT}/${poId}`,
+              show: true,
+              doAction: () => router.push(`${PO.PAGE.EDIT}/${poId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(poId),
+            },
+          ];
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={branchId}
-                editURL={`${PURCHASE_PAGE.EDIT}/${branchId}`}
-                viewURL={`${PURCHASE_PAGE.VIEW}/${branchId}`}
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu item={optItem} rowId={poId} />
             </div>
           );
         },
@@ -111,7 +131,7 @@ const PurchasePage = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -190,7 +210,7 @@ const PurchasePage = () => {
         <ScrollArea className="h-full">
           <div className="flex-1 space-y-4 md:p-8">
             <HeaderModule
-              addPageURL={PURCHASE_PAGE.ADD}
+              addPageURL={PO.PAGE.ADD}
               title={titlePage}
               bcumbs={bcData}
             />

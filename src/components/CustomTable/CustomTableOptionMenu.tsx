@@ -7,101 +7,86 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { VscSettings } from "react-icons/vsc";
-import { capitalizeStr } from "^/utils/capitalizeStr";
-import { useTranslations } from "next-intl";
-import { CustomTblOptMenuProps } from "./types";
-import { useRouter } from "next/navigation";
+import { CustomTblOptMenuProps, OptMenuItem } from "./types";
 
-const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
-  viewURL,
-  editURL,
-  rowId,
-  confirmDel,
-  addPickupDoc,
-  addDelivNote,
-  doGenPdf,
-}) => {
-  const t = useTranslations("");
+const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({ item }) => {
+  // const addDelivNoteDrpDownItem = () => {
+  //   if (addDelivNote) {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => addDelivNote(rowId)}
+  //       >
+  //         {`+ ${capitalizeStr(t("Common.create"))} ${capitalizeStr(t("Sidebar.delivNote"))}`}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
-  const router = useRouter();
+  // const addPickupDocDrpDownItem = () => {
+  //   if (addPickupDoc && typeof addPickupDoc !== "undefined") {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => addPickupDoc(rowId)}
+  //       >
+  //         {`+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
-  const addDelivNoteDrpDownItem = () => {
-    if (addDelivNote) {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => addDelivNote(rowId)}
-        >
-          {`+ ${capitalizeStr(t("Common.create"))} ${capitalizeStr(t("Sidebar.delivNote"))}`}
-        </DropdownMenuItem>
-      );
-    }
-  };
+  // const genPDFDrpDownItem = () => {
+  //   if (doGenPdf) {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => doGenPdf(rowId)}
+  //       >
+  //         {`${capitalizeStr(t("Common.create"))} PDF`}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
-  const addPickupDocDrpDownItem = () => {
-    if (addPickupDoc && typeof addPickupDoc !== "undefined") {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => addPickupDoc(rowId)}
-        >
-          {`+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`}
-        </DropdownMenuItem>
-      );
-    }
-  };
+  // const viewDrpDownItem = () => {
+  //   if (viewURL) {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => router.push(viewURL ?? "#")}
+  //       >
+  //         {capitalizeStr(t("Common.view"))}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
-  const genPDFDrpDownItem = () => {
-    if (doGenPdf) {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => doGenPdf(rowId)}
-        >
-          {`${capitalizeStr(t("Common.create"))} PDF`}
-        </DropdownMenuItem>
-      );
-    }
-  };
+  // const editDrpDownItem = () => {
+  //   if (editURL) {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => router.push(editURL ?? "#")}
+  //       >
+  //         {capitalizeStr(t("Common.edit"))}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
-  const viewDrpDownItem = () => {
-    if (viewURL) {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(viewURL ?? "#")}
-        >
-          {capitalizeStr(t("Common.view"))}
-        </DropdownMenuItem>
-      );
-    }
-  };
-
-  const editDrpDownItem = () => {
-    if (editURL) {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => router.push(editURL ?? "#")}
-        >
-          {capitalizeStr(t("Common.edit"))}
-        </DropdownMenuItem>
-      );
-    }
-  };
-
-  const deleteDrpDownItem = () => {
-    if (confirmDel) {
-      return (
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => confirmDel(rowId)}
-        >
-          {capitalizeStr(t("Common.delete"))}
-        </DropdownMenuItem>
-      );
-    }
-  };
+  // const deleteDrpDownItem = () => {
+  //   if (confirmDel) {
+  //     return (
+  //       <DropdownMenuItem
+  //         className="cursor-pointer"
+  //         onClick={() => confirmDel(rowId)}
+  //       >
+  //         {capitalizeStr(t("Common.delete"))}
+  //       </DropdownMenuItem>
+  //     );
+  //   }
+  // };
 
   return (
     <DropdownMenu>
@@ -111,12 +96,24 @@ const CustomTableOptionMenu: FC<CustomTblOptMenuProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {editDrpDownItem()}
-        {viewDrpDownItem()}
-        {addPickupDocDrpDownItem()}
+        {item.map(
+          (itm: OptMenuItem, idx: number) =>
+            itm.show && (
+              <DropdownMenuItem
+                key={`${idx}-${itm.label}`}
+                className="cursor-pointer"
+                onClick={itm.doAction}
+              >
+                {itm.label}
+              </DropdownMenuItem>
+            )
+        )}
+        {/* {editDrpDownItem()} */}
+        {/* {viewDrpDownItem()} */}
+        {/* {addPickupDocDrpDownItem()}
         {addDelivNoteDrpDownItem()}
-        {genPDFDrpDownItem()}
-        {deleteDrpDownItem()}
+        {genPDFDrpDownItem()} */}
+        {/* {deleteDrpDownItem()} */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

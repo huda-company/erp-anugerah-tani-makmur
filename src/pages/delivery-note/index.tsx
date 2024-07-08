@@ -26,7 +26,6 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import useGetDelivNote from "@/hooks/delivery-note/useGetDelivNote";
-import { noop } from "lodash";
 import {
   DelivNoteTanTblData,
   IDelivNoteGetReq,
@@ -35,10 +34,15 @@ import { useSession } from "next-auth/react";
 import { thsandSep } from "^/utils/helpers";
 import { formatDate } from "^/utils/dateFormatting";
 import { DELIV_NOTE, SUPPLIER } from "@/constants/pageURL";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { useRouter } from "next/router";
 
 const DeliveryNotePage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.delivNote")}`;
+
+  const router = useRouter();
 
   const { data: session, status } = useSession();
 
@@ -53,6 +57,7 @@ const DeliveryNotePage = () => {
     handlePrevClck,
     handlePageInputChange,
     handlePageRowChange,
+    confirmDeletion,
   } = useGetDelivNote();
 
   const columns = useMemo<ColumnDef<DelivNoteTanTblData, any>[]>(
@@ -113,14 +118,31 @@ const DeliveryNotePage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const suppId = info.row.original.id;
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${DELIV_NOTE.PAGE.VIEW}/${suppId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${DELIV_NOTE.PAGE.VIEW}/${suppId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${DELIV_NOTE.PAGE.EDIT}/${suppId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${DELIV_NOTE.PAGE.EDIT}/${suppId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(suppId),
+            },
+          ];
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={suppId}
-                editURL={`${DELIV_NOTE.PAGE.EDIT}/${suppId}`}
-                viewURL={`${DELIV_NOTE.PAGE.VIEW}/${suppId}`}
-                confirmDel={noop}
-              />
+              <CustomTableOptionMenu item={optItem} rowId={suppId} />
             </div>
           );
         },
@@ -128,7 +150,7 @@ const DeliveryNotePage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

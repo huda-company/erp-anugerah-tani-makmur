@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { CustomTblBody } from "@/components/CustomTable/types";
+import { CustomTblBody, OptMenuItem } from "@/components/CustomTable/types";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -37,6 +37,7 @@ import useCloseAlertModal from "../useCloseAlertModal";
 import DelivNoteForm from "@/components/DeliveryNote/DelivNoteForm";
 import { CostTypes, IDelivNoteForm } from "^/@types/models/deliverynote";
 import moment from "moment";
+import { noop } from "lodash";
 
 const useGetPaymentPurchByPurchId = () => {
   const t = useTranslations("");
@@ -304,6 +305,29 @@ const useGetPaymentPurchByPurchId = () => {
     paymPurcTblBd = paymPurchDataItems.map((x: PaymentPurchaseResp) => {
       const hasDelivNote =
         Array.isArray(x.deliveryNotes) && x.deliveryNotes.length > 0;
+
+      const optItem: OptMenuItem[] = [
+        {
+          label: `+ ${capitalizeStr(t("Common.create"))} PPB / SPAA`,
+          url: "#",
+          show: x.pickupDocs ? false : true,
+          doAction: x.pickupDocs ? noop : () => PickupDocDialog(String(x._id)),
+        },
+        {
+          label: `+ ${capitalizeStr(t("Common.create"))} ${capitalizeStr(t("Sidebar.delivNote"))}`,
+          url: "#",
+          show: hasDelivNote ? false : true,
+          doAction: hasDelivNote
+            ? noop
+            : () => crtDelivNoteDialog(String(x._id)),
+        },
+        {
+          label: capitalizeStr(t("Common.delete")),
+          url: "#",
+          show: true,
+          doAction: () => confirmDeletion(String(x._id)),
+        },
+      ];
       return {
         items: [
           {
@@ -332,22 +356,7 @@ const useGetPaymentPurchByPurchId = () => {
           },
           {
             value: (
-              <CustomTableOptionMenu
-                rowId={String(x._id)}
-                addPickupDoc={
-                  x.pickupDocs
-                    ? undefined
-                    : () => PickupDocDialog(String(x._id))
-                }
-                addDelivNote={
-                  hasDelivNote
-                    ? undefined
-                    : () => {
-                        crtDelivNoteDialog(String(x._id));
-                      }
-                }
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu rowId={String(x._id)} item={optItem} />
             ),
             className: "",
           },

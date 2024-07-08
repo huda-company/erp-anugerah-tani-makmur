@@ -25,10 +25,15 @@ import { IItemGetReq, ItemTanTblData } from "^/@types/models/item";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import { ITEM } from "@/constants/pageURL";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { useRouter } from "next/router";
+import { capitalizeStr } from "^/utils/capitalizeStr";
 
 const Item = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.item")}`;
+
+  const router = useRouter();
 
   const {
     loading,
@@ -74,14 +79,31 @@ const Item = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const itemId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${ITEM.PAGE.VIEW}/${itemId}`,
+              show: true,
+              doAction: () => router.push(`${ITEM.PAGE.VIEW}/${itemId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${ITEM.PAGE.EDIT}/${itemId}`,
+              show: true,
+              doAction: () => router.push(`${ITEM.PAGE.EDIT}/${itemId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(itemId),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={itemId}
-                editURL={`${ITEM.PAGE.EDIT}/${itemId}`}
-                viewURL={`${ITEM.PAGE.VIEW}/${itemId}`}
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu rowId={itemId} item={optItem} />
             </div>
           );
         },
@@ -89,7 +111,7 @@ const Item = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

@@ -45,6 +45,7 @@ export const PO = {
     ADD: "/purchase/add",
     EDIT: "/purchase/edit",
     VIEW: "/purchase/view",
+    PDF: "/purchase/pdf",
   },
   API: {
     ROOT: `${BASE_API_URL}/purchase`,
@@ -108,10 +109,6 @@ export const STOCK = {
   },
 };
 
-export const STOCK_HIST_PAGE = {
-  ROOT: `${STOCK.PAGE.ROOT}/history`,
-};
-
 export const CASHFLOW = {
   PAGE: {
     ROOT: "/cashflow",
@@ -147,21 +144,13 @@ export const BRANCH = {
   },
 };
 
-export const PURCHASE_PAGE = {
-  ROOT: "/purchase",
-  ADD: "/purchase/add",
-  EDIT: "/purchase/edit",
-  VIEW: "/purchase/view",
-  PDF: "/purchase/pdf",
-};
-
 export const PURCHASE_PAYMENT = {
   PAGE: {
-    ROOT: "/purchase",
-    ADD: "/purchase/add",
-    EDIT: "/purchase/edit",
-    VIEW: "/purchase/view",
-    PDF: "/purchase/pdf",
+    ROOT: "/payment-purchase",
+    ADD: "/payment-purchase/add",
+    EDIT: "/payment-purchase/edit",
+    VIEW: "/payment-purchase/view",
+    PDF: "/payment-purchase/pdf",
   },
   API: {
     ROOT: `${BASE_API_URL}/payment-purchase`,
@@ -258,10 +247,10 @@ export const ROLE = {
 
 export const STOCK_HIST = {
   PAGE: {
-    ROOT: "/stock-hist",
-    ADD: "/stock-hist/add",
-    EDIT: "/stock-hist/edit",
-    VIEW: "/stock-hist/view",
+    ROOT: `${STOCK.PAGE.ROOT}/history`,
+    ADD: `${STOCK.PAGE.ROOT}/history/add`,
+    EDIT: `${STOCK.PAGE.ROOT}/history/edit`,
+    VIEW: `${STOCK.PAGE.ROOT}/view`,
   },
   API: {
     ROOT: `${BASE_API_URL}/stock-hist`,

@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { CustomTblBody } from "@/components/CustomTable/types";
+import { CustomTblBody, OptMenuItem } from "@/components/CustomTable/types";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -23,6 +23,7 @@ import { formatDate } from "^/utils/dateFormatting";
 import { thsandSep } from "^/utils/helpers";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { noop } from "lodash";
 
 const useGetPickupDocByPurchId = () => {
   const t = useTranslations("");
@@ -167,6 +168,20 @@ const useGetPickupDocByPurchId = () => {
   if (pickupDochData && Array.isArray(pickupDochData.items)) {
     const { items } = pickupDochData;
     paymPurcTblBd = items.map((x: any) => {
+      const optItem: OptMenuItem[] = [
+        {
+          label: `${capitalizeStr(t("Common.create"))} PDF`,
+          url: "#",
+          show: true,
+          doAction: noop,
+        },
+        {
+          label: capitalizeStr(t("Common.delete")),
+          url: "#",
+          show: true,
+          doAction: () => confirmDeletion(String(x._id)),
+        },
+      ];
       return {
         items: [
           {
@@ -186,13 +201,7 @@ const useGetPickupDocByPurchId = () => {
             className: "text-left w-[6rem] pl-0",
           },
           {
-            value: (
-              <CustomTableOptionMenu
-                rowId={x.id}
-                doGenPdf={confirmDeletion}
-                confirmDel={confirmDeletion}
-              />
-            ),
+            value: <CustomTableOptionMenu rowId={x.id} item={optItem} />,
             className: "",
           },
         ],

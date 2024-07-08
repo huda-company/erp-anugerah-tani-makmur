@@ -1,4 +1,4 @@
-import { CustomTblBody } from "@/components/CustomTable/types";
+import { CustomTblBody, OptMenuItem } from "@/components/CustomTable/types";
 import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
@@ -216,6 +216,28 @@ const useGetRole = () => {
     let formattedBody: CustomTblBody[] = [];
     if (roles && Array.isArray(roles.data.items)) {
       formattedBody = roles.data.items.map((x: any) => {
+        const optItem: OptMenuItem[] = [
+          {
+            label: capitalizeStr(t("Common.view")),
+            url: `${ROLE.PAGE.VIEW}/${String(x.id)}`,
+            show: true,
+            doAction: () =>
+              router.push(`${ROLE.PAGE.VIEW}/${String(x.id)}` ?? "#"),
+          },
+          {
+            label: capitalizeStr(t("Common.edit")),
+            url: `${ROLE.PAGE.EDIT}/${String(x.id)}`,
+            show: true,
+            doAction: () =>
+              router.push(`${ROLE.PAGE.EDIT}/${String(x.id)}` ?? "#"),
+          },
+          {
+            label: capitalizeStr(t("Common.delete")),
+            url: "#",
+            show: true,
+            doAction: () => confirmDeletion(String(x.id)),
+          },
+        ];
         return {
           items: [
             {
@@ -239,14 +261,7 @@ const useGetRole = () => {
               className: "text-left w-[6rem] pl-0",
             },
             {
-              value: (
-                <CustomTableOptionMenu
-                  rowId={x.id}
-                  editURL={`${ROLE.PAGE.EDIT}/${x.id}`}
-                  viewURL={`${ROLE.PAGE.VIEW}/${x.id}`}
-                  confirmDel={confirmDeletion}
-                />
-              ),
+              value: <CustomTableOptionMenu rowId={x.id} item={optItem} />,
               className: "",
             },
           ],

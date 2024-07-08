@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { STOCK_HIST_PAGE } from "@/constants/pageURL";
+import { STOCK_HIST } from "@/constants/pageURL";
 
 import {
   ColumnDef,
@@ -30,10 +30,14 @@ import { ISupplierStockGetReq } from "^/@types/models/supplierstock";
 import { useSession } from "next-auth/react";
 import useGetStock from "@/hooks/stock/useGetStock";
 import { StockTanTblData } from "^/@types/models/stock";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { useRouter } from "next/router";
 
 const StockPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.stock")}`;
+  const router = useRouter();
 
   const { status, data: session } = useSession();
 
@@ -85,12 +89,20 @@ const StockPage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const suppStockId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${STOCK_HIST.PAGE.VIEW}/${suppStockId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${STOCK_HIST.PAGE.VIEW}/${suppStockId}` ?? "#"),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={suppStockId}
-                viewURL={`${STOCK_HIST_PAGE.ROOT}?stockId=${suppStockId}`}
-              />
+              <CustomTableOptionMenu rowId={suppStockId} item={optItem} />
             </div>
           );
         },
@@ -98,7 +110,7 @@ const StockPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

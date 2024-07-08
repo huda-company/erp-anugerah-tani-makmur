@@ -28,6 +28,8 @@ import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeade
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import useDebounce from "@/hooks/useDebounce";
 import { pageRowsArr } from "^/config/request/config";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
 
 const UserPage = () => {
   const router = useRouter();
@@ -98,14 +100,31 @@ const UserPage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const usrId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${USER.PAGE.VIEW}/${usrId}`,
+              show: true,
+              doAction: () => router.push(`${USER.PAGE.VIEW}/${usrId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${USER.PAGE.EDIT}/${usrId}`,
+              show: true,
+              doAction: () => router.push(`${USER.PAGE.EDIT}/${usrId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(usrId),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={usrId}
-                editURL={`${USER.PAGE.EDIT}/${usrId}`}
-                viewURL={`${USER.PAGE.VIEW}/${usrId}`}
-                confirmDel={() => confirmDeletion(usrId)}
-              />
+              <CustomTableOptionMenu rowId={usrId} item={optItem} />
             </div>
           );
         },
@@ -113,7 +132,7 @@ const UserPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
 
   const data = userData ? userData.items : [];

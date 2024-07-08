@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
+import { PO } from "@/constants/pageURL";
 import useDebounce from "@/hooks/useDebounce";
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
@@ -32,6 +32,8 @@ import Loading from "@/components/Loading";
 import useGetCashflow from "@/hooks/cashflow/useGetCashflow";
 import useGetCashflowHistByCashflowId from "@/hooks/cashflow-hist/useGetCashflowHistByCashflowId";
 import { CashflowHistTanTblData } from "^/@types/models/cashflowhist";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { OptMenuItem } from "@/components/CustomTable/types";
 
 const CashflowHistPage = () => {
   const t = useTranslations("");
@@ -96,13 +98,18 @@ const CashflowHistPage = () => {
       {
         accessorKey: "action",
         cell: (info: any) => {
-          const poId = info.row.original.poId;
+          const id = info.row.original.poId;
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${PO.PAGE.ROOT}/${id}`,
+              show: true,
+              doAction: () => router.push(`${PO.PAGE.ROOT}/${id}` ?? "#"),
+            },
+          ];
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={poId}
-                viewURL={`${PURCHASE_PAGE.VIEW}/${poId}`}
-              />
+              <CustomTableOptionMenu rowId={id} item={optItem} />
             </div>
           );
         },
@@ -110,7 +117,7 @@ const CashflowHistPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
 
   const table = useReactTable({
