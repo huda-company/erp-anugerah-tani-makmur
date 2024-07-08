@@ -119,7 +119,7 @@ const StockHistPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
 
   const table = useReactTable({

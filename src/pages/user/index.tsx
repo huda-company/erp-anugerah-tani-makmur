@@ -132,7 +132,7 @@ const UserPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
 
   const data = userData ? userData.items : [];

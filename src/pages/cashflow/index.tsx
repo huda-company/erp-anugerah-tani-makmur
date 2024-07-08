@@ -97,7 +97,7 @@ const CashflowPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

@@ -317,7 +317,9 @@ const useGetPaymentPurchByPurchId = () => {
           label: `+ ${capitalizeStr(t("Common.create"))} ${capitalizeStr(t("Sidebar.delivNote"))}`,
           url: "#",
           show: hasDelivNote ? false : true,
-          doAction: hasDelivNote ? noop : () => PickupDocDialog(String(x._id)),
+          doAction: hasDelivNote
+            ? noop
+            : () => crtDelivNoteDialog(String(x._id)),
         },
         {
           label: capitalizeStr(t("Common.delete")),

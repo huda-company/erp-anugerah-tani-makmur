@@ -117,7 +117,7 @@ const CashflowHistPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
 
   const table = useReactTable({

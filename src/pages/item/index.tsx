@@ -111,7 +111,7 @@ const Item = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
