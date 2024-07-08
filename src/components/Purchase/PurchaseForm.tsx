@@ -59,7 +59,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   );
 
   const { unitDataOpts, fetch: fetchUnit } = useGetUnit();
-  const { itemDataOpts, fetch: fetchItem } = useGetItem();
+  const { reqPrm, itemDataOpts, fetch: fetchItem } = useGetItem();
   const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
 
   const calculateSubtotal = (
@@ -190,7 +190,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
   useMount(() => {
     fetchItem({
-      // ...reqPrm,
+      ...reqPrm,
       // id: mode == FormMode.EDIT ? initialFormVals.items.map(item => item.item).join(",") : "",
       limit: 50,
     });
