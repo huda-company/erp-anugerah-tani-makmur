@@ -10,6 +10,7 @@ import {
   handlePrmChangeRowPage,
   initPgPrms,
 } from "@/components/PaginationCustom/config";
+import { actions as toastActs } from "@/redux/toast";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -19,10 +20,20 @@ import {
   DelivNoteTanTblData,
   IDelivNoteGetReq,
 } from "^/@types/models/deliverynote";
+import { Button } from "@/components/ui/button";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import useAppDispatch from "../useAppDispatch";
+import useCloseAlertModal from "../useCloseAlertModal";
+import { useTranslations } from "next-intl";
 
 const useGetDelivNote = () => {
+  const t = useTranslations("");
+
   const router = useRouter();
   const { delivNoteId } = router.query;
+
+  const dispatch = useAppDispatch();
+  const { closeAlertModal } = useCloseAlertModal();
 
   const fetched = useRef(false);
 
@@ -115,6 +126,35 @@ const useGetDelivNote = () => {
     onPaginationChange(newPrms);
   };
 
+  const confirmDelOk = async (id: string) => {
+    // eslint-disable-next-line no-console
+    console.log("confirmDelOk", id);
+  };
+
+  const confirmDeletion = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col pt-[1rem] capitalize">
+            <h1 className="text-[1.5rem]">
+              {capitalizeStr(t("Msg.areUSure"))}
+            </h1>
+            <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
+                {capitalizeStr(t("Common.delete"))}
+              </Button>
+              <Button onClick={closeAlertModal} type="reset">
+                {capitalizeStr(t("Common.cancel"))}
+              </Button>
+            </div>
+          </div>
+        ),
+        type: "confirm",
+      })
+    );
+  };
+
   const data =
     delivNoteData && delivNoteData.length > 0
       ? delivNoteData.map((x: DelivNoteResp) => {
@@ -143,6 +183,7 @@ const useGetDelivNote = () => {
     handlePrevClck,
     handlePageInputChange,
     handlePageRowChange,
+    confirmDeletion,
   };
 };
 

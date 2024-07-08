@@ -23,7 +23,7 @@ import {
 } from "@tanstack/react-table";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
+import { PO } from "@/constants/pageURL";
 import useDebounce from "@/hooks/useDebounce";
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
@@ -34,6 +34,8 @@ import Typography from "@/components/Typography";
 import { useSession } from "next-auth/react";
 import useGetSuppStockHistBySuppStockId from "@/hooks/supplier-stock-hist/useGetSuppStockHistBySuppStockId";
 import Loading from "@/components/Loading";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
 
 const SuppStockHistPage = () => {
   const t = useTranslations("");
@@ -99,11 +101,23 @@ const SuppStockHistPage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const poId = info.row.original.poId;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${PO.PAGE.ROOT}/${suppStockId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${PO.PAGE.ROOT}/${suppStockId}` ?? "#"),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
               <CustomTableOptionMenu
                 rowId={poId}
-                viewURL={`${PURCHASE_PAGE.VIEW}/${poId}`}
+                item={optItem}
+                // viewURL={`${PURCHASE_PAGE.VIEW}/${poId}`}
               />
             </div>
           );
@@ -112,7 +126,7 @@ const SuppStockHistPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, suppStockId, t]
   );
 
   const table = useReactTable({

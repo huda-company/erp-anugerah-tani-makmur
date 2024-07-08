@@ -1,5 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
+import { PO } from "@/constants/pageURL";
 import { Options } from "^/@types/global";
 import { PaymentDelivnoteResp } from "^/@types/models/paymentdelivnote";
 import { PaymentPurchaseResp } from "^/@types/models/paymentpurchase";
@@ -18,7 +18,7 @@ export const bcData: BreadcrumbItem[] = [
     isActive: true,
     key: "purchase",
     name: "purchaseOrder",
-    url: PURCHASE_PAGE.ROOT,
+    url: PO.PAGE.ROOT,
   },
 ];
 

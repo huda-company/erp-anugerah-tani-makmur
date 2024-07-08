@@ -32,10 +32,15 @@ import {
 import useGetSupplierStock from "@/hooks/supplier-stock/useGetSupplierStock";
 import { useSession } from "next-auth/react";
 import { SUPP_STOCK_HIST } from "@/constants/pageURL";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { useRouter } from "next/router";
 
 const SupplierStock = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.supplierStock")}`;
+
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -81,12 +86,22 @@ const SupplierStock = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const suppStockId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${SUPP_STOCK_HIST.PAGE.ROOT}/${suppStockId}`,
+              show: true,
+              doAction: () =>
+                router.push(
+                  `${SUPP_STOCK_HIST.PAGE.ROOT}/${suppStockId}` ?? "#"
+                ),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={suppStockId}
-                viewURL={`${SUPP_STOCK_HIST.PAGE.ROOT}?suppStockId=${suppStockId}`}
-              />
+              <CustomTableOptionMenu rowId={suppStockId} item={optItem} />
             </div>
           );
         },
@@ -94,7 +109,7 @@ const SupplierStock = () => {
         enableColumnFilter: false,
       },
     ],
-    [t]
+    [router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

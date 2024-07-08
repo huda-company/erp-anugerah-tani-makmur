@@ -30,10 +30,15 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import { SUPPLIER } from "@/constants/pageURL";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { useRouter } from "next/router";
 
 const Supplier = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.supplier")}`;
+
+  const router = useRouter();
 
   const {
     loading,
@@ -96,14 +101,33 @@ const Supplier = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const suppId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${SUPPLIER.PAGE.VIEW}/${suppId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${SUPPLIER.PAGE.VIEW}/${suppId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${SUPPLIER.PAGE.EDIT}/${suppId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${SUPPLIER.PAGE.EDIT}/${suppId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(suppId),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={suppId}
-                editURL={`${SUPPLIER.PAGE.EDIT}/${suppId}`}
-                viewURL={`${SUPPLIER.PAGE.VIEW}/${suppId}`}
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu rowId={suppId} item={optItem} />
             </div>
           );
         },
@@ -111,7 +135,7 @@ const Supplier = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

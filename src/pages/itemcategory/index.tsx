@@ -29,10 +29,14 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import { pageRowsArr } from "^/config/request/config";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import { ITEM_CAT } from "@/constants/pageURL";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { useRouter } from "next/router";
 
 const ItemCategory = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.itemCategory")}`;
+  const router = useRouter();
 
   const {
     loading,
@@ -68,14 +72,33 @@ const ItemCategory = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const itemCatId = info.row.original.id;
+
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${ITEM_CAT.PAGE.VIEW}/${itemCatId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${ITEM_CAT.PAGE.VIEW}/${itemCatId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${ITEM_CAT.PAGE.EDIT}/${itemCatId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${ITEM_CAT.PAGE.EDIT}/${itemCatId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(itemCatId),
+            },
+          ];
+
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={itemCatId}
-                editURL={`${ITEM_CAT.PAGE.EDIT}/${itemCatId}`}
-                viewURL={`${ITEM_CAT.PAGE.VIEW}/${itemCatId}`}
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu rowId={itemCatId} item={optItem} />
             </div>
           );
         },
@@ -83,7 +106,7 @@ const ItemCategory = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

@@ -25,11 +25,16 @@ import useDebounce from "@/hooks/useDebounce";
 import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
 import { IUnitForm } from "^/@types/models/unit";
 import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
-import { UNIT } from "@/constants/pageURL";
+import { BRANCH, UNIT } from "@/constants/pageURL";
+import { OptMenuItem } from "@/components/CustomTable/types";
+import { capitalizeStr } from "^/utils/capitalizeStr";
+import { useRouter } from "next/router";
 
 const UnitPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.unit")}`;
+
+  const router = useRouter();
 
   const {
     loading,
@@ -67,14 +72,31 @@ const UnitPage = () => {
         accessorKey: "action",
         cell: (info: any) => {
           const branchId = info.row.original.id;
+          const optItem: OptMenuItem[] = [
+            {
+              label: capitalizeStr(t("Common.view")),
+              url: `${BRANCH.PAGE.VIEW}/${branchId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${BRANCH.PAGE.VIEW}/${branchId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.edit")),
+              url: `${BRANCH.PAGE.EDIT}/${branchId}`,
+              show: true,
+              doAction: () =>
+                router.push(`${BRANCH.PAGE.EDIT}/${branchId}` ?? "#"),
+            },
+            {
+              label: capitalizeStr(t("Common.delete")),
+              url: "#",
+              show: true,
+              doAction: () => confirmDeletion(branchId),
+            },
+          ];
           return (
             <div className="align-start flex justify-start">
-              <CustomTableOptionMenu
-                rowId={branchId}
-                editURL={`${UNIT.PAGE.EDIT}/${branchId}`}
-                viewURL={`${UNIT.PAGE.VIEW}/${branchId}`}
-                confirmDel={confirmDeletion}
-              />
+              <CustomTableOptionMenu item={optItem} rowId={branchId} />
             </div>
           );
         },
@@ -82,7 +104,7 @@ const UnitPage = () => {
         enableColumnFilter: false,
       },
     ],
-    [confirmDeletion, t]
+    [confirmDeletion, router, t]
   );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

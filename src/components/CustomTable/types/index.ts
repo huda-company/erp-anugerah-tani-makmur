@@ -28,12 +28,14 @@ export type CustomTblProps = {
   data: CustomTblData;
 };
 
+export type OptMenuItem = {
+  label: string;
+  url: string;
+  show: boolean;
+  doAction: (x: any) => void;
+};
+
 export type CustomTblOptMenuProps = {
+  item: OptMenuItem[];
   rowId: string;
-  viewURL?: string;
-  editURL?: string;
-  confirmDel?: (x: string) => void;
-  addPickupDoc?: (x: string) => void;
-  addDelivNote?: (x: string) => void;
-  doGenPdf?: (x: string) => void;
 };

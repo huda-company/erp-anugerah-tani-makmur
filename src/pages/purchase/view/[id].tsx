@@ -5,7 +5,6 @@ import { FC } from "react";
 import { getStaticProps } from "^/utils/getStaticProps";
 import { getStaticPaths } from "^/utils/getStaticPaths";
 import { useTranslations } from "next-intl";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
 import { bcData } from "^/config/purchase/config";
 import Loading from "@/components/Loading";
 import useGetPurchaseById from "@/hooks/purchase/useGetPurchaseById";
@@ -35,6 +34,7 @@ import { apprPurchaseAPI } from "^/services/purchase";
 import { thsandSep } from "^/utils/helpers";
 import { formatDate } from "^/utils/dateFormatting";
 import useGetPaymentPurchByPurchId from "@/hooks/purchase/useGetPaymentPurchByPurchId";
+import { PO } from "@/constants/pageURL";
 
 const ViewPurchasePage: FC = () => {
   const t = useTranslations("");
@@ -93,7 +93,7 @@ const ViewPurchasePage: FC = () => {
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 md:p-8">
           <HeaderModule
-            addPageURL={PURCHASE_PAGE.ADD}
+            addPageURL={PO.PAGE.ADD}
             title={titlePage}
             bcumbs={bcData}
           />
@@ -137,23 +137,21 @@ const ViewPurchasePage: FC = () => {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
                               onClick={() =>
-                                router.push(`${PURCHASE_PAGE.EDIT}/${id}`)
+                                router.push(`${PO.PAGE.EDIT}/${id}`)
                               }
                             >
                               {capitalizeStr(t("Common.edit"))}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
-                                router.push(
-                                  `${PURCHASE_PAGE.VIEW}/${String(id)}`
-                                )
+                                router.push(`${PO.PAGE.VIEW}/${String(id)}`)
                               }
                             >
                               {capitalizeStr(t("Common.view"))}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <a
-                                href={`${PURCHASE_PAGE.PDF}/${String(id)}`}
+                                href={`${PO.PAGE.PDF}/${String(id)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >

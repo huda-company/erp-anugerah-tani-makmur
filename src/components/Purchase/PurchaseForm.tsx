@@ -29,7 +29,6 @@ import { initialPurchaseForm, paymentMethOpts } from "^/config/purchase/config";
 import { createPurchaseAPI, editPurchaseAPI } from "^/services/purchase";
 import { actions as toastActs } from "@/redux/toast";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { PURCHASE_PAGE } from "@/constants/pageURL";
 import useMount from "@/hooks/useMount";
 import useGetUnit from "@/hooks/unit/useGetUnit";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -42,6 +41,7 @@ import {
 } from "../ui/command";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PO } from "@/constants/pageURL";
 
 const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const t = useTranslations("");
@@ -163,7 +163,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
         setTimeout(() => {
           if (mode == FormMode.ADD) {
-            router.push(`${PURCHASE_PAGE.VIEW}/${res.data.data.id}`);
+            router.push(`${PO.PAGE.VIEW}/${res.data.data.id}`);
           }
         }, 750);
       }
