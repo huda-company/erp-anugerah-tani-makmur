@@ -191,9 +191,7 @@ const useGetItem = () => {
   };
 
   const handlePageRowChange = (prm: number) => {
-    console.log("handlePageRowChange", itemPgntn);
     const newPrms = handlePrmChangeRowPage(itemPgntn, prm);
-    console.log("handlePageRowChange newPrms", newPrms);
     onPaginationChange({
       ...reqPrm,
       page: Number(newPrms.page),

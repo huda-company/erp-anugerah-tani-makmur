@@ -44,6 +44,20 @@ const useItemTable = (
     debugRows: false,
   });
 
+  const handleNextPgnt = () => {
+    table.setPagination({
+      pageIndex: table.getState().pagination.pageIndex + 1,
+      pageSize: table.getState().pagination.pageSize,
+    });
+  };
+
+  const handlePrevPgnt = () => {
+    table.setPagination({
+      pageIndex: table.getState().pagination.pageIndex - 1,
+      pageSize: table.getState().pagination.pageSize,
+    });
+  };
+
   return {
     table,
     columnFilters,
@@ -51,6 +65,8 @@ const useItemTable = (
     debGlobFltr,
     setColumnFilters,
     setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
   };
 };
 
