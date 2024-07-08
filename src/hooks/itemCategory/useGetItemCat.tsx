@@ -13,6 +13,7 @@ import {
 import useAppSelector from "../useAppSelector";
 import {
   IItemCatFieldRequest,
+  IItemCatGetReq,
   ItemCatResp,
 } from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
@@ -42,8 +43,7 @@ const useGetItemCat = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] =
-    useState<IItemCatFieldRequest["query"]>(initItemCatReqPrm);
+  const [reqPrm, setReqPrm] = useState<IItemCatGetReq>(initItemCatReqPrm);
   const [loading, setLoading] = useState(true);
   const [itemCat, setItemCat] = useState<ItemCatResp[]>([]);
   const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
@@ -181,16 +181,15 @@ const useGetItemCat = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IItemCatFieldRequest["query"], "name"> = {
+      const pgntParam: IItemCatGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {
@@ -210,7 +209,11 @@ const useGetItemCat = () => {
 
   const handlePageRowChange = (prm: number) => {
     const newPrms = handlePrmChangeRowPage(itemCatPgntn, prm);
-    onPaginationChange(newPrms);
+    onPaginationChange({
+      ...itemCatPgntn,
+      page: Number(newPrms.page),
+      limit: Number(newPrms.limit),
+    });
   };
 
   useEffect(() => {

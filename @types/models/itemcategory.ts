@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps, FormMode } from "../global";
 
 export interface IItemCategoryDocument extends Document {
@@ -26,6 +27,9 @@ export interface IItemCatFieldRequest {
     "sort[direction]"?: IItemCatFieldRequest["sort"]["direction"];
   };
 }
+
+export type IItemCatGetReq = Omit<IItemCatFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;
