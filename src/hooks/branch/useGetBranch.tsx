@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 
-import { initSuppReqPrm } from "^/config/supplier/config";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -13,7 +12,11 @@ import {
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
 import { deleteBranchAPI, getBranchAPI } from "^/services/branch";
-import { BranchResp, IBranchFieldRequest } from "^/@types/models/branch";
+import {
+  BranchResp,
+  IBranchFieldRequest,
+  IBranchGetReq,
+} from "^/@types/models/branch";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
   handlePrmChangeInputPage,
@@ -25,6 +28,7 @@ import {
 import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
 import { Options } from "^/@types/global";
+import { initBranchReqPrm } from "^/config/branch/config";
 
 const useGetBranch = () => {
   const t = useTranslations("");
@@ -39,8 +43,8 @@ const useGetBranch = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IBranchFieldRequest["query"]>({
-    ...initSuppReqPrm,
+  const [reqPrm, setReqPrm] = useState<IBranchGetReq>({
+    ...initBranchReqPrm,
     limit: pageRowsArr[1],
   });
   const [loading, setLoading] = useState(true);
@@ -177,16 +181,15 @@ const useGetBranch = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IBranchFieldRequest["query"], "name"> = {
+      const pgntParam: IBranchGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {
