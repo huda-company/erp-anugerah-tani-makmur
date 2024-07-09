@@ -11,11 +11,7 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import {
-  IItemCatFieldRequest,
-  IItemCatGetReq,
-  ItemCatResp,
-} from "^/@types/models/itemcategory";
+import { IItemCatGetReq, ItemCatResp } from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
 import { Options } from "^/@types/global";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
@@ -27,7 +23,6 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { initItemCatReqPrm } from "^/config/itemcategory/config";
-import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetItemCat = () => {
@@ -52,14 +47,7 @@ const useGetItemCat = () => {
   const [data, setData] = useState<ItemCatResp[]>([]);
 
   const fetch = useCallback(
-    async (
-      payload: Omit<IItemCatFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[0],
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+    async (payload: IItemCatGetReq = initItemCatReqPrm) => {
       fetched.current = true;
       setLoading(true);
 
