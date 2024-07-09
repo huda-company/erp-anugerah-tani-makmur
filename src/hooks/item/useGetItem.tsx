@@ -132,7 +132,7 @@ const useGetItem = () => {
       }
       setLoading(false);
     },
-    [dispatch, fetch, session, t, toast]
+    [closeAlertModal, dispatch, fetch, session, t, toast]
   );
 
   const confirmDeletion = useCallback(

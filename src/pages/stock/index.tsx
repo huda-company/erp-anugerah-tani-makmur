@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,42 +8,26 @@ import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
-import { STOCK_HIST } from "@/constants/pageURL";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import useDebounce from "@/hooks/useDebounce";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import { pageRowsArr } from "^/config/request/config";
-import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
-import { bcData, initSuppStockReqPrm } from "^/config/supplier-stock/config";
-import { ISupplierStockGetReq } from "^/@types/models/supplierstock";
+import { bcData } from "^/config/supplier-stock/config";
 import { useSession } from "next-auth/react";
 import useGetStock from "@/hooks/stock/useGetStock";
-import { StockTanTblData } from "^/@types/models/stock";
-import { capitalizeStr } from "^/utils/capitalizeStr";
-import { OptMenuItem } from "@/components/CustomTable/types";
-import { useRouter } from "next/router";
+import useStockTableColumn from "@/hooks/stock/useStockTableColumn";
+import { noop } from "lodash";
+import useStockTable from "@/hooks/stock/useStockTable";
+import { IStockGetReq } from "^/@types/models/stock";
 
 const StockPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.stock")}`;
-  const router = useRouter();
 
   const { status, data: session } = useSession();
 
   const {
     data: data,
-    suppPgntn,
+    stockPgntn,
     reqPrm,
     stockDataLoading: loading,
     setReqPrm,
@@ -54,134 +38,29 @@ const StockPage = () => {
     handlePageRowChange,
   } = useGetStock();
 
-  const columns = useMemo<ColumnDef<StockTanTblData, any>[]>(
-    () => [
-      {
-        accessorFn: (row) => `${row.branchName}`,
-        id: "company",
-        header: () => (
-          <CstmTstackHeaderCell key="company" str={t("Sidebar.branch")} />
-        ),
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => row.itemName,
-        id: "item",
-        cell: (info: any) => info.getValue(),
-        header: () => (
-          <CstmTstackHeaderCell key="item" str={t("Sidebar.item")} />
-        ),
-        enableColumnFilter: false,
-      },
+  const columns = useStockTableColumn(noop);
 
-      {
-        accessorKey: "stock",
-        header: () => (
-          <CstmTstackHeaderCell key="stock" str={t("Sidebar.stock")} />
-        ),
-        enableColumnFilter: false,
-        meta: {
-          filterVariant: "text",
-        },
-      },
-      {
-        accessorKey: "action",
-        cell: (info: any) => {
-          const suppStockId = info.row.original.id;
-
-          const optItem: OptMenuItem[] = [
-            {
-              label: capitalizeStr(t("Common.view")),
-              url: `${STOCK_HIST.PAGE.VIEW}/${suppStockId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${STOCK_HIST.PAGE.VIEW}/${suppStockId}` ?? "#"),
-            },
-          ];
-
-          return (
-            <div className="align-start flex justify-start">
-              <CustomTableOptionMenu rowId={suppStockId} item={optItem} />
-            </div>
-          );
-        },
-        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
-        enableColumnFilter: false,
-      },
-    ],
-    [router, t]
-  );
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: pageRowsArr[0], //default page size
-  });
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      globalFilter,
-      pagination,
-    },
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    enableFilters: true,
-    enableColumnFilters: true,
-    manualPagination: true, //turn off client-side pagination
-    pageCount: suppPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
-    debugTable: true,
-    debugHeaders: false,
-    debugColumns: false,
-    debugRows: false,
-  });
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useStockTable(data, columns, stockPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
-      const payload: ISupplierStockGetReq = {
+      const payload: IStockGetReq = {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
+      setReqPrm(payload);
       fetchStockData(session, payload);
     }
-  }, [debGlobFltr, fetchStockData, reqPrm, session]);
-
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetchStockData(session, {
-      ...initSuppStockReqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
 
   return (
     <>
@@ -233,12 +112,7 @@ const StockPage = () => {
                   }}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: ISupplierStockGetReq = {
-                      ...reqPrm,
-                      limit,
-                    };
                     table.setPageSize(limit);
-                    setReqPrm(newReqPrm);
                     handlePageRowChange(limit);
                   }}
                 />
