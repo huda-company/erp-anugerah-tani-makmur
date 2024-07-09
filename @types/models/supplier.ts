@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps } from "../global";
 
 export interface ISupplierDocument extends Document {
@@ -41,6 +42,8 @@ export interface ISupplierFieldRequest {
   };
 }
 
+export type ISuppGetReq = Omit<ISupplierFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 export interface ISortOptions {
   name?: string;
   createdAt?: number;

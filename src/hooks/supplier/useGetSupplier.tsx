@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import {
-  ISupplierFieldRequest,
+  ISuppGetReq,
   SupplierResp,
   SupplierTanTblData,
 } from "^/@types/models/supplier";
@@ -28,7 +28,6 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import React from "react";
-import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetSupplier = () => {
@@ -44,8 +43,7 @@ const useGetSupplier = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] =
-    useState<ISupplierFieldRequest["query"]>(initSuppReqPrm);
+  const [reqPrm, setReqPrm] = useState<ISuppGetReq>(initSuppReqPrm);
   const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState<SupplierResp[]>([]);
   const [supplierOpts, setSupplierOpts] = useState<Options[]>([]);
@@ -54,15 +52,7 @@ const useGetSupplier = () => {
   const [data, setData] = useState<SupplierTanTblData[]>([]);
 
   const fetch = useCallback(
-    async (
-      payload: Omit<ISupplierFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[0],
-        "param[search]": "",
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+    async (payload: ISuppGetReq = initSuppReqPrm) => {
       fetched.current = true;
       setLoading(true);
 
@@ -184,17 +174,15 @@ const useGetSupplier = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<ISupplierFieldRequest["query"], "name"> = {
+      const pgntParam: ISuppGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "param[search]": "",
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {
@@ -214,7 +202,11 @@ const useGetSupplier = () => {
 
   const handlePageRowChange = (prm: number) => {
     const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
-    onPaginationChange(newPrms);
+    onPaginationChange({
+      ...suppPgntn,
+      page: Number(newPrms.page),
+      limit: Number(newPrms.limit),
+    });
   };
 
   useEffect(() => {
