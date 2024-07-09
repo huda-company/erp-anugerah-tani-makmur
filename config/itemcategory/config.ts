@@ -1,8 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import {
-  IItemCatFieldRequest,
-  IItemCatForm,
-} from "^/@types/models/itemcategory";
+import { IItemCatForm, IItemCatGetReq } from "^/@types/models/itemcategory";
 import { z } from "zod";
 import { pageRowsArr } from "../request/config";
 import { SUPPLIER } from "@/constants/pageURL";
@@ -37,12 +34,14 @@ export const ItemCatFormSchema = z.object({
   }),
 });
 
-export const initItemCatReqPrm: IItemCatFieldRequest["query"] = {
-  name: "",
+export const initItemCatReqPrm: IItemCatGetReq = {
   "param[search]": "",
   "sort[direction]": "asc",
   "sort[key]": "name",
   id: "",
   limit: pageRowsArr[0],
   page: 0,
+  prevPage: null,
+  nextPage: null,
+  totalPages: 0,
 };

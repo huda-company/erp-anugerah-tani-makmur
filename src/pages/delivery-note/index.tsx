@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,44 +7,23 @@ import { withAuth } from "^/utils/withAuth";
 import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
-import { bcData, initSuppReqPrm } from "^/config/supplier/config";
+import { bcData } from "^/config/supplier/config";
 import Loading from "@/components/Loading";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import useDebounce from "@/hooks/useDebounce";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import { pageRowsArr } from "^/config/request/config";
-import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import useGetDelivNote from "@/hooks/delivery-note/useGetDelivNote";
-import {
-  DelivNoteTanTblData,
-  IDelivNoteGetReq,
-} from "^/@types/models/deliverynote";
+import { IDelivNoteGetReq } from "^/@types/models/deliverynote";
 import { useSession } from "next-auth/react";
-import { thsandSep } from "^/utils/helpers";
-import { formatDate } from "^/utils/dateFormatting";
-import { DELIV_NOTE, SUPPLIER } from "@/constants/pageURL";
-import { OptMenuItem } from "@/components/CustomTable/types";
-import { capitalizeStr } from "^/utils/capitalizeStr";
-import { useRouter } from "next/router";
+import { SUPPLIER } from "@/constants/pageURL";
+import useDelivNoteTableColumn from "@/hooks/delivery-note/useDelivNoteTableColumn";
+import useDelivNoteTable from "@/hooks/delivery-note/useDelivNoteTable";
 
 const DeliveryNotePage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.delivNote")}`;
 
-  const router = useRouter();
-
-  const { data: session, status } = useSession();
+  const { status, data: session } = useSession();
 
   const {
     data,
@@ -60,135 +39,17 @@ const DeliveryNotePage = () => {
     confirmDeletion,
   } = useGetDelivNote();
 
-  const columns = useMemo<ColumnDef<DelivNoteTanTblData, any>[]>(
-    () => [
-      {
-        accessorFn: (row) => row.createdAt,
-        id: "createdAt",
-        cell: (info: any) => formatDate(info.getValue()),
-        header: () => <CstmTstackHeaderCell str={t("PurchasePage.date")} />,
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => row.code,
-        id: "code",
-        cell: (info: any) => info.getValue(),
-        header: () => <CstmTstackHeaderCell str={t("Common.code")} />,
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => `${row.branchName}`,
-        id: "branchName",
-        header: () => (
-          <CstmTstackHeaderCell
-            str={`${t("Sidebar.branch")} ${t("Common.destination")}`}
-          />
-        ),
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => `${row.driverName}`,
-        id: "driverName",
-        header: () => (
-          <CstmTstackHeaderCell str={`${t("PurchasePage.driverName")}`} />
-        ),
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => `${row.purchaseTotal}`,
-        id: "purchaseTotal",
-        header: () => (
-          <CstmTstackHeaderCell str={t("DelivNote.purchaseTotal")} />
-        ),
-        cell: (info) => thsandSep(Number(info.getValue())),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => row.sellingTotal,
-        id: "sellingTotal",
-        cell: (info: any) => thsandSep(Number(info.getValue())),
-        header: () => (
-          <CstmTstackHeaderCell str={t("DelivNote.sellingTotal")} />
-        ),
-        enableColumnFilter: false,
-      },
-      {
-        accessorKey: "action",
-        cell: (info: any) => {
-          const suppId = info.row.original.id;
-          const optItem: OptMenuItem[] = [
-            {
-              label: capitalizeStr(t("Common.view")),
-              url: `${DELIV_NOTE.PAGE.VIEW}/${suppId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${DELIV_NOTE.PAGE.VIEW}/${suppId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.edit")),
-              url: `${DELIV_NOTE.PAGE.EDIT}/${suppId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${DELIV_NOTE.PAGE.EDIT}/${suppId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.delete")),
-              url: "#",
-              show: true,
-              doAction: () => confirmDeletion(suppId),
-            },
-          ];
-          return (
-            <div className="align-start flex justify-start">
-              <CustomTableOptionMenu item={optItem} rowId={suppId} />
-            </div>
-          );
-        },
-        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
-        enableColumnFilter: false,
-      },
-    ],
-    [confirmDeletion, router, t]
-  );
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const columns = useDelivNoteTableColumn(confirmDeletion);
 
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: pageRowsArr[0], //default page size
-  });
-
-  const table = useReactTable({
-    data: data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      globalFilter,
-      pagination,
-    },
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    enableFilters: true,
-    enableColumnFilters: true,
-    manualPagination: true, //turn off client-side pagination
-    pageCount: suppPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
-    debugTable: true,
-    debugHeaders: false,
-    debugColumns: false,
-    debugRows: false,
-  });
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useDelivNoteTable(data, columns, suppPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
@@ -196,32 +57,11 @@ const DeliveryNotePage = () => {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
+      setReqPrm(payload);
       fetchData(session, payload);
     }
-  }, [debGlobFltr, fetchData, reqPrm, session]);
-
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetchData(session, {
-      ...initSuppReqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps, FormMode } from "../global";
 
 export interface IBranchDocument extends Document {
@@ -28,6 +29,9 @@ export interface IBranchFieldRequest {
     "sort[direction]"?: IBranchFieldRequest["sort"]["direction"];
   };
 }
+
+export type IBranchGetReq = Omit<IBranchFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;

@@ -1,7 +1,8 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
 import { BRANCH } from "@/constants/pageURL";
-import { IBranchForm } from "^/@types/models/branch";
+import { IBranchForm, IBranchGetReq } from "^/@types/models/branch";
 import { z } from "zod";
+import { pageRowsArr } from "../request/config";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -40,3 +41,15 @@ export const BranchFormSchema = z.object({
     message: "invalid description",
   }),
 });
+
+export const initBranchReqPrm: IBranchGetReq = {
+  "param[search]": "",
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[0],
+  page: 0,
+  prevPage: null,
+  nextPage: null,
+  totalPages: 0,
+};

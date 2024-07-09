@@ -11,10 +11,7 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import {
-  IItemCatFieldRequest,
-  ItemCatResp,
-} from "^/@types/models/itemcategory";
+import { IItemCatGetReq, ItemCatResp } from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
 import { Options } from "^/@types/global";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
@@ -26,7 +23,6 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { initItemCatReqPrm } from "^/config/itemcategory/config";
-import { pageRowsArr } from "^/config/request/config";
 import useCloseAlertModal from "../useCloseAlertModal";
 
 const useGetItemCat = () => {
@@ -42,8 +38,7 @@ const useGetItemCat = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] =
-    useState<IItemCatFieldRequest["query"]>(initItemCatReqPrm);
+  const [reqPrm, setReqPrm] = useState<IItemCatGetReq>(initItemCatReqPrm);
   const [loading, setLoading] = useState(true);
   const [itemCat, setItemCat] = useState<ItemCatResp[]>([]);
   const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
@@ -52,14 +47,7 @@ const useGetItemCat = () => {
   const [data, setData] = useState<ItemCatResp[]>([]);
 
   const fetch = useCallback(
-    async (
-      payload: Omit<IItemCatFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[0],
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+    async (payload: IItemCatGetReq = initItemCatReqPrm) => {
       fetched.current = true;
       setLoading(true);
 
@@ -181,16 +169,15 @@ const useGetItemCat = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IItemCatFieldRequest["query"], "name"> = {
+      const pgntParam: IItemCatGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {
@@ -210,7 +197,11 @@ const useGetItemCat = () => {
 
   const handlePageRowChange = (prm: number) => {
     const newPrms = handlePrmChangeRowPage(itemCatPgntn, prm);
-    onPaginationChange(newPrms);
+    onPaginationChange({
+      ...itemCatPgntn,
+      page: Number(newPrms.page),
+      limit: Number(newPrms.limit),
+    });
   };
 
   useEffect(() => {

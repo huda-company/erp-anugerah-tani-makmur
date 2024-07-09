@@ -33,7 +33,7 @@ const useGetStock = () => {
     id: suppStockId ? String(suppStockId) : "",
   });
 
-  const [suppPgntn, setSuppTblPgntn] =
+  const [stockPgntn, setStockTblPgntn] =
     useState<PaginationCustomPrms>(initPgPrms);
 
   const {
@@ -67,7 +67,7 @@ const useGetStock = () => {
 
       queryClient.setQueryData(["stock"], suppData);
 
-      setSuppTblPgntn({
+      setStockTblPgntn({
         page: resData.data.page,
         limit: resData.data.limit,
         nextPage: resData.data.nextPage,
@@ -107,27 +107,27 @@ const useGetStock = () => {
   };
 
   const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(suppPgntn);
+    const newPrms = handlePrmChangeNextBtn(stockPgntn);
     onPaginationChange(newPrms);
   };
 
   const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(suppPgntn);
+    const newPrms = handlePrmChangePrevBtn(stockPgntn);
     onPaginationChange(newPrms);
   };
 
   const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(suppPgntn, prm);
+    const newPrms = handlePrmChangeInputPage(stockPgntn, prm);
     onPaginationChange(newPrms);
   };
 
   const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
+    const newPrms = handlePrmChangeRowPage(stockPgntn, prm);
     onPaginationChange(newPrms);
   };
 
   return {
-    suppPgntn,
+    stockPgntn,
     stockData,
     stockDataErr,
     stockDataLoading,

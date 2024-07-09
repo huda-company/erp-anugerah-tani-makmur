@@ -21,13 +21,14 @@ import {
 } from "@/components/PaginationCustom/config";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
 import {
-  IPurchaseFieldRequest,
+  IPurchGetReq,
   PurchTanTblData,
   PurchaseResp,
 } from "^/@types/models/purchase";
 import { pageRowsArr } from "^/config/request/config";
-import { initSuppReqPrm } from "^/config/supplier/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { initBranchReqPrm } from "^/config/branch/config";
+import { initPurchReqPrm } from "^/config/purchase/config";
 
 const useGetPurchase = () => {
   const t = useTranslations("");
@@ -42,8 +43,8 @@ const useGetPurchase = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IPurchaseFieldRequest["query"]>({
-    ...initSuppReqPrm,
+  const [reqPrm, setReqPrm] = useState<IPurchGetReq>({
+    ...initBranchReqPrm,
     limit: pageRowsArr[0],
   });
   const [loading, setLoading] = useState(true);
@@ -53,15 +54,7 @@ const useGetPurchase = () => {
   const [data, setData] = useState<PurchTanTblData[]>([]);
 
   const fetch = useCallback(
-    async (
-      payload: Omit<IPurchaseFieldRequest["query"], "name"> = {
-        page: 1,
-        limit: pageRowsArr[0],
-        "param[search]": "",
-        "sort[key]": "name",
-        "sort[direction]": "asc",
-      }
-    ) => {
+    async (payload: IPurchGetReq = initPurchReqPrm) => {
       fetched.current = true;
       setLoading(true);
 
@@ -182,16 +175,15 @@ const useGetPurchase = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IPurchaseFieldRequest["query"], "name"> = {
+      const pgntParam: IPurchGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {

@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { BaseFormProps } from "../global";
 import { ItemCatResp } from "./itemcategory";
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 
 export interface IItemDocument extends Document {
   itemCategory: Types.ObjectId;
@@ -33,7 +34,9 @@ export interface IItemFieldRequest {
   };
 }
 
-export type IItemGetReq = IItemFieldRequest["query"];
+// export type IItemGetReq = IItemFieldRequest["query"];
+export type IItemGetReq = Omit<IItemFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;

@@ -11,12 +11,7 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import {
-  IItemFieldRequest,
-  IItemGetReq,
-  ItemResp,
-  ItemTanTblData,
-} from "^/@types/models/item";
+import { IItemGetReq, ItemResp, ItemTanTblData } from "^/@types/models/item";
 import { deleteItemAPI, getItemAPI } from "^/services/item";
 import { Options } from "^/@types/global";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
@@ -44,20 +39,18 @@ const useGetItem = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IItemGetReq>({
-    ...initItemReqPrm,
-    page: 0,
-    limit: pageRowsArr[4],
-  });
+  const [reqPrm, setReqPrm] = useState<IItemGetReq>(initItemReqPrm);
   const [loading, setLoading] = useState(true);
   const [itemData, setItemData] = useState<any>(null);
   const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
-  const [itemPgntn, setItemTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
+  const [itemPgntn, setItemTblPgntn] = useState<PaginationCustomPrms>({
+    ...initPgPrms,
+    limit: pageRowsArr[4],
+  });
   const [data, setData] = useState<ItemTanTblData[]>([]);
 
   const fetch = useCallback(
-    async (payload: Omit<IItemFieldRequest["query"], "name"> = reqPrm) => {
+    async (payload: IItemGetReq = reqPrm) => {
       fetched.current = true;
       setLoading(true);
 
@@ -106,12 +99,7 @@ const useGetItem = () => {
       const resDelete = await deleteItemAPI(session, id);
       if (resDelete.data.success) {
         await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
+        closeAlertModal;
         await dispatch(
           toastActs.callShowToast({
             show: true,
@@ -140,7 +128,7 @@ const useGetItem = () => {
       }
       setLoading(false);
     },
-    [dispatch, fetch, session, t, toast]
+    [closeAlertModal, dispatch, fetch, session, t, toast]
   );
 
   const confirmDeletion = useCallback(
@@ -172,16 +160,15 @@ const useGetItem = () => {
 
   const onPaginationChange = useCallback(
     (prm: PaginationCustomPrms) => {
-      const pgntParam: Omit<IItemFieldRequest["query"], "name"> = {
+      const pgntParam: IItemGetReq = {
+        ...reqPrm,
         page: prm.page,
         limit: prm.limit,
-        "sort[key]": "name",
-        "sort[direction]": "asc",
       };
 
       fetch(pgntParam);
     },
-    [fetch]
+    [fetch, reqPrm]
   );
 
   const handleNextClck = () => {
@@ -201,7 +188,11 @@ const useGetItem = () => {
 
   const handlePageRowChange = (prm: number) => {
     const newPrms = handlePrmChangeRowPage(itemPgntn, prm);
-    onPaginationChange(newPrms);
+    onPaginationChange({
+      ...reqPrm,
+      page: Number(newPrms.page),
+      limit: Number(newPrms.limit),
+    });
   };
 
   useEffect(() => {

@@ -41,11 +41,13 @@ export const ItemFormSchema = z.object({
 });
 
 export const initItemReqPrm: IItemGetReq = {
-  name: "",
   "param[search]": "",
   "sort[direction]": "asc",
   "sort[key]": "name",
   id: "",
   limit: pageRowsArr[4],
   page: 0,
+  prevPage: null,
+  nextPage: null,
+  totalPages: 0,
 };

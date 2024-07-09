@@ -27,7 +27,11 @@ const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
           }}
         >
           {pageRowsArr.map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
+            <option
+              selected={table.getState().pagination.pageSize == pageSize}
+              key={pageSize}
+              value={pageSize}
+            >
               {pageSize}
             </option>
           ))}

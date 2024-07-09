@@ -20,7 +20,7 @@ import {
   initPgPrms,
 } from "@/components/PaginationCustom/config";
 import { deleteUnitAPI, getUnitAPI } from "^/services/unit";
-import { IUnitFieldRequest, UnitResp } from "^/@types/models/unit";
+import { IUnitFieldRequest, IUnitGetReq, UnitResp } from "^/@types/models/unit";
 import { Options } from "^/@types/global";
 import { pageRowsArr } from "^/config/request/config";
 import { initSuppReqPrm } from "^/config/supplier/config";
@@ -39,7 +39,7 @@ const useGetUnit = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IUnitFieldRequest["query"]>({
+  const [reqPrm, setReqPrm] = useState<IUnitGetReq>({
     ...initSuppReqPrm,
     limit: pageRowsArr[1],
   });

@@ -1,5 +1,5 @@
 import { BreadcrumbItem } from "@/components/CustomBreadcrumb/types";
-import { ISupplierFieldRequest, ISupplierForm } from "^/@types/models/supplier";
+import { ISuppGetReq, ISupplierForm } from "^/@types/models/supplier";
 import { z } from "zod";
 import { pageRowsArr } from "../request/config";
 import { SUPPLIER } from "@/constants/pageURL";
@@ -53,12 +53,14 @@ export const SupplierFormSchema = z.object({
   }),
 });
 
-export const initSuppReqPrm: ISupplierFieldRequest["query"] = {
-  name: "",
+export const initSuppReqPrm: ISuppGetReq = {
   "param[search]": "",
   "sort[direction]": "asc",
   "sort[key]": "name",
   id: "",
   limit: pageRowsArr[0],
   page: 0,
+  prevPage: null,
+  nextPage: null,
+  totalPages: 0,
 };

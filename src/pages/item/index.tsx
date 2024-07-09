@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,35 +12,25 @@ import useGetItem from "@/hooks/item/useGetItem";
 import { bcData } from "^/config/item/config";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import useDebounce from "@/hooks/useDebounce";
-import { IItemGetReq, ItemTanTblData } from "^/@types/models/item";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
+
+import { IItemGetReq } from "^/@types/models/item";
 import { ITEM } from "@/constants/pageURL";
-import { OptMenuItem } from "@/components/CustomTable/types";
-import { useRouter } from "next/router";
-import { capitalizeStr } from "^/utils/capitalizeStr";
+import useItemTableColumn from "@/hooks/item/useItemTableColumn";
+import useItemTable from "@/hooks/item/useItemTable";
+import { useSession } from "next-auth/react";
 
 const Item = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.item")}`;
 
-  const router = useRouter();
+  const { status } = useSession();
 
   const {
     loading,
     data,
     reqPrm,
-    setReqPrm,
     itemPgntn,
+    setReqPrm,
     fetch,
     handleNextClck,
     handlePrevClck,
@@ -49,107 +39,17 @@ const Item = () => {
     confirmDeletion,
   } = useGetItem();
 
-  const columns = useMemo<ColumnDef<ItemTanTblData, any>[]>(
-    () => [
-      {
-        accessorFn: (row) => `${row.itemCategoryName}`,
-        id: "itemCategory",
-        header: () => <CstmTstackHeaderCell str={t("Sidebar.itemCategory")} />,
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => row.name,
-        id: "name",
-        cell: (info: any) => info.getValue(),
-        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
-        enableColumnFilter: false,
-      },
+  const columns = useItemTableColumn(confirmDeletion);
 
-      {
-        accessorFn: (row) => `${row.description}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
-        enableColumnFilter: false,
-        meta: {
-          filterVariant: "text",
-        },
-      },
-      {
-        accessorKey: "action",
-        cell: (info: any) => {
-          const itemId = info.row.original.id;
-
-          const optItem: OptMenuItem[] = [
-            {
-              label: capitalizeStr(t("Common.view")),
-              url: `${ITEM.PAGE.VIEW}/${itemId}`,
-              show: true,
-              doAction: () => router.push(`${ITEM.PAGE.VIEW}/${itemId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.edit")),
-              url: `${ITEM.PAGE.EDIT}/${itemId}`,
-              show: true,
-              doAction: () => router.push(`${ITEM.PAGE.EDIT}/${itemId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.delete")),
-              url: "#",
-              show: true,
-              doAction: () => confirmDeletion(itemId),
-            },
-          ];
-
-          return (
-            <div className="align-start flex justify-start">
-              <CustomTableOptionMenu rowId={itemId} item={optItem} />
-            </div>
-          );
-        },
-        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
-        enableColumnFilter: false,
-      },
-    ],
-    [confirmDeletion, router, t]
-  );
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: Number(reqPrm.limit), //default page size
-  });
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      globalFilter,
-      pagination,
-    },
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    enableFilters: true,
-    enableColumnFilters: true,
-    manualPagination: true, //turn off client-side pagination
-    pageCount: itemPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
-    debugTable: true,
-    debugHeaders: false,
-    debugColumns: false,
-    debugRows: false,
-  });
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useItemTable(data, columns, itemPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
@@ -157,32 +57,11 @@ const Item = () => {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
+      setReqPrm(payload);
       fetch(payload);
     }
-  }, [debGlobFltr, fetch, reqPrm]);
-
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetch({
-      ...reqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
 
   return (
     <>
@@ -195,9 +74,9 @@ const Item = () => {
               bcumbs={bcData}
             />
 
-            {loading && <Loading />}
+            {status == "loading" || (loading && <Loading />)}
 
-            {loading == false && (
+            {status == "authenticated" && loading == false && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
@@ -231,6 +110,7 @@ const Item = () => {
                     const newReqPrm = {
                       ...reqPrm,
                       page,
+                      limit: table.getState().pagination.pageSize,
                     };
                     table.setPageIndex(page);
                     setReqPrm(newReqPrm);
@@ -238,12 +118,7 @@ const Item = () => {
                   }}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: IItemGetReq = {
-                      ...reqPrm,
-                      limit,
-                    };
                     table.setPageSize(limit);
-                    setReqPrm(newReqPrm);
                     handlePageRowChange(limit);
                   }}
                 />

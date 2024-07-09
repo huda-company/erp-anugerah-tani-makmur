@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,37 +10,27 @@ import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
 import useGetBranch from "@/hooks/branch/useGetBranch";
 import { bcData } from "^/config/branch/config";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import useDebounce from "@/hooks/useDebounce";
-import { BranchResp, IBranchFieldRequest } from "^/@types/models/branch";
+
+import { IBranchGetReq } from "^/@types/models/branch";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
 import { BRANCH } from "@/constants/pageURL";
-import { OptMenuItem } from "@/components/CustomTable/types";
-import { capitalizeStr } from "^/utils/capitalizeStr";
-import { useRouter } from "next/router";
+import useBranchTableColumn from "@/hooks/branch/useBranchTableColumn";
+import useBranchTable from "@/hooks/branch/useBranchTable";
+import { useSession } from "next-auth/react";
 
 const BranchPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.branch")}`;
 
-  const router = useRouter();
+  const { status } = useSession();
 
   const {
     loading,
     data,
     reqPrm,
-    setReqPrm,
     branchPgntn,
+    setReqPrm,
     fetch,
     handleNextClck,
     handlePrevClck,
@@ -49,140 +39,29 @@ const BranchPage = () => {
     confirmDeletion,
   } = useGetBranch();
 
-  const columns = useMemo<ColumnDef<BranchResp, any>[]>(
-    () => [
-      {
-        accessorFn: (row) => `${row.name}`,
-        id: "name",
-        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => row.address,
-        id: "address",
-        cell: (info: any) => info.getValue(),
-        header: () => <CstmTstackHeaderCell str={t("ParkingField.address")} />,
-        enableColumnFilter: false,
-      },
+  const columns = useBranchTableColumn(confirmDeletion);
 
-      {
-        accessorFn: (row) => `${row.description}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
-        enableColumnFilter: false,
-        meta: {
-          filterVariant: "text",
-        },
-      },
-      {
-        accessorKey: "action",
-        cell: (info: any) => {
-          const branchId = info.row.original.id;
-          const optItem: OptMenuItem[] = [
-            {
-              label: capitalizeStr(t("Common.view")),
-              url: `${BRANCH.PAGE.VIEW}/${branchId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${BRANCH.PAGE.VIEW}/${branchId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.edit")),
-              url: `${BRANCH.PAGE.EDIT}/${branchId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${BRANCH.PAGE.EDIT}/${branchId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.delete")),
-              url: "#",
-              show: true,
-              doAction: () => confirmDeletion(branchId),
-            },
-          ];
-          return (
-            <div className="align-start flex justify-start">
-              <CustomTableOptionMenu rowId={branchId} item={optItem} />
-            </div>
-          );
-        },
-        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
-        enableColumnFilter: false,
-      },
-    ],
-    [confirmDeletion, router, t]
-  );
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: Number(reqPrm.limit), //default page size
-  });
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      globalFilter,
-      pagination,
-    },
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    enableFilters: true,
-    enableColumnFilters: true,
-    manualPagination: true, //turn off client-side pagination
-    pageCount: branchPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
-    debugTable: true,
-    debugHeaders: false,
-    debugColumns: false,
-    debugRows: false,
-  });
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useBranchTable(data, columns, branchPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
-      const payload: IBranchFieldRequest["query"] = {
+      const payload: IBranchGetReq = {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
+      setReqPrm(payload);
       fetch(payload);
     }
-  }, [debGlobFltr, fetch, reqPrm]);
-
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetch({
-      ...reqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
 
   return (
     <>
@@ -195,9 +74,9 @@ const BranchPage = () => {
               bcumbs={bcData}
             />
 
-            {loading && <Loading />}
+            {loading || (status == "loading" && <Loading />)}
 
-            {loading == false && (
+            {loading == false && status == "authenticated" && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
@@ -238,12 +117,7 @@ const BranchPage = () => {
                   }}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: IBranchFieldRequest["query"] = {
-                      ...reqPrm,
-                      limit,
-                    };
                     table.setPageSize(limit);
-                    setReqPrm(newReqPrm);
                     handlePageRowChange(limit);
                   }}
                 />
