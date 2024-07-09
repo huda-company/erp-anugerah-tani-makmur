@@ -4,8 +4,13 @@ import { Options } from "^/@types/global";
 import { PaymentDelivnoteResp } from "^/@types/models/paymentdelivnote";
 import { PaymentPurchaseResp } from "^/@types/models/paymentpurchase";
 import { PickupDocType } from "^/@types/models/pickupdoc";
-import { IPurchaseForm, PurchaseStatus } from "^/@types/models/purchase";
+import {
+  IPurchaseForm,
+  IPurchGetReq,
+  PurchaseStatus,
+} from "^/@types/models/purchase";
 import { z } from "zod";
+import { pageRowsArr } from "../request/config";
 
 export const bcData: BreadcrumbItem[] = [
   {
@@ -82,6 +87,18 @@ export const PurchaseFormSchema = z.object({
     message: "invalid address",
   }),
 });
+
+export const initPurchReqPrm: IPurchGetReq = {
+  "param[search]": "",
+  "sort[direction]": "asc",
+  "sort[key]": "name",
+  id: "",
+  limit: pageRowsArr[0],
+  page: 0,
+  prevPage: null,
+  nextPage: null,
+  totalPages: 0,
+};
 
 export const paymentMethOpts: Options[] = [
   {

@@ -60,7 +60,11 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
 
   const { unitDataOpts, fetch: fetchUnit } = useGetUnit();
   const { reqPrm, itemDataOpts, fetch: fetchItem } = useGetItem();
-  const { supplierOpts, fetch: fetchSupp } = useGetSupplier();
+  const {
+    supplierOpts,
+    fetch: fetchSupp,
+    reqPrm: reqPrmSupp,
+  } = useGetSupplier();
 
   const calculateSubtotal = (
     quantity: number,
@@ -195,6 +199,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
       limit: 50,
     });
     fetchSupp({
+      ...reqPrmSupp,
       page: 1,
       limit: 50,
     });

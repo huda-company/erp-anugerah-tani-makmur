@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps, FormMode } from "../global";
 import { ItemResp } from "./item";
 import { SupplierResp } from "./supplier";
@@ -68,6 +69,9 @@ export interface IPurchaseFieldRequest {
     "sort[direction]"?: IPurchaseFieldRequest["sort"]["direction"];
   };
 }
+
+export type IPurchGetReq = Omit<IPurchaseFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;
