@@ -15,15 +15,12 @@ import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { IUnitGetReq } from "^/@types/models/unit";
 import { UNIT } from "@/constants/pageURL";
-import { useRouter } from "next/router";
 import useUnitTable from "@/hooks/unit/useUnitTable";
 import useUnitTableColumn from "@/hooks/unit/useUnitTableColumn";
 
 const UnitPage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.unit")}`;
-
-  const router = useRouter();
 
   const {
     loading,

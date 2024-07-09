@@ -15,7 +15,6 @@ import { bcData } from "^/config/supplier-stock/config";
 import { ISupplierStockGetReq } from "^/@types/models/supplierstock";
 import useGetSupplierStock from "@/hooks/supplier-stock/useGetSupplierStock";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import useSuppStockTableColumn from "@/hooks/supplier-stock/useSuppStockTableColumn";
 import { noop } from "lodash";
 import useSuppStockTable from "@/hooks/supplier-stock/useSuppStockTable";
@@ -23,8 +22,6 @@ import useSuppStockTable from "@/hooks/supplier-stock/useSuppStockTable";
 const SupplierStock = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.supplierStock")}`;
-
-  const router = useRouter();
 
   const { data: session } = useSession();
 

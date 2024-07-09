@@ -16,7 +16,7 @@ const useBranchTable = (
   columns: any,
   itemPgntn: PaginationCustomPrms
 ) => {
-  const { fetch, reqPrm, setReqPrm } = useGetBranch();
+  const { reqPrm, setReqPrm } = useGetBranch();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");

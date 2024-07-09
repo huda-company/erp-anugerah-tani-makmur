@@ -8,6 +8,7 @@ import { capitalizeStr } from "^/utils/capitalizeStr";
 import { SuppStockTanTblData } from "^/@types/models/supplierstock";
 import { SUPP_STOCK_HIST } from "@/constants/pageURL";
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const useSuppStockTableColumn = (confirmDeletion: (id: string) => void) => {
   const router = useRouter();
   const t = useTranslations("");
