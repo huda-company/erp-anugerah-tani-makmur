@@ -16,7 +16,7 @@ const useSupplierTable = (
   columns: any,
   itemPgntn: PaginationCustomPrms
 ) => {
-  const { fetch, reqPrm, setReqPrm } = useGetSupplier();
+  const { reqPrm, setReqPrm } = useGetSupplier();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
