@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BaseFormProps, FormMode } from "../global";
 
 export interface IUnitDocument extends Document {
@@ -26,6 +27,9 @@ export interface IUnitFieldRequest {
     "sort[direction]"?: IUnitFieldRequest["sort"]["direction"];
   };
 }
+
+export type IUnitGetReq = Omit<IUnitFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;

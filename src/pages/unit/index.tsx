@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,25 +10,14 @@ import HeaderModule from "@/components/DashboardLayout/HeaderModule";
 import Loading from "@/components/Loading";
 import useGetUnit from "@/hooks/unit/useGetUnit";
 import { bcData } from "^/config/unit/config";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { IBranchFieldRequest } from "^/@types/models/branch";
+
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import useDebounce from "@/hooks/useDebounce";
-import CustomTableOptionMenu from "@/components/CustomTable/CustomTableOptionMenu";
-import { IUnitForm } from "^/@types/models/unit";
-import CstmTstackHeaderCell from "@/components/CustomTstackTable/CstmTstackHeaderCell";
-import { BRANCH, UNIT } from "@/constants/pageURL";
-import { OptMenuItem } from "@/components/CustomTable/types";
-import { capitalizeStr } from "^/utils/capitalizeStr";
+import { IUnitGetReq } from "^/@types/models/unit";
+import { UNIT } from "@/constants/pageURL";
 import { useRouter } from "next/router";
+import useUnitTable from "@/hooks/unit/useUnitTable";
+import useUnitTableColumn from "@/hooks/unit/useUnitTableColumn";
 
 const UnitPage = () => {
   const t = useTranslations("");
@@ -50,132 +39,29 @@ const UnitPage = () => {
     confirmDeletion,
   } = useGetUnit();
 
-  const columns = useMemo<ColumnDef<IUnitForm, any>[]>(
-    () => [
-      {
-        accessorFn: (row) => `${row.name}`,
-        id: "name",
-        header: () => <CstmTstackHeaderCell str={t("Signup.name")} />,
-        cell: (info) => info.getValue(),
-        enableColumnFilter: false,
-      },
-      {
-        accessorFn: (row) => `${row.description}`,
-        accessorKey: "description",
-        header: () => <CstmTstackHeaderCell str={t("Index.description")} />,
-        enableColumnFilter: false,
-        meta: {
-          filterVariant: "text",
-        },
-      },
-      {
-        accessorKey: "action",
-        cell: (info: any) => {
-          const branchId = info.row.original.id;
-          const optItem: OptMenuItem[] = [
-            {
-              label: capitalizeStr(t("Common.view")),
-              url: `${BRANCH.PAGE.VIEW}/${branchId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${BRANCH.PAGE.VIEW}/${branchId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.edit")),
-              url: `${BRANCH.PAGE.EDIT}/${branchId}`,
-              show: true,
-              doAction: () =>
-                router.push(`${BRANCH.PAGE.EDIT}/${branchId}` ?? "#"),
-            },
-            {
-              label: capitalizeStr(t("Common.delete")),
-              url: "#",
-              show: true,
-              doAction: () => confirmDeletion(branchId),
-            },
-          ];
-          return (
-            <div className="align-start flex justify-start">
-              <CustomTableOptionMenu item={optItem} rowId={branchId} />
-            </div>
-          );
-        },
-        header: () => <CstmTstackHeaderCell str={t("Common.action")} />,
-        enableColumnFilter: false,
-      },
-    ],
-    [confirmDeletion, router, t]
-  );
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, //initial page index
-    pageSize: Number(reqPrm.limit), //default page size
-  });
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    // getFilteredRowModel: getFilteredRowModel(),
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      globalFilter,
-      pagination,
-    },
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    enableFilters: true,
-    enableColumnFilters: true,
-    manualPagination: true, //turn off client-side pagination
-    pageCount: unitPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
-    debugTable: true,
-    debugHeaders: false,
-    debugColumns: false,
-    debugRows: false,
-  });
+  const columns = useUnitTableColumn(confirmDeletion);
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useUnitTable(data, columns, unitPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
-      const payload: IBranchFieldRequest["query"] = {
+      const payload: IUnitGetReq = {
         ...reqPrm,
         "param[search]": debGlobFltr,
       };
+      setReqPrm(payload);
       fetch(payload);
     }
-  }, [debGlobFltr, fetch, reqPrm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
 
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetch({
-      ...reqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
   return (
     <>
       <DashboardLayout>
@@ -230,12 +116,7 @@ const UnitPage = () => {
                   }}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: IBranchFieldRequest["query"] = {
-                      ...reqPrm,
-                      limit,
-                    };
                     table.setPageSize(limit);
-                    setReqPrm(newReqPrm);
                     handlePageRowChange(limit);
                   }}
                 />
