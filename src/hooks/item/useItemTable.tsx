@@ -8,12 +8,15 @@ import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { ItemTanTblData } from "^/@types/models/item";
 import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
+import useGetItem from "./useGetItem";
+import { initItemReqPrm } from "^/config/item/config";
 
 const useItemTable = (
   data: ItemTanTblData[],
   columns: any,
   itemPgntn: PaginationCustomPrms
 ) => {
+  const { fetch, setReqPrm } = useGetItem();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
@@ -58,6 +61,12 @@ const useItemTable = (
     });
   };
 
+  const handleResetFilter = async () => {
+    await setGlobalFilter("");
+    setReqPrm(initItemReqPrm);
+    fetch(initItemReqPrm);
+  };
+
   return {
     table,
     columnFilters,
@@ -67,6 +76,7 @@ const useItemTable = (
     setGlobalFilter,
     handleNextPgnt,
     handlePrevPgnt,
+    handleResetFilter,
   };
 };
 

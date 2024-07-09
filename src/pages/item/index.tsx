@@ -41,11 +41,15 @@ const Item = () => {
 
   const columns = useItemTableColumn(confirmDeletion);
 
-  const { table, globalFilter, debGlobFltr, setGlobalFilter } = useItemTable(
-    data,
-    columns,
-    itemPgntn
-  );
+  const {
+    table,
+    globalFilter,
+    debGlobFltr,
+    setGlobalFilter,
+    handleNextPgnt,
+    handlePrevPgnt,
+    handleResetFilter,
+  } = useItemTable(data, columns, itemPgntn);
 
   useEffect(() => {
     if (debGlobFltr) {
@@ -58,29 +62,6 @@ const Item = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
-
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
-  };
-
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    fetch({
-      ...reqPrm,
-      page: 1,
-      limit: reqPrm.limit,
-    });
-  };
 
   return (
     <>

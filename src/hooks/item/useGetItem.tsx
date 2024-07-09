@@ -39,11 +39,7 @@ const useGetItem = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IItemGetReq>({
-    ...initItemReqPrm,
-    page: 0,
-    limit: pageRowsArr[4],
-  });
+  const [reqPrm, setReqPrm] = useState<IItemGetReq>(initItemReqPrm);
   const [loading, setLoading] = useState(true);
   const [itemData, setItemData] = useState<any>(null);
   const [itemDataOpts, setItemDataOpts] = useState<Options[]>([]);
