@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,13 +11,13 @@ import Loading from "@/components/Loading";
 import useGetBranch from "@/hooks/branch/useGetBranch";
 import { bcData } from "^/config/branch/config";
 
-import { IBranchGetReq } from "^/@types/models/branch";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import { BRANCH } from "@/constants/pageURL";
 import useBranchTableColumn from "@/hooks/branch/useBranchTableColumn";
 import useBranchTable from "@/hooks/branch/useBranchTable";
 import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BranchPage = () => {
   const t = useTranslations("");
@@ -25,43 +25,24 @@ const BranchPage = () => {
 
   const { status } = useSession();
 
-  const {
-    loading,
-    data,
-    reqPrm,
-    branchPgntn,
-    setReqPrm,
-    fetch,
-    handleNextClck,
-    handlePrevClck,
-    handlePageRowChange,
-    handlePageInputChange,
-    confirmDeletion,
-  } = useGetBranch();
+  const queryClient = useQueryClient();
+  const glbFltr = queryClient.getQueryData<any>(["bchGlobFltr"]);
+
+  const { bchDataLoading: loading, bchData, confirmDeletion } = useGetBranch();
 
   const columns = useBranchTableColumn(confirmDeletion);
 
   const {
     table,
-    globalFilter,
-    debGlobFltr,
-    setGlobalFilter,
-    handleNextPgnt,
-    handlePrevPgnt,
+    handleGlobFltrChange,
     handleResetFilter,
-  } = useBranchTable(data, columns, branchPgntn);
-
-  useEffect(() => {
-    if (debGlobFltr) {
-      const payload: IBranchGetReq = {
-        ...reqPrm,
-        "param[search]": debGlobFltr,
-      };
-      setReqPrm(payload);
-      fetch(payload);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
+    handleFirstPageClck,
+    handleLastPageClck,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
+  } = useBranchTable(columns);
 
   return (
     <>
@@ -80,41 +61,18 @@ const BranchPage = () => {
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
-                  data={data}
+                  data={bchData.items}
                   handleResetFilter={handleResetFilter}
-                  globalFilter={globalFilter}
-                  setGlobalFilter={setGlobalFilter}
+                  globalFilter={glbFltr}
+                  handleGlobFltrchange={handleGlobFltrChange}
                 />
 
                 <CstmTstackPagination
                   table={table}
-                  handlePrevClick={() => {
-                    handlePrevClck();
-                    handlePrevPgnt();
-                  }}
-                  handleNextClick={() => {
-                    handleNextClck();
-                    handleNextPgnt();
-                  }}
-                  handleFirstPageClick={() => {
-                    table.setPageIndex(0);
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page: 0,
-                    };
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
-                  handleLastPageClick={() => {
-                    const page = table.getPageCount();
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page,
-                    };
-                    table.setPageIndex(page);
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
+                  handlePrevClick={handlePrevClck}
+                  handleNextClick={handleNextClck}
+                  handleFirstPageClick={handleFirstPageClck}
+                  handleLastPageClick={handleLastPageClck}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
                     table.setPageSize(limit);
