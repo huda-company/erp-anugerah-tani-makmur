@@ -5,83 +5,153 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import useDebounce from "@/hooks/useDebounce";
-import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import { SupplierTanTblData } from "^/@types/models/supplier";
+import { ISuppGetReq } from "^/@types/models/supplier";
 import { initSuppReqPrm } from "^/config/supplier/config";
 import useGetSupplier from "./useGetSupplier";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const useSupplierTable = (
-  data: SupplierTanTblData[],
-  columns: any,
-  itemPgntn: PaginationCustomPrms
-) => {
-  const { reqPrm, setReqPrm } = useGetSupplier();
+const useSupplierTable = (columns: any) => {
+  const queryClient = useQueryClient();
+  const suppPgntn = queryClient.getQueryData<ISuppGetReq>(["suppPgntn"]);
+  const glbFltr = queryClient.getQueryData<any>(["suppGlobFltr"]);
+  const suppData = queryClient.getQueryData<any>(["supplier"]);
+
+  const { fetch } = useGetSupplier();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-  const debGlobFltr = useDebounce(globalFilter, 500); // Adjust delay as needed
+
+  const pgntMut = useMutation({
+    mutationFn: async (prm: ISuppGetReq) => {
+      await queryClient.setQueryData(["suppGlobFltr"], prm["param[search]"]);
+
+      return await fetch(prm);
+    },
+    onSettled: async (mutRes: any) => {
+      await queryClient.setQueryData(["suppPgntn"], {
+        ...suppPgntn,
+        page: 1,
+        limit: mutRes.limit ?? 1,
+      });
+    },
+  });
+
+  const handleGlobFltrChange = (prm: string) => {
+    if (suppPgntn) {
+      pgntMut.mutate({
+        ...suppPgntn,
+        "param[search]": prm,
+      });
+    }
+  };
 
   const table = useReactTable({
-    data,
+    data: suppData ? suppData?.items : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualFiltering: true,
     state: {
       columnFilters,
-      globalFilter,
+      globalFilter: glbFltr,
       pagination: {
-        pageIndex: Number(itemPgntn.page - 1),
-        pageSize: itemPgntn.limit,
+        pageIndex: Number(suppData?.page - 1),
+        pageSize: suppData?.limit,
       },
     },
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: handleGlobFltrChange,
     enableFilters: true,
     enableColumnFilters: true,
     manualPagination: true, //turn off client-side pagination
-    pageCount: itemPgntn.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
+    pageCount: suppData?.totalPages, //pass in the total row count so the table knows how many pages there are (pageCount calculated internally if not provided)
     debugTable: true,
     debugHeaders: false,
     debugColumns: false,
-    debugRows: false,
+    debugRows: true,
   });
 
-  const handleNextPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex + 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
+  const handleResetFilter = async () => {
+    if (suppPgntn) {
+      pgntMut.mutate(initSuppReqPrm);
+    }
   };
 
-  const handlePrevPgnt = () => {
-    table.setPagination({
-      pageIndex: table.getState().pagination.pageIndex - 1,
-      pageSize: table.getState().pagination.pageSize,
-    });
+  const handleFirstPageClck = () => {
+    if (suppPgntn) {
+      pgntMut.mutate({
+        ...suppPgntn,
+        page: 0,
+        limit: suppPgntn.limit,
+      });
+    }
   };
 
-  const handleResetFilter = () => {
-    setGlobalFilter("");
-    setReqPrm({
-      ...initSuppReqPrm,
-      "param[search]": "",
-      page: 1,
-      limit: reqPrm.limit,
-    });
+  const handleLastPageClck = () => {
+    const lastPage = table.getPageCount();
+    if (suppPgntn) {
+      pgntMut.mutate({
+        ...suppPgntn,
+        page: lastPage,
+        limit: suppPgntn.limit,
+      });
+    }
+  };
+
+  const handleNextClck = () => {
+    const newPage = Number(suppData.page) + 1;
+    if (suppPgntn) {
+      pgntMut.mutate({
+        ...suppPgntn,
+        page: newPage,
+        limit: suppPgntn.limit,
+      });
+    }
+  };
+
+  const handlePrevClck = () => {
+    const newPage = Number(suppData.page) - 1;
+    if (suppPgntn) {
+      pgntMut.mutate({
+        ...suppPgntn,
+        page: newPage,
+        limit: suppPgntn.limit,
+      });
+    }
+  };
+
+  const handlePageInputChange = (prm: number) => {
+    if (suppPgntn) {
+      queryClient.setQueryData(["suppPgntn"], {
+        ...suppPgntn,
+        page: Number(prm),
+      });
+      fetch({ ...suppPgntn, page: Number(prm) });
+    }
+  };
+
+  const handlePageRowChange = async (prm: number) => {
+    if (suppPgntn) {
+      await pgntMut.mutate({
+        ...suppPgntn,
+        page: 1,
+        limit: prm ?? 1,
+      });
+    }
   };
 
   return {
     table,
     columnFilters,
-    globalFilter,
-    debGlobFltr,
+    pgntMut,
     setColumnFilters,
-    setGlobalFilter,
-    handleNextPgnt,
-    handlePrevPgnt,
+    handleGlobFltrChange,
     handleResetFilter,
+    handleFirstPageClck,
+    handleLastPageClck,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
   };
 };
 

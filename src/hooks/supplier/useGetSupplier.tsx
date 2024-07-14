@@ -1,15 +1,11 @@
 import { Button } from "@/components/ui/button";
 
-import {
-  ISuppGetReq,
-  SupplierResp,
-  SupplierTanTblData,
-} from "^/@types/models/supplier";
+import { ISuppGetReq } from "^/@types/models/supplier";
 import { initSuppReqPrm } from "^/config/supplier/config";
 import { deleteSupplierAPI, getSupplierAPI } from "^/services/supplier";
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -19,19 +15,15 @@ import {
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
 import { Options } from "^/@types/global";
-import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import {
-  handlePrmChangeInputPage,
-  handlePrmChangeNextBtn,
-  handlePrmChangePrevBtn,
-  handlePrmChangeRowPage,
-  initPgPrms,
-} from "@/components/PaginationCustom/config";
+
 import React from "react";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useGetSupplier = () => {
   const t = useTranslations("");
+
+  const queryClient = useQueryClient();
 
   const fetched = useRef(false);
 
@@ -43,222 +35,171 @@ const useGetSupplier = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<ISuppGetReq>(initSuppReqPrm);
-  const [loading, setLoading] = useState(true);
-  const [suppliers, setSuppliers] = useState<SupplierResp[]>([]);
-  const [supplierOpts, setSupplierOpts] = useState<Options[]>([]);
-  const [suppPgntn, setSuppTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
-  const [data, setData] = useState<SupplierTanTblData[]>([]);
+  const {
+    data: pgntn,
+    error: pgntnErr,
+    isLoading: pgntnLoading,
+  } = useQuery<ISuppGetReq, Error>({
+    queryKey: ["suppPgntn"],
+    initialData: initSuppReqPrm,
+  });
 
-  const fetch = useCallback(
-    async (payload: ISuppGetReq = initSuppReqPrm) => {
-      fetched.current = true;
-      setLoading(true);
+  const {
+    data: reqPrm,
+    error: reqPrmErr,
+    isLoading: reqPrmLoading,
+  } = useQuery<ISuppGetReq, Error>({
+    queryKey: ["suppReqPrm"],
+    initialData: initSuppReqPrm,
+  });
 
-      try {
-        const response = await getSupplierAPI(session, payload);
-
-        if (!response || (response && response.status !== 200)) {
-          setLoading(false);
-          dispatch(
-            toastActs.callShowToast({
-              show: true,
-              msg: (
-                <div className="flex flex-col py-[1rem]">
-                  <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
-                </div>
-              ),
-              type: "error",
-            })
-          );
-        }
-
-        if (response.data) {
-          const { data: resData } = response;
-
-          const suppData: SupplierResp[] = resData.data.items;
-
-          setSuppliers(suppData);
-          setSuppTblPgntn({
-            page: resData.data.page,
-            limit: resData.data.limit,
-            nextPage: resData.data.nextPage,
-            prevPage: resData.data.prevPage,
-            totalPages: resData.data.totalPages,
-          });
-          setLoading(false);
-        }
-      } catch (error) {
-        setLoading(false);
-        return null;
-      }
+  const {
+    data: suppData,
+    error: suppDataErr,
+    isLoading: suppDataLoading,
+  } = useQuery<any, Error>({
+    queryKey: ["supplier"],
+    queryFn: async () => {
+      return await fetch(reqPrm);
     },
-    [dispatch, session, t]
-  );
+  });
 
-  const confirmDelOk = useCallback(
-    async (id: string) => {
-      setLoading(true);
-      const resDelete = await deleteSupplierAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.SUPPLIER_DELETE"))}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem] capitalize">
-                <span>
-                  {t(capitalizeStr(t("API_MSG.SUCCESS.SUPPLIER_DELETE")))}
-                </span>
-              </div>
-            ),
-            timeout: 2000,
-            type: "error",
-          })
-        );
+  let supplierOpts: Options[] = [];
+  const fetch = async (payload: ISuppGetReq = initSuppReqPrm) => {
+    fetched.current = true;
+    try {
+      const response = await getSupplierAPI(session, payload);
+
+      if (!response || (response && response.status !== 200)) {
+        throw new Error("API Error", response);
       }
-      setLoading(false);
-    },
-    [dispatch, fetch, session, t, toast]
-  );
 
-  const confirmDeletion = useCallback(
-    async (id: string) => {
+      if (response.data) {
+        const { data: resData } = response;
+
+        const newPgntnPrm = {
+          limit: resData.data.limit,
+          totalPages: resData.data.totalPages,
+          page: resData.data.page,
+          prevPage: resData.data.prevPage,
+          nextPage: resData.data.nextPage,
+        };
+
+        const newReqPrm = {
+          ...reqPrm,
+          limit: newPgntnPrm.limit,
+          totalPages: newPgntnPrm.totalPages,
+          page: newPgntnPrm.page,
+          prevPage: newPgntnPrm.prevPage,
+          nextPage: newPgntnPrm.nextPage,
+        };
+
+        await queryClient.setQueryData(["supplier"], resData.data);
+
+        await queryClient.setQueryData(["suppReqPrm"], newReqPrm);
+      }
+    } catch (error: any) {
+      throw new Error("API Error", error);
+    }
+  };
+
+  const confirmDelOk = async (id: string) => {
+    const resDelete = await deleteSupplierAPI(session, id);
+    if (resDelete.data.success) {
+      await fetch();
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: false,
+        })
+      );
       await dispatch(
         toastActs.callShowToast({
           show: true,
           msg: (
-            <div className="flex flex-col pt-[1rem] capitalize">
-              <h1 className="text-[1.5rem]">
-                {t(capitalizeStr(t("Msg.areUSure")))}
-              </h1>
-              <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button onClick={() => confirmDelOk(id)} variant="destructive">
-                  {capitalizeStr(t("Common.delete"))}
-                </Button>
-                <Button onClick={closeAlertModal} type="reset">
-                  {capitalizeStr(t("Common.cancel"))}
-                </Button>
-              </div>
+            <div className="flex flex-col py-[1rem]">
+              <span>
+                {" "}
+                {capitalizeStr(t("API_MSG.SUCCESS.SUPPLIER_DELETE"))}{" "}
+              </span>
             </div>
           ),
-          type: "confirm",
+          type: "success",
         })
       );
-    },
-    [closeAlertModal, confirmDelOk, dispatch, t]
-  );
-
-  const onPaginationChange = useCallback(
-    (prm: PaginationCustomPrms) => {
-      const pgntParam: ISuppGetReq = {
-        ...reqPrm,
-        page: prm.page,
-        limit: prm.limit,
-      };
-
-      fetch(pgntParam);
-    },
-    [fetch, reqPrm]
-  );
-
-  const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(suppPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(suppPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(suppPgntn, prm);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
-    onPaginationChange({
-      ...suppPgntn,
-      page: Number(newPrms.page),
-      limit: Number(newPrms.limit),
-    });
-  };
-
-  useEffect(() => {
-    if (!fetched.current && session && session?.accessToken) fetch();
-  }, [fetch, session]);
-
-  useEffect(() => {
-    if (suppliers) {
-      const items = suppliers;
-      // build opts
-      const opts =
-        suppliers && items.length > 0
-          ? items.map((x: any) => {
-              return {
-                value: x.id,
-                text: x.company,
-              };
-            })
-          : [];
-      setSupplierOpts(opts);
+    } else {
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: true,
+          msg: (
+            <div className="flex flex-col py-[1rem] capitalize">
+              <span>
+                {t(capitalizeStr(t("API_MSG.SUCCESS.SUPPLIER_DELETE")))}
+              </span>
+            </div>
+          ),
+          timeout: 2000,
+          type: "error",
+        })
+      );
     }
-  }, [suppliers]);
+  };
 
-  useEffect(() => {
-    if (suppliers) {
-      const tStackTblBd = suppliers.map((x: SupplierResp) => {
-        return {
-          id: String(x.id),
-          company: x.company,
-          address: x.address,
-          supplierCode: x.supplierCode,
-          tel: x.tel,
-          email: x.email,
-        } as SupplierTanTblData;
-      });
-      setData(tStackTblBd);
-    }
-  }, [suppliers]);
+  const confirmDeletion = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col pt-[1rem] capitalize">
+            <h1 className="text-[1.5rem]">
+              {t(capitalizeStr(t("Msg.areUSure")))}
+            </h1>
+            <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
+                {capitalizeStr(t("Common.delete"))}
+              </Button>
+              <Button onClick={closeAlertModal} type="reset">
+                {capitalizeStr(t("Common.cancel"))}
+              </Button>
+            </div>
+          </div>
+        ),
+        type: "confirm",
+      })
+    );
+  };
+
+  if (suppData) {
+    const items = suppData.items;
+    // build opts
+    const opts =
+      suppData && items.length > 0
+        ? items.map((x: any) => {
+            return {
+              value: x.id,
+              text: x.company,
+            };
+          })
+        : [];
+
+    supplierOpts = opts;
+  }
 
   return {
-    loading,
     fetch,
-    suppliers,
     supplierOpts,
-    suppPgntn,
-    data,
     reqPrm,
-    setReqPrm,
-    handleNextClck,
-    handlePrevClck,
-    handlePageInputChange,
-    handlePageRowChange,
+    reqPrmErr,
+    reqPrmLoading,
+
+    pgntn,
+    pgntnErr,
+    pgntnLoading,
+    suppData,
+    suppDataErr,
+    suppDataLoading,
+
     confirmDeletion,
   };
 };

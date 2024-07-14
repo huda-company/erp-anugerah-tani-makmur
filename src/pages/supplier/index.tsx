@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,7 +7,7 @@ import { withAuth } from "^/utils/withAuth";
 import { useTranslations } from "next-intl";
 import { getStaticProps } from "^/utils/getStaticProps";
 import HeaderModule from "@/components/DashboardLayout/HeaderModule";
-import { bcData } from "^/config/supplier/config";
+import { bcData, initSuppReqPrm } from "^/config/supplier/config";
 import useGetSupplier from "@/hooks/supplier/useGetSupplier";
 import Loading from "@/components/Loading";
 
@@ -16,23 +16,22 @@ import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagin
 import { SUPPLIER } from "@/constants/pageURL";
 import useSupplierTableColumn from "@/hooks/supplier/useSupplierTableColumn";
 import useSupplierTable from "@/hooks/supplier/useSupplierTable";
-import { ISuppGetReq } from "^/@types/models/supplier";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import useMount from "@/hooks/useMount";
 
 const Supplier = () => {
+  const { status } = useSession();
+
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.supplier")}`;
 
+  const queryClient = useQueryClient();
+  const glbFltr = queryClient.getQueryData<any>(["suppGlobFltr"]);
+
   const {
-    loading,
-    data: data,
-    suppPgntn,
-    reqPrm,
-    setReqPrm,
-    fetch,
-    handleNextClck,
-    handlePrevClck,
-    handlePageInputChange,
-    handlePageRowChange,
+    suppDataLoading: loading,
+    suppData,
     confirmDeletion,
   } = useGetSupplier();
 
@@ -40,25 +39,20 @@ const Supplier = () => {
 
   const {
     table,
-    globalFilter,
-    debGlobFltr,
-    setGlobalFilter,
-    handleNextPgnt,
-    handlePrevPgnt,
+    pgntMut,
+    handleGlobFltrChange,
     handleResetFilter,
-  } = useSupplierTable(data, columns, suppPgntn);
+    handleFirstPageClck,
+    handleLastPageClck,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
+  } = useSupplierTable(columns);
 
-  useEffect(() => {
-    if (debGlobFltr) {
-      const payload: ISuppGetReq = {
-        ...reqPrm,
-        "param[search]": debGlobFltr,
-      };
-      setReqPrm(payload);
-      fetch(payload);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
+  useMount(() => {
+    pgntMut.mutate(initSuppReqPrm);
+  });
 
   return (
     <>
@@ -71,47 +65,24 @@ const Supplier = () => {
               bcumbs={bcData}
             />
 
-            {loading && <Loading />}
+            {(loading || status == "loading") && <Loading />}
 
-            {loading == false && (
+            {!loading && status == "authenticated" && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
-                  data={data}
+                  data={suppData.items}
                   handleResetFilter={handleResetFilter}
-                  globalFilter={globalFilter}
-                  setGlobalFilter={setGlobalFilter}
+                  globalFilter={glbFltr}
+                  handleGlobFltrchange={handleGlobFltrChange}
                 />
 
                 <CstmTstackPagination
                   table={table}
-                  handlePrevClick={() => {
-                    handlePrevClck();
-                    handlePrevPgnt();
-                  }}
-                  handleNextClick={() => {
-                    handleNextClck();
-                    handleNextPgnt();
-                  }}
-                  handleFirstPageClick={() => {
-                    table.setPageIndex(0);
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page: 0,
-                    };
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
-                  handleLastPageClick={() => {
-                    const page = table.getPageCount();
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page,
-                    };
-                    table.setPageIndex(page);
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
+                  handlePrevClick={handlePrevClck}
+                  handleNextClick={handleNextClck}
+                  handleFirstPageClick={handleFirstPageClck}
+                  handleLastPageClick={handleLastPageClck}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
                     table.setPageSize(limit);

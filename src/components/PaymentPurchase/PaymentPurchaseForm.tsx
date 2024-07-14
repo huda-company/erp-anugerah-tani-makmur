@@ -46,7 +46,7 @@ const PaymentPurchaseForm: FC<PaymentPurchaseFormProps> = ({
 
   // const [file, setFile] = useState<File | null>(null);
   const { loading: itemLoading, itemDataOpts } = useGetItem();
-  const { loading: unitLoading, unitDataOpts } = useGetUnit();
+  const { unitDataLoading: unitLoading, unitDataOpts } = useGetUnit();
 
   const onSubmit = async (data: IPaymentPurchaseForm) => {
     const prm: IPaymentPurchaseForm = {

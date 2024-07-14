@@ -42,6 +42,7 @@ import {
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PO } from "@/constants/pageURL";
+import { initSuppReqPrm } from "^/config/supplier/config";
 
 const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
   const t = useTranslations("");
@@ -204,6 +205,7 @@ const PurchaseForm: FC<PurchaseFormProps> = ({ mode, initialFormVals }) => {
       limit: 50,
     });
     fetchUnit({
+      ...initSuppReqPrm,
       limit: 20,
     });
   });
