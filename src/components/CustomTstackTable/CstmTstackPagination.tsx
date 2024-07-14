@@ -55,7 +55,7 @@ const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
         </button>
         <strong>
           <span className="text-lg">
-            {table.getState().pagination.pageIndex + 1}
+            {Number(table.getState().pagination.pageIndex + 1) || ""}
           </span>
         </strong>
         <button
@@ -81,6 +81,7 @@ const CstmTstackPagination: React.FC<CstmTstackPaginationProps> = ({
             min={table.getPageCount() === 0 ? 0 : 1}
             max={table.getState().pagination.pageSize - 1}
             type="number"
+            value={table.getState().pagination.pageIndex + 1}
             defaultValue={table.getState().pagination.pageIndex + 1}
             onFocus={handleFocusSelectAll}
             onChange={(e) => {
