@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,51 +13,36 @@ import { bcData } from "^/config/unit/config";
 
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
-import { IUnitGetReq } from "^/@types/models/unit";
 import { UNIT } from "@/constants/pageURL";
 import useUnitTable from "@/hooks/unit/useUnitTable";
 import useUnitTableColumn from "@/hooks/unit/useUnitTableColumn";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 const UnitPage = () => {
+  const { status } = useSession();
+
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.unit")}`;
 
+  const queryClient = useQueryClient();
+  const glbFltr = queryClient.getQueryData<any>(["usrGlobFltr"]);
+
+  const { unitDataLoading: loading, unitData, confirmDeletion } = useGetUnit();
+
+  const columns = useUnitTableColumn(confirmDeletion);
+
   const {
-    loading,
-    unitPgntn,
-    data,
-    reqPrm,
-    setReqPrm,
-    fetch,
+    table,
+    handleGlobFltrChange,
+    handleResetFilter,
+    handleFirstPageClck,
+    handleLastPageClck,
     handleNextClck,
     handlePrevClck,
     handlePageRowChange,
     handlePageInputChange,
-    confirmDeletion,
-  } = useGetUnit();
-
-  const columns = useUnitTableColumn(confirmDeletion);
-  const {
-    table,
-    globalFilter,
-    debGlobFltr,
-    setGlobalFilter,
-    handleNextPgnt,
-    handlePrevPgnt,
-    handleResetFilter,
-  } = useUnitTable(data, columns, unitPgntn);
-
-  useEffect(() => {
-    if (debGlobFltr) {
-      const payload: IUnitGetReq = {
-        ...reqPrm,
-        "param[search]": debGlobFltr,
-      };
-      setReqPrm(payload);
-      fetch(payload);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
+  } = useUnitTable(columns);
 
   return (
     <>
@@ -70,47 +55,24 @@ const UnitPage = () => {
               bcumbs={bcData}
             />
 
-            {loading && <Loading />}
+            {(loading || status == "loading") && <Loading />}
 
-            {loading == false && (
+            {!loading && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
-                  data={data}
+                  data={unitData.items}
                   handleResetFilter={handleResetFilter}
-                  globalFilter={globalFilter}
-                  setGlobalFilter={setGlobalFilter}
+                  globalFilter={glbFltr}
+                  handleGlobFltrchange={handleGlobFltrChange}
                 />
 
                 <CstmTstackPagination
                   table={table}
-                  handlePrevClick={() => {
-                    handlePrevClck();
-                    handlePrevPgnt();
-                  }}
-                  handleNextClick={() => {
-                    handleNextClck();
-                    handleNextPgnt();
-                  }}
-                  handleFirstPageClick={() => {
-                    table.setPageIndex(0);
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page: 0,
-                    };
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
-                  handleLastPageClick={() => {
-                    const page = table.getPageCount();
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page,
-                    };
-                    table.setPageIndex(page);
-                    setReqPrm(newReqPrm);
-                    fetch(newReqPrm);
-                  }}
+                  handlePrevClick={handlePrevClck}
+                  handleNextClick={handleNextClck}
+                  handleFirstPageClick={handleFirstPageClck}
+                  handleLastPageClick={handleLastPageClck}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
                     table.setPageSize(limit);
