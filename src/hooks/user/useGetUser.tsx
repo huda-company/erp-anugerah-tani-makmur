@@ -11,21 +11,12 @@ import {
   selectors as toastSelectors,
 } from "@/redux/toast";
 import useAppSelector from "../useAppSelector";
-import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import {
-  handlePrmChangeInputPage,
-  handlePrmChangeNextBtn,
-  handlePrmChangePrevBtn,
-  handlePrmChangeRowPage,
-} from "@/components/PaginationCustom/config";
+
 import { deleteUserAPI, getUserAPI } from "^/services/user";
 import { IUserGetReq } from "^/@types/models/user";
 import useCloseAlertModal from "../useCloseAlertModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  convGetReqToPgntCustomProps,
-  initUserReqPrm,
-} from "^/config/user/config";
+import { initUserReqPrm } from "^/config/user/config";
 
 const useGetUser = () => {
   const t = useTranslations("");
@@ -43,6 +34,21 @@ const useGetUser = () => {
   const { data: session } = useSession();
 
   const {
+    data: globFltr,
+    error: globFltrErr,
+    isLoading: globFltrLoading,
+  } = useQuery<String, Error>({ queryKey: ["usrGlobFltr"], initialData: "" });
+
+  const {
+    data: pgntn,
+    error: pgntnErr,
+    isLoading: pgntnLoading,
+  } = useQuery<IUserGetReq, Error>({
+    queryKey: ["usrPgntn"],
+    initialData: initUserReqPrm,
+  });
+
+  const {
     data: reqPrm,
     error: reqPrmErr,
     isLoading: reqPrmLoading,
@@ -56,7 +62,7 @@ const useGetUser = () => {
     error: userDataErr,
     isLoading: userDataLoading,
   } = useQuery<any, Error>({
-    queryKey: ["user", reqPrm],
+    queryKey: ["user"],
     queryFn: async () => {
       return await fetchData(session, reqPrm);
     },
@@ -73,15 +79,14 @@ const useGetUser = () => {
       const response = await getUserAPI(session, usrReq);
 
       if (!response || (response && response.status !== 200)) {
-        throw new Error("API Error");
+        throw new Error("API Error", response);
       }
 
       const { data: resData } = response;
 
       await queryClient.setQueryData(["user"], resData.data);
 
-      const newReqPrm = {
-        ...reqPrm,
+      const newPgntnPrm = {
         limit: resData.data.limit,
         totalPages: resData.data.totalPages,
         page: resData.data.page,
@@ -89,13 +94,20 @@ const useGetUser = () => {
         nextPage: resData.data.nextPage,
       };
 
+      const newReqPrm = {
+        ...reqPrm,
+        limit: newPgntnPrm.limit,
+        totalPages: newPgntnPrm.totalPages,
+        page: newPgntnPrm.page,
+        prevPage: newPgntnPrm.prevPage,
+        nextPage: newPgntnPrm.nextPage,
+      };
+
       await queryClient.setQueryData(["reqPrm"], newReqPrm);
-      // await queryClient.invalidateQueries({ queryKey: ['reqPrm'] })
-      // await queryClient.invalidateQueries({ queryKey: ['user'] })
 
       return resData.data;
-    } catch (error) {
-      throw new Error("API Error");
+    } catch (error: any) {
+      throw new Error("API Error", error);
     }
   };
 
@@ -161,58 +173,20 @@ const useGetUser = () => {
     );
   };
 
-  const onPaginationChange = async (prm: PaginationCustomPrms) => {
-    const pgntParam: IUserGetReq = {
-      ...reqPrm,
-      page: prm.page,
-      limit: prm.limit,
-    };
-
-    // await queryClient.setQueryData(["reqPrm"], pgntParam);
-    await fetchData(session, pgntParam);
-  };
-
-  const handleNextClck = () => {
-    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
-    const newPrms = handlePrmChangeNextBtn(pgReq);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePrevClck = () => {
-    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
-    const newPrms = handlePrmChangePrevBtn(pgReq);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageInputChange = (prm: number) => {
-    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
-    const newPrms = handlePrmChangeInputPage(pgReq, prm);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageRowChange = (prm: number) => {
-    const pgReq: PaginationCustomPrms = convGetReqToPgntCustomProps(reqPrm);
-    const newPrms = handlePrmChangeRowPage(pgReq, prm);
-    onPaginationChange(newPrms);
-  };
-
-  const handleSetReqPrm = (prm: IUserGetReq) => {
-    queryClient.setQueryData(["reqPrm"], prm);
-  };
-
   return {
     userData,
     userDataErr,
     userDataLoading,
-    fetchData,
     reqPrm,
     reqPrmErr,
     reqPrmLoading,
-    handleSetReqPrm,
-    handleNextClck,
-    handlePrevClck,
-    handlePageRowChange,
-    handlePageInputChange,
+    pgntn,
+    pgntnErr,
+    pgntnLoading,
+    globFltr,
+    globFltrErr,
+    globFltrLoading,
+    fetchData,
     confirmDeletion,
   };
 };

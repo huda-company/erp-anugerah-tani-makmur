@@ -6,6 +6,7 @@ export interface CstmTstackTableProps<T> {
   globalFilter?: string;
   setGlobalFilter?: React.Dispatch<React.SetStateAction<string>>;
   handleResetFilter: () => void;
+  handleGlobFltrchange?: (prm: string) => void;
 }
 
 export interface CstmTstackPaginationProps {

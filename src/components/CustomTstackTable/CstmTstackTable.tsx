@@ -13,13 +13,14 @@ import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import { CstmTstackTableProps } from "./types";
 import EmptyContent from "../EmptyContent/EmptyContent";
+import { handleFocusSelectAll } from "^/utils/helpers";
 
 const CstmTstackTable = <T,>({
   columns,
   data,
   globalFilter,
-  setGlobalFilter,
   handleResetFilter,
+  handleGlobFltrchange,
 }: CstmTstackTableProps<T>) => {
   const t = useTranslations("");
 
@@ -32,7 +33,7 @@ const CstmTstackTable = <T,>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: handleGlobFltrchange,
   });
 
   return (
@@ -42,7 +43,10 @@ const CstmTstackTable = <T,>({
           <Input
             className="bg-[#ECF8DA]"
             value={globalFilter}
-            onChange={(e) => setGlobalFilter && setGlobalFilter(e.target.value)}
+            onFocus={handleFocusSelectAll}
+            onChange={(e) =>
+              handleGlobFltrchange && handleGlobFltrchange(e.target.value)
+            }
             placeholder={capitalizeStr(t("Common.search"))}
           />
           <Button
