@@ -18,6 +18,8 @@ import useUnitTable from "@/hooks/unit/useUnitTable";
 import useUnitTableColumn from "@/hooks/unit/useUnitTableColumn";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import useMount from "@/hooks/useMount";
+import { initSuppReqPrm } from "^/config/supplier/config";
 
 const UnitPage = () => {
   const { status } = useSession();
@@ -32,6 +34,8 @@ const UnitPage = () => {
 
   const columns = useUnitTableColumn(confirmDeletion);
 
+  const { pgntMut } = useUnitTable(columns);
+
   const {
     table,
     handleGlobFltrChange,
@@ -43,6 +47,10 @@ const UnitPage = () => {
     handlePageRowChange,
     handlePageInputChange,
   } = useUnitTable(columns);
+
+  useMount(() => {
+    pgntMut.mutate(initSuppReqPrm);
+  });
 
   return (
     <>
