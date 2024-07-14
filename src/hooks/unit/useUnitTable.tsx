@@ -22,12 +22,12 @@ const useUnitTable = (columns: any) => {
 
   const pgntMut = useMutation({
     mutationFn: async (prm: IUnitGetReq) => {
-      await queryClient.setQueryData(["usrGlobFltr"], prm["param[search]"]);
+      await queryClient.setQueryData(["untGlobFltr"], prm["param[search]"]);
 
       return await fetch(prm);
     },
     onSettled: async (mutRes: any) => {
-      await queryClient.setQueryData(["usrPgntn"], {
+      await queryClient.setQueryData(["untPgntn"], {
         ...usrPgntn,
         page: 1,
         limit: mutRes.limit ?? 1,
