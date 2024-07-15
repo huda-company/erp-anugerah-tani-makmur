@@ -58,7 +58,7 @@ const CashflowHistPage = () => {
     handlePageRowChange,
   } = useGetCashflowHistByCashflowId();
 
-  const { stockData } = useGetCashflow();
+  const { data: stockData } = useGetCashflow();
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");

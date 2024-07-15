@@ -1,3 +1,4 @@
+import { PaginationCustomProp } from "@/components/PaginationCustom/types";
 import { BranchResp } from "./branch";
 import { CashflowActTypes } from "./cashflowhist";
 
@@ -29,7 +30,8 @@ export interface ICashflowFieldRequest {
   };
 }
 
-export type ICashflowGetReq = Omit<ICashflowFieldRequest["query"], "name">;
+export type ICashflowGetReq = Omit<ICashflowFieldRequest["query"], "name"> &
+  Pick<PaginationCustomProp, "nextPage" | "prevPage" | "totalPages">;
 
 export interface ISortOptions {
   name?: string;
