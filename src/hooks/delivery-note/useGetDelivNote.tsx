@@ -1,15 +1,8 @@
 import { initSuppReqPrm } from "^/config/supplier/config";
 import { useSession } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import {
-  handlePrmChangeInputPage,
-  handlePrmChangeNextBtn,
-  handlePrmChangePrevBtn,
-  handlePrmChangeRowPage,
-  initPgPrms,
-} from "@/components/PaginationCustom/config";
+import { initPgPrms } from "@/components/PaginationCustom/config";
 import { actions as toastActs } from "@/redux/toast";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -41,20 +34,33 @@ const useGetDelivNote = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IDelivNoteGetReq>({
-    ...initSuppReqPrm,
-    id: delivNoteId ? String(delivNoteId) : "",
+  const {
+    data: reqPrm,
+    error: reqPrmErr,
+    isLoading: reqPrmLoading,
+  } = useQuery<IDelivNoteGetReq, Error>({
+    queryKey: ["delivNoteReqPrm"],
+    initialData: {
+      ...initSuppReqPrm,
+      id: delivNoteId ? String(delivNoteId) : "",
+    },
   });
 
-  const [suppPgntn, setSuppTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
+  const {
+    data: pgntn,
+    error: pgntnErr,
+    isLoading: pgntnLoading,
+  } = useQuery<IDelivNoteGetReq, Error>({
+    queryKey: ["delivNotePgntn"],
+    initialData: initPgPrms,
+  });
 
   const {
     data: delivNoteData,
     error: delivNoteDataErr,
     isLoading: delivNoteDataLoading,
-  } = useQuery<DelivNoteResp[], Error>({
-    queryKey: ["deliv-note"],
+  } = useQuery<any, Error>({
+    queryKey: ["delivNote"],
     retry: 1,
     queryFn: async () => {
       const dNoteData = await fetchData(session, reqPrm);
@@ -78,57 +84,36 @@ const useGetDelivNote = () => {
       }
 
       const { data: resData } = response;
-      const suppData: DelivNoteResp[] = resData.data.items;
+      const cashflowData: DelivNoteResp[] = resData.data;
 
-      queryClient.setQueryData(["deliv-note"], suppData);
-
-      setSuppTblPgntn({
-        page: resData.data.page,
+      const newPgntnPrm = {
         limit: resData.data.limit,
-        nextPage: resData.data.nextPage,
-        prevPage: resData.data.prevPage,
         totalPages: resData.data.totalPages,
-      });
+        page: resData.data.page,
+        prevPage: resData.data.prevPage,
+        nextPage: resData.data.nextPage,
+      };
 
-      return suppData;
+      const newReqPrm = {
+        ...reqPrm,
+        limit: newPgntnPrm.limit,
+        totalPages: newPgntnPrm.totalPages,
+        page: newPgntnPrm.page,
+        prevPage: newPgntnPrm.prevPage,
+        nextPage: newPgntnPrm.nextPage,
+      };
+
+      queryClient.setQueryData(["delivNote"], cashflowData);
+      queryClient.setQueryData(["delivNoteReqPrm"], newReqPrm);
+
+      return cashflowData;
     } catch (error) {
       throw new Error("API Error");
     }
   };
 
-  const onPaginationChange = (prm: PaginationCustomPrms) => {
-    const pgntParam: IDelivNoteGetReq = {
-      ...reqPrm,
-      page: prm.page,
-      limit: prm.limit,
-    };
-
-    fetchData(session, pgntParam);
-  };
-
-  const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(suppPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(suppPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(suppPgntn, prm);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(suppPgntn, prm);
-    onPaginationChange(newPrms);
-  };
-
   const confirmDelOk = async (id: string) => {
-    // eslint-disable-next-line no-console
-    console.log("confirmDelOk", id);
+    return id;
   };
 
   const confirmDeletion = async (id: string) => {
@@ -138,7 +123,7 @@ const useGetDelivNote = () => {
         msg: (
           <div className="flex flex-col pt-[1rem] capitalize">
             <h1 className="text-[1.5rem]">
-              {capitalizeStr(t("Msg.areUSure"))}
+              {t(capitalizeStr(t("Msg.areUSure")))}
             </h1>
             <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
               <Button onClick={() => confirmDelOk(id)} variant="destructive">
@@ -155,9 +140,9 @@ const useGetDelivNote = () => {
     );
   };
 
-  const data =
-    delivNoteData && delivNoteData.length > 0
-      ? delivNoteData.map((x: DelivNoteResp) => {
+  const tblData =
+    delivNoteData && delivNoteData.items.length > 0
+      ? delivNoteData.items.map((x: DelivNoteResp) => {
           return {
             id: String(x.id),
             branchName: x.branch.name,
@@ -171,18 +156,17 @@ const useGetDelivNote = () => {
       : [];
 
   return {
-    suppPgntn,
     delivNoteData,
     delivNoteDataErr,
     delivNoteDataLoading,
-    data,
     reqPrm,
-    setReqPrm,
+    reqPrmErr,
+    reqPrmLoading,
+    pgntn,
+    pgntnErr,
+    pgntnLoading,
+    tblData,
     fetchData,
-    handleNextClck,
-    handlePrevClck,
-    handlePageInputChange,
-    handlePageRowChange,
     confirmDeletion,
   };
 };

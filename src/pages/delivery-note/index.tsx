@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import DashboardLayout from "@/components/DashboardLayout";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -13,29 +13,24 @@ import Loading from "@/components/Loading";
 import CstmTstackTable from "@/components/CustomTstackTable/CstmTstackTable";
 import CstmTstackPagination from "@/components/CustomTstackTable/CstmTstackPagination";
 import useGetDelivNote from "@/hooks/delivery-note/useGetDelivNote";
-import { IDelivNoteGetReq } from "^/@types/models/deliverynote";
 import { useSession } from "next-auth/react";
 import { SUPPLIER } from "@/constants/pageURL";
 import useDelivNoteTableColumn from "@/hooks/delivery-note/useDelivNoteTableColumn";
 import useDelivNoteTable from "@/hooks/delivery-note/useDelivNoteTable";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DeliveryNotePage = () => {
   const t = useTranslations("");
   const titlePage = `${t("Sidebar.delivNote")}`;
 
-  const { status, data: session } = useSession();
+  const { status } = useSession();
+
+  const queryClient = useQueryClient();
+  const glbFltr = queryClient.getQueryData<any>(["delivNoteGlobFltr"]);
 
   const {
-    data,
+    tblData,
     delivNoteDataLoading: loading,
-    suppPgntn,
-    reqPrm,
-    setReqPrm,
-    fetchData,
-    handleNextClck,
-    handlePrevClck,
-    handlePageInputChange,
-    handlePageRowChange,
     confirmDeletion,
   } = useGetDelivNote();
 
@@ -43,25 +38,15 @@ const DeliveryNotePage = () => {
 
   const {
     table,
-    globalFilter,
-    debGlobFltr,
-    setGlobalFilter,
-    handleNextPgnt,
-    handlePrevPgnt,
+    handleGlobFltrChange,
     handleResetFilter,
-  } = useDelivNoteTable(data, columns, suppPgntn);
-
-  useEffect(() => {
-    if (debGlobFltr) {
-      const payload: IDelivNoteGetReq = {
-        ...reqPrm,
-        "param[search]": debGlobFltr,
-      };
-      setReqPrm(payload);
-      fetchData(session, payload);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debGlobFltr, reqPrm.page, reqPrm.limit]);
+    handleFirstPageClck,
+    handleLastPageClck,
+    handleNextClck,
+    handlePrevClck,
+    handlePageRowChange,
+    handlePageInputChange,
+  } = useDelivNoteTable(columns);
 
   return (
     <>
@@ -74,55 +59,27 @@ const DeliveryNotePage = () => {
               bcumbs={bcData}
             />
 
-            {status == "loading" || (loading && <Loading />)}
+            {(status == "loading" || loading) && <Loading />}
 
             {status == "authenticated" && loading == false && (
               <div className="border-bg-[#CAF4AB] my-[1rem] rounded-[1rem] border-2 p-4">
                 <CstmTstackTable
                   columns={columns}
-                  data={data}
+                  data={tblData}
                   handleResetFilter={handleResetFilter}
-                  globalFilter={globalFilter}
-                  setGlobalFilter={setGlobalFilter}
+                  globalFilter={glbFltr}
+                  handleGlobFltrchange={handleGlobFltrChange}
                 />
 
                 <CstmTstackPagination
                   table={table}
-                  handlePrevClick={() => {
-                    handlePrevClck();
-                    handlePrevPgnt();
-                  }}
-                  handleNextClick={() => {
-                    handleNextClck();
-                    handleNextPgnt();
-                  }}
-                  handleFirstPageClick={() => {
-                    table.setPageIndex(0);
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page: 0,
-                    };
-                    setReqPrm(newReqPrm);
-                    fetchData(session, newReqPrm);
-                  }}
-                  handleLastPageClick={() => {
-                    const page = table.getPageCount();
-                    const newReqPrm = {
-                      ...reqPrm,
-                      page,
-                    };
-                    table.setPageIndex(page);
-                    setReqPrm(newReqPrm);
-                    fetchData(session, newReqPrm);
-                  }}
+                  handlePrevClick={handlePrevClck}
+                  handleNextClick={handleNextClck}
+                  handleFirstPageClick={handleFirstPageClck}
+                  handleLastPageClick={handleLastPageClck}
                   handlePageInputChange={handlePageInputChange}
                   handlePageRowChange={(limit: number) => {
-                    const newReqPrm: IDelivNoteGetReq = {
-                      ...reqPrm,
-                      limit,
-                    };
                     table.setPageSize(limit);
-                    setReqPrm(newReqPrm);
                     handlePageRowChange(limit);
                   }}
                 />
