@@ -187,7 +187,7 @@ const useGetItemCat = () => {
         ? items.map((x: any) => {
             return {
               value: x.id,
-              text: x.company,
+              text: x.name,
             };
           })
         : [];
