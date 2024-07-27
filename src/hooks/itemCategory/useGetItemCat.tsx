@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 import { capitalizeStr } from "^/utils/capitalizeStr";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
 import useAppDispatch from "../useAppDispatch";
 
@@ -13,22 +13,18 @@ import {
 import useAppSelector from "../useAppSelector";
 import { IItemCatGetReq, ItemCatResp } from "^/@types/models/itemcategory";
 import { deleteItemCatAPI, getItemCatAPI } from "^/services/itemCategory";
-import { Options } from "^/@types/global";
-import { PaginationCustomPrms } from "@/components/PaginationCustom/types";
-import {
-  handlePrmChangeInputPage,
-  handlePrmChangeNextBtn,
-  handlePrmChangePrevBtn,
-  handlePrmChangeRowPage,
-  initPgPrms,
-} from "@/components/PaginationCustom/config";
+import { initPgPrms } from "@/components/PaginationCustom/config";
 import { initItemCatReqPrm } from "^/config/itemcategory/config";
 import useCloseAlertModal from "../useCloseAlertModal";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Options } from "^/@types/global";
 
 const useGetItemCat = () => {
   const t = useTranslations("");
 
   const fetched = useRef(false);
+
+  const queryClient = useQueryClient();
 
   const dispatch = useAppDispatch();
 
@@ -38,219 +34,194 @@ const useGetItemCat = () => {
 
   const { data: session } = useSession();
 
-  const [reqPrm, setReqPrm] = useState<IItemCatGetReq>(initItemCatReqPrm);
-  const [loading, setLoading] = useState(true);
-  const [itemCat, setItemCat] = useState<ItemCatResp[]>([]);
-  const [itemCatOpts, setItemCatOpts] = useState<Options[]>([]);
-  const [itemCatPgntn, setItemCatTblPgntn] =
-    useState<PaginationCustomPrms>(initPgPrms);
-  const [data, setData] = useState<ItemCatResp[]>([]);
+  const {
+    data: globFltr,
+    error: globFltrErr,
+    isLoading: globFltrLoading,
+  } = useQuery<String, Error>({
+    queryKey: ["itemCatGlobFltr"],
+    initialData: "",
+  });
 
-  const fetch = useCallback(
-    async (payload: IItemCatGetReq = initItemCatReqPrm) => {
+  const {
+    data: pgntn,
+    error: pgntnErr,
+    isLoading: pgntnLoading,
+  } = useQuery<IItemCatGetReq, Error>({
+    queryKey: ["itemCatPgntn"],
+    initialData: initPgPrms,
+  });
+
+  const {
+    data: reqPrm,
+    error: reqPrmErr,
+    isLoading: reqPrmLoading,
+  } = useQuery<IItemCatGetReq, Error>({
+    queryKey: ["itemCatReqPrm"],
+    initialData: initItemCatReqPrm,
+  });
+
+  const {
+    data: itemCatData,
+    error: itemCatDataErr,
+    isLoading: itemCatDataLoading,
+  } = useQuery<any, Error>({
+    queryKey: ["itemCat"],
+    queryFn: async () => {
+      return await fetchData(session, reqPrm);
+    },
+  });
+
+  // Adjust the query function to match the expected type
+  const fetchData = async (
+    session: any, // Replace with your session type
+    payload: IItemCatGetReq // Replace with your request payload type
+  ): Promise<any> => {
+    try {
       fetched.current = true;
-      setLoading(true);
 
-      try {
-        const response = await getItemCatAPI(session, payload);
+      const response = await getItemCatAPI(session, payload);
 
-        if (!response || (response && response.status !== 200)) {
-          setLoading(false);
-          dispatch(
-            toastActs.callShowToast({
-              show: true,
-              msg: (
-                <div className="flex flex-col py-[1rem]">
-                  <span>{t("API_MSG.ERROR.UNEXPECTED_ERROR")}</span>
-                </div>
-              ),
-              type: "error",
-            })
-          );
-        }
-
-        if (response.data) {
-          const { data: resData } = response;
-
-          setItemCat(resData.data.items);
-
-          setItemCatTblPgntn({
-            page: resData.data.page,
-            limit: resData.data.limit,
-            nextPage: resData.data.nextPage,
-            prevPage: resData.data.prevPage,
-            totalPages: resData.data.totalPages,
-          });
-
-          setLoading(false);
-        }
-      } catch (error) {
-        setLoading(false);
-        return null;
+      if (!response || (response && response.status !== 200)) {
+        throw new Error("API Error", response);
       }
-    },
-    [dispatch, session, t]
-  );
 
-  const confirmDelOk = useCallback(
-    async (id: string) => {
-      setLoading(true);
-      const resDelete = await deleteItemCatAPI(session, id);
-      if (resDelete.data.success) {
-        await fetch();
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: false,
-          })
-        );
-        await dispatch(
-          toastActs.callShowToast({
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem]">
-                <span>
-                  {" "}
-                  {capitalizeStr(t("API_MSG.SUCCESS.ITEM_CAT_DELETE"))}{" "}
-                </span>
-              </div>
-            ),
-            type: "success",
-          })
-        );
-      } else {
-        await dispatch(
-          toastActs.callShowToast({
-            ...toast,
-            show: true,
-            msg: (
-              <div className="flex flex-col py-[1rem] capitalize">
-                <span>
-                  {t(capitalizeStr(t("API_MSG.ERROR.ITEM_CAT_DELETE")))}
-                </span>
-              </div>
-            ),
-            timeout: 2000,
-            type: "error",
-          })
-        );
-      }
-      setLoading(false);
-    },
-    [dispatch, fetch, session, t, toast]
-  );
+      const { data: resData } = response;
 
-  const confirmDeletion = useCallback(
-    async (id: string) => {
+      await queryClient.setQueryData(["itemCat"], resData.data);
+
+      const newPgntnPrm = {
+        limit: resData.data.limit,
+        totalPages: resData.data.totalPages,
+        page: resData.data.page,
+        prevPage: resData.data.prevPage,
+        nextPage: resData.data.nextPage,
+      };
+
+      const newReqPrm = {
+        ...reqPrm,
+        limit: newPgntnPrm.limit,
+        totalPages: newPgntnPrm.totalPages,
+        page: newPgntnPrm.page,
+        prevPage: newPgntnPrm.prevPage,
+        nextPage: newPgntnPrm.nextPage,
+      };
+
+      await queryClient.setQueryData(["itemCatReqPrm"], newReqPrm);
+
+      return resData.data;
+    } catch (error: any) {
+      throw new Error("API Error", error);
+    }
+  };
+
+  const confirmDelOk = async (id: string) => {
+    const resDelete = await deleteItemCatAPI(session, id);
+    if (resDelete && resDelete.data.success) {
+      await fetchData(session, reqPrm);
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: false,
+        })
+      );
       await dispatch(
         toastActs.callShowToast({
           show: true,
           msg: (
-            <div className="flex flex-col pt-[1rem] capitalize">
-              <h1 className="text-[1.5rem]">
-                {t(capitalizeStr(t("Msg.areUSure")))}
-              </h1>
-              <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
-                <Button onClick={() => confirmDelOk(id)} variant="destructive">
-                  {capitalizeStr(t("Common.delete"))}
-                </Button>
-                <Button onClick={closeAlertModal} type="reset">
-                  {capitalizeStr(t("Common.cancel"))}
-                </Button>
-              </div>
+            <div className="flex flex-col py-[1rem]">
+              <span> {capitalizeStr(t("API_MSG.SUCCESS.USER_DELETE"))} </span>
             </div>
           ),
-          type: "confirm",
+          type: "success",
         })
       );
-    },
-    [closeAlertModal, confirmDelOk, dispatch, t]
-  );
-
-  const onPaginationChange = useCallback(
-    (prm: PaginationCustomPrms) => {
-      const pgntParam: IItemCatGetReq = {
-        ...reqPrm,
-        page: prm.page,
-        limit: prm.limit,
-      };
-
-      fetch(pgntParam);
-    },
-    [fetch, reqPrm]
-  );
-
-  const handleNextClck = () => {
-    const newPrms = handlePrmChangeNextBtn(itemCatPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePrevClck = () => {
-    const newPrms = handlePrmChangePrevBtn(itemCatPgntn);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageInputChange = (prm: number) => {
-    const newPrms = handlePrmChangeInputPage(itemCatPgntn, prm);
-    onPaginationChange(newPrms);
-  };
-
-  const handlePageRowChange = (prm: number) => {
-    const newPrms = handlePrmChangeRowPage(itemCatPgntn, prm);
-    onPaginationChange({
-      ...itemCatPgntn,
-      page: Number(newPrms.page),
-      limit: Number(newPrms.limit),
-    });
-  };
-
-  useEffect(() => {
-    if (!fetched.current && session && session?.accessToken) fetch();
-  }, [fetch, session]);
-
-  useEffect(() => {
-    if (itemCat) {
-      const items = itemCat;
-      // build opts
-      const opts =
-        itemCat && Array.isArray(items) && items.length > 0
-          ? items.map((x: any) => {
-              return {
-                value: x.id,
-                text: x.name,
-              };
-            })
-          : [];
-      setItemCatOpts(opts);
+    } else {
+      await dispatch(
+        toastActs.callShowToast({
+          ...toast,
+          show: true,
+          msg: (
+            <div className="flex flex-col py-[1rem] capitalize">
+              <span>{t(capitalizeStr(t("API_MSG.ERROR.USER_DELETE")))}</span>
+            </div>
+          ),
+          timeout: 2000,
+          type: "error",
+        })
+      );
     }
-  }, [itemCat]);
+  };
 
-  useEffect(() => {
-    if (itemCat) {
-      const tStackTblBd = itemCat.map((x: ItemCatResp) => {
-        return {
-          id: String(x.id),
-          name: x.name,
-          description: x.description,
-        } as ItemCatResp;
-      });
-      setData(tStackTblBd);
-    }
-  }, [itemCat]);
+  const confirmDeletion = async (id: string) => {
+    await dispatch(
+      toastActs.callShowToast({
+        show: true,
+        msg: (
+          <div className="flex flex-col pt-[1rem] capitalize">
+            <h1 className="text-[1.5rem]">
+              {t(capitalizeStr(t("Msg.areUSure")))}
+            </h1>
+            <div className="mt-[1rem] flex flex-row justify-center gap-4 text-white">
+              <Button onClick={() => confirmDelOk(id)} variant="destructive">
+                {capitalizeStr(t("Common.delete"))}
+              </Button>
+              <Button onClick={closeAlertModal} type="reset">
+                {capitalizeStr(t("Common.cancel"))}
+              </Button>
+            </div>
+          </div>
+        ),
+        type: "confirm",
+      })
+    );
+  };
+
+  let itemCatOpts: Options[] = [];
+
+  if (itemCatData) {
+    const items = itemCatData.items;
+    // build opts
+    const opts =
+      itemCatData && items.length > 0
+        ? items.map((x: any) => {
+            return {
+              value: x.id,
+              text: x.name,
+            };
+          })
+        : [];
+
+    itemCatOpts = opts;
+  }
+
+  const tblData =
+    itemCatData && itemCatData.items.length > 0
+      ? itemCatData.items.map((x: ItemCatResp) => {
+          return {
+            id: String(x.id),
+            name: x.name,
+            description: x.description,
+          } as ItemCatResp;
+        })
+      : [];
 
   return {
-    loading,
-    fetch,
-    itemCat,
-    data,
-    itemCatOpts,
-    itemCatPgntn,
+    globFltr,
+    globFltrErr,
+    globFltrLoading,
+    pgntn,
+    pgntnLoading,
+    pgntnErr,
+    itemCatData,
+    itemCatDataErr,
+    itemCatDataLoading,
     reqPrm,
-    setReqPrm,
-    handlePageInputChange,
-    handlePageRowChange,
-    handleNextClck,
-    handlePrevClck,
+    reqPrmErr,
+    reqPrmLoading,
+    tblData,
+    itemCatOpts,
+    fetchData,
     confirmDeletion,
   };
 };
