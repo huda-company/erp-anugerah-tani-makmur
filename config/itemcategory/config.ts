@@ -39,7 +39,7 @@ export const initItemCatReqPrm: IItemCatGetReq = {
   "sort[direction]": "asc",
   "sort[key]": "name",
   id: "",
-  limit: pageRowsArr[0],
+  limit: pageRowsArr[1],
   page: 0,
   prevPage: null,
   nextPage: null,

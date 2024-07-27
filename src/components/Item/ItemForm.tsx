@@ -47,7 +47,7 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
 
   const { data: session } = useSession();
 
-  const { itemCatOpts, fetch, reqPrm: reqPrmItmCat } = useGetItemCat();
+  const { itemCatOpts, fetchData, reqPrm: reqPrmItmCat } = useGetItemCat();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -122,7 +122,7 @@ const ItemForm: FC<ItemFormProps> = ({ mode, initialFormVals, doRefresh }) => {
   });
 
   useMount(() => {
-    fetch({
+    fetchData(session, {
       ...reqPrmItmCat,
       limit: 50,
     });
